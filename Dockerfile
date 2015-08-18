@@ -51,3 +51,8 @@ RUN git clone https://github.com/martine/ninja.git && \
   ./ninja && \
   cp ./ninja /usr/bin/ && \
   cd .. && rm -rf ninja
+
+WORKDIR /build
+ENTRYPOINT ["/dockcross/entrypoint.sh"]
+
+COPY imagefiles/entrypoint.sh imagefiles/dockcross /dockcross/
