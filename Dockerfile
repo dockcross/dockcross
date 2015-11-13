@@ -28,7 +28,7 @@ RUN apt-get update && apt-get -y install \
 WORKDIR /usr/src
 RUN git clone git://cmake.org/cmake.git CMake && \
   cd CMake && \
-  git checkout v3.3.0-rc4
+  git checkout v3.4.0
 RUN mkdir CMake-build
 WORKDIR /usr/src/CMake-build
 RUN /usr/src/CMake/bootstrap \
