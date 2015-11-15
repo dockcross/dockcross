@@ -1,5 +1,5 @@
 FROM debian:jessie
-MAINTAINER Matt McCormick "matt.mccormick@kitware.com"
+MAINTAINER Leigh Phillips "neurocis@neurocis.me"
 
 RUN apt-get update && apt-get -y install \
   automake \
@@ -22,7 +22,17 @@ RUN apt-get update && apt-get -y install \
   tar \
   vim \
   wget \
-  xz-utils
+  xz-utils \
+  libboost-all-dev \
+  libminiupnpc-dev
+
+# Install BerkeleyDB 5.1, not mainline 5.3.
+RUN mkdir libdb5.1 && cd libdb5.1
+RUN wget http://ftp.debian.org/debian/pool/main/d/db/libdb5.1_5.1.29-5_amd64.deb && dpkg -i libdb5.1_5.1.29-5_amd64.deb
+RUN wget http://ftp.debian.org/debian/pool/main/d/db/libdb5.1++_5.1.29-5_amd64.deb && dpkg -i libdb5.1++_5.1.29-5_amd64.deb
+RUN wget http://ftp.debian.org/debian/pool/main/d/db/libdb5.1-dev_5.1.29-5_amd64.deb && dpkg -i libdb5.1-dev_5.1.29-5_amd64.deb
+RUN wget http://ftp.debian.org/debian/pool/main/d/db/libdb5.1++-dev_5.1.29-5_amd64.deb && dpkg -i libdb5.1++-dev_5.1.29-5_amd64.deb
+RUN cd .. && rm -rf libdb5.1
 
 # Build and install CMake from source.
 WORKDIR /usr/src
