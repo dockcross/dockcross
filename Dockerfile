@@ -28,9 +28,9 @@ RUN apt-get update && apt-get -y install \
 
 # Build and install CMake from source.
 WORKDIR /usr/src
-RUN git clone git://cmake.org/cmake.git CMake && \
+RUN git clone --branch v3.4.3 --depth 1 \
+     git://cmake.org/cmake.git CMake && \
   cd CMake && \
-  git checkout v3.4.3 && \
   cd .. && mkdir CMake-build && cd CMake-build && \
   /usr/src/CMake/bootstrap \
     --parallel=$(nproc) \
