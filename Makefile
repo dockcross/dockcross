@@ -85,6 +85,10 @@ windows-x64.test: windows-x64 test/run.py
 	$(DOCKER) run --rm dockcross/windows-x64 > $(BIN)/dockcross-windows-x64 && chmod +x $(BIN)/dockcross-windows-x64
 	$(BIN)/dockcross-windows-x64 python test/run.py --exe-suffix ".exe"
 
+xtensa-lx106.test: xtensa-lx106 test/run.py
+	$(DOCKER) run --rm dockcross/xtensa-lx106 > $(BIN)/dockcross-xtensa && chmod +x $(BIN)/dockcross-xtensa
+	$(BIN)/dockcross-xtensa python test/run.py
+
 base: Dockerfile
 	$(DOCKER) build -t $(ORG)/base .
 

@@ -123,9 +123,7 @@ script is bundled with the image.
 To install the helper script, run one of the images with no arguments, and
 redirect the output to a file::
 
-  docker run --rm CROSS_COMPILER_IMAGE_NAME > ./dockcross
-  chmod +x ./dockcross
-  mv ./dockcross ~/bin/
+  docker run --rm CROSS_COMPILER_IMAGE_NAME > ~/bin/dockcross && chmod +x ~/bin/dockcross
 
 Where `CROSS_COMPILER_IMAGE_NAME` is the name of the cross-compiler toolchain
 Docker instance, e.g. `dockcross/linux-armv7`.
