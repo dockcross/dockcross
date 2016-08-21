@@ -55,6 +55,3 @@ ENV QEMU_LD_PREFIX ${CROSS_ROOT}/libc
 ENV QEMU_SET_ENV "LD_LIBRARY_PATH=${CROSS_ROOT}/lib:${CROSS_ROOT}/libc/lib/${CROSS_ROOT}/"
 
 ENV DEFAULT_DOCKCROSS_IMAGE brainstorm/dockcross-esp-open-sdk
-
-COPY Toolchain.cmake ${CROSS_ROOT}/
-ENV CMAKE_TOOLCHAIN_FILE ${CROSS_ROOT}/Toolchain.cmake
