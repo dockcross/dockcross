@@ -30,6 +30,10 @@ if [[ -n $BUILDER_UID ]] && [[ -n $BUILDER_GID ]]; then
     cp -r /root/* $HOME/
     chown -R $BUILDER_UID:$BUILDER_GID $HOME/*
 
+    if [[ -e "${DOCKCROSS_ENTRYPOINT_PRE_EXEC_SCRIPT}" ]]; then
+        ${DOCKCROSS_ENTRYPOINT_PRE_EXEC_SCRIPT}
+    fi
+
     # Run the command as the specified user/group.
     exec chpst -u :$BUILDER_UID:$BUILDER_GID "$@"
 else
