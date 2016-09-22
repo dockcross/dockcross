@@ -25,14 +25,11 @@ if [[ -n $BUILDER_UID ]] && [[ -n $BUILDER_GID ]]; then
 
     groupadd -o -g $BUILDER_GID $BUILDER_GROUP 2> /dev/null
     useradd -o -m -g $BUILDER_GID -u $BUILDER_UID $BUILDER_USER 2> /dev/null
+    echo "$BUILDER_USER    ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
     export HOME=/home/${BUILDER_USER}
     shopt -s dotglob
     cp -r /root/* $HOME/
     chown -R $BUILDER_UID:$BUILDER_GID $HOME/*
-
-    if [[ -e "${DOCKCROSS_ENTRYPOINT_PRE_EXEC_SCRIPT}" ]]; then
-        ${DOCKCROSS_ENTRYPOINT_PRE_EXEC_SCRIPT}
-    fi
 
     # Run the command as the specified user/group.
     exec chpst -u :$BUILDER_UID:$BUILDER_GID "$@"

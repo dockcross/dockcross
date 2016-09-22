@@ -12,6 +12,8 @@ RUN cd /opt && \
 COPY manylinux-x64/install-skbuild.sh /usr/local/bin
 RUN /usr/local/bin/install-skbuild.sh
 
+RUN yum -y install sudo
+
 ENV CROSS_TRIPLE x86_64-linux-gnu
 ENV CROSS_ROOT /opt/rh/devtoolset-2/root/usr/bin
 ENV AS=${CROSS_ROOT}/as \
@@ -25,8 +27,4 @@ COPY linux-x64/${CROSS_TRIPLE}-noop.sh /usr/bin/${CROSS_TRIPLE}-noop
 
 COPY manylinux-x64/Toolchain.cmake ${CROSS_ROOT}/../lib/
 ENV CMAKE_TOOLCHAIN_FILE ${CROSS_ROOT}/../lib/Toolchain.cmake
-
-COPY manylinux-x64/entrypoint-pre-exec.sh /dockcross/
-ENV DOCKCROSS_ENTRYPOINT_PRE_EXEC_SCRIPT /dockcross/entrypoint-pre-exec.sh
-
 ENV DEFAULT_DOCKCROSS_IMAGE dockcross/manylinux-x64
