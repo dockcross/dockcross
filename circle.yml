@@ -21,6 +21,7 @@ dependencies:
           docker load -i ~/docker/$image.tar;
         fi
         docker pull dockcross/$image
+      done
 
 test:
   override:
