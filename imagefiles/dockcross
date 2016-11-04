@@ -191,7 +191,7 @@ run_exit_code=$?
 # Deleting the container while ignoring error is required because of
 # https://circleci.com/docs/docker-btrfs-error/.
 # See issue dockcross/dockcross#50 for more details.
-docker rm -f $CONTAINER_NAME > /dev/null || true
+docker rm -f $CONTAINER_NAME > /dev/null 2>&1 || true
 
 exit $run_exit_code
 
