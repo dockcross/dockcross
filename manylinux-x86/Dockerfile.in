@@ -1,6 +1,8 @@
 FROM quay.io/pypa/manylinux1_i686:latest
 MAINTAINER Matt McCormick "matt.mccormick@kitware.com"
 
+ENV DEFAULT_DOCKCROSS_IMAGE dockcross/manylinux-x86
+
 #include "common.docker"
 
 #include "common.manylinux"
@@ -18,12 +20,6 @@ COPY linux-x86/${CROSS_TRIPLE}-noop.sh /usr/bin/${CROSS_TRIPLE}-noop
 
 COPY manylinux-x86/Toolchain.cmake ${CROSS_ROOT}/../lib/
 ENV CMAKE_TOOLCHAIN_FILE ${CROSS_ROOT}/../lib/Toolchain.cmake
-ENV DEFAULT_DOCKCROSS_IMAGE dockcross/manylinux-x86
-
-RUN curl -O https://cmake.org/files/v3.6/cmake-3.6.2-Linux-i386.tar.gz && \
-   tar xzf cmake-3.6.2-Linux-i386.tar.gz && \
-   cp -a cmake-3.6.2-Linux-i386/* /usr/ && \
-   rm -rf cmake-3.6.2-Linux-i386
 
 COPY linux-x86/linux32-entrypoint.sh /dockcross/
 ENTRYPOINT ["/dockcross/linux32-entrypoint.sh"]

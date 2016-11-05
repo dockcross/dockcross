@@ -5,22 +5,32 @@ RUN git clone "https://github.com/nojhan/liquidprompt.git" && \
 COPY imagefiles/.bashrc /root/
 
 WORKDIR /usr/src
-RUN git clone git://cmake.org/cmake.git CMake && \
+RUN wget https://www.openssl.org/source/openssl-1.0.2j.tar.gz && \
+  tar -xzvf openssl-1.0.2j.tar.gz && \
+  cd openssl-1.0.2j && \
+  WRAPPER=$([[ $DEFAULT_DOCKCROSS_IMAGE == "dockcross/manylinux-x86" ]] && echo "linux32") && \
+  CONFIG_FLAG=$([[ $DEFAULT_DOCKCROSS_IMAGE == "dockcross/manylinux-x86" ]] && echo "-m32") && \
+  ${WRAPPER} ./config $CONFIG_FLAG && \
+  ${WRAPPER} make && \
+  cd .. && \
+  git clone git://cmake.org/cmake.git CMake && \
   cd CMake && \
   git checkout ab2ae4823c3b60347825da4b851cd4e676f8bed1 && \
   mkdir /usr/src/CMake-build && \
   cd /usr/src/CMake-build && \
-  /usr/src/CMake/bootstrap \
+  ${WRAPPER} /usr/src/CMake/bootstrap \
     --parallel=$(grep -c processor /proc/cpuinfo) \
     --prefix=/usr && \
-  make -j$(grep -c processor /proc/cpuinfo) && \
-  ./bin/cmake \
+  ${WRAPPER} make -j$(grep -c processor /proc/cpuinfo) && \
+  ${WRAPPER} ./bin/cmake \
     -DCMAKE_BUILD_TYPE:STRING=Release \
-    -DCMAKE_USE_OPENSSL:BOOL=ON . && \
-  make install && \
-  cd .. && rm -rf CMake*
+    -DCMAKE_USE_OPENSSL:BOOL=ON \
+    -DOPENSSL_ROOT_DIR:PATH=/usr/src/openssl-1.0.2j \
+    . && \
+  ${WRAPPER} make install && \
+  cd .. && rm -rf CMake* && rm -rf /usr/src/openssl-1.0.2j
 
-RUN git clone "https://github.com/martine/ninja.git" && \
+RUN git clone "https://github.com/ninja-build/ninja.git" && \
    cd ninja && \
    git checkout v1.7.1 && \
    ([ -e /opt/python/cp35-cp35m/bin/python ] && /opt/python/cp35-cp35m/bin/python ./configure.py --bootstrap) || python ./configure.py --bootstrap && \

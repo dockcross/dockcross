@@ -1,6 +1,8 @@
 FROM quay.io/pypa/manylinux1_x86_64:latest
 MAINTAINER Matt McCormick "matt.mccormick@kitware.com"
 
+ENV DEFAULT_DOCKCROSS_IMAGE dockcross/manylinux-x64
+
 #include "common.docker"
 
 #include "common.manylinux"
@@ -18,7 +20,6 @@ COPY linux-x64/${CROSS_TRIPLE}-noop.sh /usr/bin/${CROSS_TRIPLE}-noop
 
 COPY manylinux-x64/Toolchain.cmake ${CROSS_ROOT}/../lib/
 ENV CMAKE_TOOLCHAIN_FILE ${CROSS_ROOT}/../lib/Toolchain.cmake
-ENV DEFAULT_DOCKCROSS_IMAGE dockcross/manylinux-x64
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
