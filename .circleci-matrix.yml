@@ -34,7 +34,6 @@ command:
           echo "Copying base image from node0"
           mkdir -p ~/docker; scp node0:~/docker/base.tar ~/docker/base.tar
           docker load -i ~/docker/base.tar
-          docker pull dockcross/base
           touch ~/BASE_LOADED
         else
           echo "Base image already loaded"
