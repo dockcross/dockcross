@@ -22,7 +22,7 @@ command:
         mkdir -p ~/docker; docker save dockcross/base > ~/docker/base.tar
         touch ~/BASE_READY
       else
-        if [[ ! -f ~/BASE_LOADED ]]; then
+        if [[ ! -f ~/BASE_DOWNLOADED ]]; then
           echo "Waiting for node0"
           while true; do
             sleep 5
@@ -33,14 +33,13 @@ command:
           echo ""
           echo "Copying base image from node0"
           mkdir -p ~/docker; scp node0:~/docker/base.tar ~/docker/base.tar
-          docker load -i ~/docker/base.tar
-          touch ~/BASE_LOADED
+          touch ~/BASE_DOWNLOADED
         else
-          echo "Base image already loaded"
+          echo "Base image already downloaded"
         fi
       fi
       if [[ -e ~/docker/$IMAGE.tar ]]; then docker load -i ~/docker/$IMAGE.tar; fi
-      docker pull dockcross/$IMAGE
+      docker load -i ~/docker/base.tar
       make $IMAGE.test
       mkdir -p ~/docker; docker save dockcross/$IMAGE > ~/docker/$IMAGE.tar
     fi
