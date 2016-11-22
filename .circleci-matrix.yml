@@ -14,7 +14,7 @@ env:
   - IMAGE=windows-x86
 command:
   - |
-    if [[ $TASK == "test" ]]; then
+    if [[ $STEP == "test" ]]; then
       if [[ $CIRCLE_NODE_INDEX == 0 ]]; then
         if [[ -e ~/docker/base.tar ]]; then docker load -i ~/docker/base.tar; fi
         docker pull dockcross/base
@@ -45,7 +45,7 @@ command:
       mkdir -p ~/docker; docker save dockcross/$IMAGE > ~/docker/$IMAGE.tar
     fi
   - |
-    if [[ $TASK == "deploy" ]]; then
+    if [[ $STEP == "deployment" ]]; then
       docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
       if [[ $CIRCLE_NODE_INDEX == 0 ]] && [[ ! -f ~/BASE_PUSHED ]]; then
         docker push dockcross/base

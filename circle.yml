@@ -21,7 +21,7 @@ test:
         parallel: true
         timeout: 3000
         environment:
-          TASK: test
+          STEP: test
 
 deployment:
   hub:
@@ -30,4 +30,4 @@ deployment:
       - circleci-matrix:
           parallel: true
           environment:
-            TASK: deploy
+            STEP: deployment
