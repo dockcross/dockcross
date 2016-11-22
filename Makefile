@@ -98,9 +98,7 @@ Dockerfile: Dockerfile.in common.docker
 base: Dockerfile imagefiles/
 	$(DOCKER) build -t $(ORG)/base \
 		--build-arg IMAGE=$(ORG)/base \
-		--build-arg VCS_REF=`git rev-parse --short HEAD` \
 		--build-arg VCS_URL=`git config --get remote.origin.url` \
-		--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
 		.
 
 base.test: base
