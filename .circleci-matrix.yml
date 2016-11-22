@@ -19,7 +19,7 @@ command:
         if [[ -e ~/docker/base.tar ]]; then docker load -i ~/docker/base.tar; fi
         docker pull dockcross/base
         make base.test
-        mkdir -p ~/docker; docker save dockcross/base > ~/docker/base.tar
+        mkdir -p ~/docker; docker save -o ~/docker/base.tar debian:jessie dockcross/base
         touch ~/BASE_READY
       else
         if [[ ! -f ~/BASE_DOWNLOADED ]]; then
@@ -39,6 +39,7 @@ command:
         fi
       fi
       if [[ -e ~/docker/$IMAGE.tar ]]; then docker load -i ~/docker/$IMAGE.tar; fi
+      docker pull dockcross/$IMAGE
       docker load -i ~/docker/base.tar
       make $IMAGE.test
       mkdir -p ~/docker; docker save dockcross/$IMAGE > ~/docker/$IMAGE.tar
