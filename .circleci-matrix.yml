@@ -16,11 +16,15 @@ command:
   - |
     if [[ $STEP == "test" ]]; then
       if [[ $CIRCLE_NODE_INDEX == 0 ]]; then
-        if [[ -e ~/docker/base.tar ]]; then time docker load -i ~/docker/base.tar; fi
-        time docker pull dockcross/base
-        time make base.test
-        mkdir -p ~/docker; time docker save -o ~/docker/base.tar debian:jessie dockcross/base
-        touch ~/BASE_AVAILABLE
+        if [[ ! -f ~/BASE_AVAILABLE ]]; then
+          if [[ -e ~/docker/base.tar ]]; then time docker load -i ~/docker/base.tar; fi
+          time docker pull dockcross/base
+          time make base.test
+          mkdir -p ~/docker; time docker save -o ~/docker/base.tar debian:jessie dockcross/base
+          touch ~/BASE_AVAILABLE
+        else
+          echo "Base image already available"
+        fi
       else
         if [[ ! -f ~/BASE_DOWNLOADED ]]; then
           echo "Waiting for node0"
