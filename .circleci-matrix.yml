@@ -1,0 +1,56 @@
+env:
+  - IMAGE=android-arm
+  - IMAGE=browser-asmjs
+  - IMAGE=linux-arm64
+  - IMAGE=linux-armv5
+  - IMAGE=linux-armv6
+  - IMAGE=linux-armv7
+  - IMAGE=linux-ppc64le
+  - IMAGE=linux-x64
+  - IMAGE=linux-x86
+  - IMAGE=manylinux-x64
+  - IMAGE=manylinux-x86
+  - IMAGE=windows-x64
+  - IMAGE=windows-x86
+command:
+  - |
+    if [[ $TASK == "test" ]]; then
+      if [[ $CIRCLE_NODE_INDEX == 0 ]]; then
+        if [[ -e ~/docker/base.tar ]]; then docker load -i ~/docker/base.tar; fi
+        docker pull dockcross/base
+        make base.test
+        mkdir -p ~/docker; docker save dockcross/base > ~/docker/base.tar
+        touch ~/BASE_READY
+      else
+        if [[ ! -f ~/BASE_LOADED ]]; then
+          echo "Waiting for node0"
+          while true; do
+            sleep 5
+            ssh -q node0 [[ -f ~/BASE_READY ]]
+            exit_code=$?
+            if [[ $exit_code -eq 0 ]]; then break; elif [[ $exit_code -eq 1 ]]; then echo -n "."; else exit $exit_code;fi
+          done
+          echo ""
+          echo "Copying base image from node0"
+          mkdir -p ~/docker; scp node0:~/docker/base.tar ~/docker/base.tar
+          docker load -i ~/docker/base.tar
+          docker pull dockcross/base
+          touch ~/BASE_LOADED
+        else
+          echo "Base image already loaded"
+        fi
+      fi
+      if [[ -e ~/docker/$IMAGE.tar ]]; then docker load -i ~/docker/$IMAGE.tar; fi
+      docker pull dockcross/$IMAGE
+      make $IMAGE.test
+      mkdir -p ~/docker; docker save dockcross/$IMAGE > ~/docker/$IMAGE.tar
+    fi
+  - |
+    if [[ $TASK == "deploy" ]]; then
+      docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      if [[ $CIRCLE_NODE_INDEX == 0 ]] && [[ ! -f ~/BASE_PUSHED ]]; then
+        docker push dockcross/base
+        touch ~/BASE_PUSHED
+      fi
+      docker push dockcross/$IMAGE
+    fi
