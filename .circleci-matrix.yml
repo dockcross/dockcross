@@ -16,10 +16,10 @@ command:
   - |
     if [[ $STEP == "test" ]]; then
       if [[ $CIRCLE_NODE_INDEX == 0 ]]; then
-        if [[ -e ~/docker/base.tar ]]; then docker load -i ~/docker/base.tar; fi
-        docker pull dockcross/base
-        make base.test
-        mkdir -p ~/docker; docker save -o ~/docker/base.tar debian:jessie dockcross/base
+        if [[ -e ~/docker/base.tar ]]; then time docker load -i ~/docker/base.tar; fi
+        time docker pull dockcross/base
+        time make base.test
+        mkdir -p ~/docker; time docker save -o ~/docker/base.tar debian:jessie dockcross/base
         touch ~/BASE_READY
       else
         if [[ ! -f ~/BASE_DOWNLOADED ]]; then
@@ -32,23 +32,23 @@ command:
           done
           echo ""
           echo "Copying base image from node0"
-          mkdir -p ~/docker; scp node0:~/docker/base.tar ~/docker/base.tar
+          mkdir -p ~/docker; time scp node0:~/docker/base.tar ~/docker/base.tar
           touch ~/BASE_DOWNLOADED
         else
           echo "Base image already downloaded"
         fi
       fi
-      if [[ -e ~/docker/$IMAGE.tar ]]; then docker load -i ~/docker/$IMAGE.tar; fi
-      docker pull dockcross/$IMAGE
-      docker load -i ~/docker/base.tar
-      make $IMAGE.test
-      mkdir -p ~/docker; docker save dockcross/$IMAGE > ~/docker/$IMAGE.tar
+      if [[ -e ~/docker/$IMAGE.tar ]]; then time docker load -i ~/docker/$IMAGE.tar; fi
+      time docker pull dockcross/$IMAGE
+      time docker load -i ~/docker/base.tar
+      time make $IMAGE.test
+      mkdir -p ~/docker; time docker save dockcross/$IMAGE > ~/docker/$IMAGE.tar
     fi
   - |
     if [[ $STEP == "deployment" ]]; then
       docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
       if [[ $CIRCLE_NODE_INDEX == 0 ]] && [[ ! -f ~/BASE_PUSHED ]]; then
-        docker push dockcross/base
+        time docker push dockcross/base
         touch ~/BASE_PUSHED
       fi
       docker push dockcross/$IMAGE
