@@ -20,13 +20,13 @@ command:
         time docker pull dockcross/base
         time make base.test
         mkdir -p ~/docker; time docker save -o ~/docker/base.tar debian:jessie dockcross/base
-        touch ~/BASE_READY
+        touch ~/BASE_AVAILABLE
       else
         if [[ ! -f ~/BASE_DOWNLOADED ]]; then
           echo "Waiting for node0"
           while true; do
             sleep 5
-            ssh -q node0 [[ -f ~/BASE_READY ]]
+            ssh -q node0 [[ -f ~/BASE_AVAILABLE ]]
             exit_code=$?
             if [[ $exit_code -eq 0 ]]; then break; elif [[ $exit_code -eq 1 ]]; then echo -n "."; else exit $exit_code;fi
           done
