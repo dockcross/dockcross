@@ -19,6 +19,10 @@ test:
   override:
     - circleci-matrix:
         parallel: true
+        environment:
+          STEP: dependencies
+    - circleci-matrix:
+        parallel: true
         timeout: 3000
         environment:
           STEP: test

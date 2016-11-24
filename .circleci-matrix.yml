@@ -14,7 +14,7 @@ env:
   - IMAGE=windows-x86
 command:
   - |
-    if [[ $STEP == "test" ]]; then
+    if [[ $STEP == "dependencies" ]]; then
       if [[ $CIRCLE_NODE_INDEX == 0 ]]; then
         if [[ ! -f ~/BASE_AVAILABLE ]]; then
           if [[ -e ~/docker/base.tar ]]; then time docker load -i ~/docker/base.tar; fi
@@ -42,6 +42,8 @@ command:
           echo "Base image already downloaded"
         fi
       fi
+    fi
+    if [[ $STEP == "test" ]]; then
       if [[ -e ~/docker/$IMAGE.tar ]]; then time docker load -i ~/docker/$IMAGE.tar; fi
       time docker pull dockcross/$IMAGE
       time docker load -i ~/docker/base.tar
