@@ -12,54 +12,26 @@ dependencies:
 
   override:
     - docker info
-    - if [[ -e ~/docker/base.tar ]]; then docker load -i ~/docker/base.tar; fi
-    - docker pull dockcross/base
-    - |
-      for image in $(make display_images); do
-        if [[ -e ~/docker/$image.tar ]]; then
-          echo "Loading $image.tar"
-          docker load -i ~/docker/$image.tar;
-        fi
-        docker pull dockcross/$image
-      done
+    - curl -fsSL https://git.io/v2Ifs -o ~/bin/circleci-matrix
+    - chmod +x ~/bin/circleci-matrix
 
 test:
   override:
-    - make base.test
-    - mkdir -p ~/docker; docker save dockcross/base > ~/docker/base.tar
-    - make android-arm.test
-    - mkdir -p ~/docker; docker save dockcross/android-arm > ~/docker/android-arm.tar
-    - make browser-asmjs.test
-    - mkdir -p ~/docker; docker save dockcross/browser-asmjs > ~/docker/browser-asmjs.tar
-    - make linux-arm64.test
-    - mkdir -p ~/docker; docker save dockcross/linux-arm64 > ~/docker/linux-arm64.tar
-    - make linux-armv5.test
-    - mkdir -p ~/docker; docker save dockcross/linux-armv5 > ~/docker/linux-armv5.tar
-    - make linux-armv6.test
-    - mkdir -p ~/docker; docker save dockcross/linux-armv6 > ~/docker/linux-armv6.tar
-    - make linux-armv7.test
-    - mkdir -p ~/docker; docker save dockcross/linux-armv7 > ~/docker/linux-armv7.tar
-    - make linux-ppc64le.test
-    - mkdir -p ~/docker; docker save dockcross/linux-ppc64le > ~/docker/linux-ppc64le.tar
-    - make linux-x64.test
-    - mkdir -p ~/docker; docker save dockcross/linux-x64 > ~/docker/linux-x64.tar
-    - make linux-x86.test
-    - mkdir -p ~/docker; docker save dockcross/linux-x86 > ~/docker/linux-x86.tar
-    - make manylinux-x64.test
-    - mkdir -p ~/docker; docker save dockcross/manylinux-x64 > ~/docker/manylinux-x64.tar
-    - make manylinux-x86.test
-    - mkdir -p ~/docker; docker save dockcross/manylinux-x86 > ~/docker/manylinux-x86.tar
-    - make windows-x64.test:
+    - circleci-matrix:
+        parallel: true
+        environment:
+          STEP: dependencies
+    - circleci-matrix:
+        parallel: true
         timeout: 3000
-    - mkdir -p ~/docker; docker save dockcross/windows-x64 > ~/docker/windows-x64.tar
-    - make windows-x86.test:
-        timeout: 3000
-    - mkdir -p ~/docker; docker save dockcross/windows-x86 > ~/docker/windows-x86.tar
+        environment:
+          STEP: test
 
 deployment:
   hub:
     branch: master
     commands:
-      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-      - docker push dockcross/base
-      - for image in $(make display_images); do docker push dockcross/$image; done
+      - circleci-matrix:
+          parallel: true
+          environment:
+            STEP: deployment

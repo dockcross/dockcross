@@ -1,0 +1,97 @@
+env:
+  - IMAGE=android-arm
+  - IMAGE=browser-asmjs
+  - IMAGE=linux-arm64
+  - IMAGE=linux-armv5
+  - IMAGE=linux-armv6
+  - IMAGE=linux-armv7
+  - IMAGE=linux-ppc64le
+  - IMAGE=linux-x64
+  - IMAGE=linux-x86
+  - IMAGE=manylinux-x64
+  - IMAGE=manylinux-x86
+  - IMAGE=windows-x64
+  - IMAGE=windows-x86
+command:
+  - |
+    if [[ $STEP == "dependencies" ]]; then
+      if [[ $CIRCLE_NODE_INDEX == 0 ]]; then
+        if [[ ! -f ~/BASE_AVAILABLE ]]; then
+
+          if [[ -e ~/docker/base.tar ]]; then
+            echo "Loading base.tar from ~/docker cache"
+            time docker load -i ~/docker/base.tar
+            echo "Loading base.tar from ~/docker cache - done"
+          fi
+
+          echo "Pulling dockcross/base"
+          time docker pull dockcross/base
+          echo "Pulling dockcross/base - done"
+
+          time make base.test
+
+          echo "Saving debian:jessie dockcross/base into ~/docker cache"
+          mkdir -p ~/docker; time docker save -o ~/docker/base.tar debian:jessie dockcross/base
+          echo "Saving debian:jessie dockcross/base into ~/docker cache - done"
+
+          touch ~/BASE_AVAILABLE
+        else
+          echo "Base image already available"
+        fi
+      else
+        if [[ ! -f ~/BASE_DOWNLOADED ]]; then
+          echo "Waiting for node0"
+          while true; do
+            sleep 5
+            ssh -q node0 [[ -f ~/BASE_AVAILABLE ]]
+            exit_code=$?
+            if [[ $exit_code -eq 0 ]]; then break; elif [[ $exit_code -eq 1 ]]; then echo -n "."; else exit $exit_code;fi
+          done
+          echo "Waiting for node0 - done"
+
+          echo "Copying base image from node0"
+          mkdir -p ~/docker; time scp node0:~/docker/base.tar ~/docker/base.tar
+          echo "Copying base image from node0 - done"
+
+          touch ~/BASE_DOWNLOADED
+        else
+          echo "Base image already downloaded"
+        fi
+      fi
+    fi
+    if [[ $STEP == "test" ]]; then
+      if [[ -e ~/docker/$IMAGE.tar ]]; then
+        echo "Loading $IMAGE.tar from ~/docker cache"
+        time docker load -i ~/docker/$IMAGE.tar
+        echo "Loading $IMAGE.tar from ~/docker cache - done"
+      fi
+
+      echo "Pulling dockcross/$IMAGE"
+      time docker pull dockcross/$IMAGE
+      echo "Pulling dockcross/$IMAGE - done"
+
+      echo "Loading base.tar from ~/docker cache"
+      time docker load -i ~/docker/base.tar
+      echo "Loading base.tar from ~/docker cache - done"
+
+      time make $IMAGE.test
+
+      echo "Saving dockcross/$IMAGE into ~/docker cache"
+      mkdir -p ~/docker; time docker save dockcross/$IMAGE > ~/docker/$IMAGE.tar
+      echo "Saving dockcross/$IMAGE into ~/docker cache - done"
+
+    fi
+  - |
+    if [[ $STEP == "deployment" ]]; then
+      docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      if [[ $CIRCLE_NODE_INDEX == 0 ]] && [[ ! -f ~/BASE_PUSHED ]]; then
+        echo "Pushing dockcross/base"
+        time docker push dockcross/base
+        echo "Pulling dockcross/base - done"
+        touch ~/BASE_PUSHED
+      fi
+
+      echo "Pushing dockcross/$IMAGE"
+      time docker push dockcross/$IMAGE
+      echo "Pushing dockcross/$IMAGE - done"
+    fi
