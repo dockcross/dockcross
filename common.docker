@@ -26,6 +26,8 @@ RUN \
     -python $([ -e /opt/python/cp35-cp35m/bin/python ] && echo "/opt/python/cp35-cp35m/bin/python" || echo "python") && \
   rm /dockcross/install-ninja.sh
 
+RUN git config --global advice.detachedHead false
+
 RUN echo "root:root" | chpasswd
 WORKDIR /work
 ENTRYPOINT ["/dockcross/entrypoint.sh"]
