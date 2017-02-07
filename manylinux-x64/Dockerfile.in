@@ -7,6 +7,8 @@ ENV DEFAULT_DOCKCROSS_IMAGE dockcross/manylinux-x64
 
 #include "common.manylinux"
 
+RUN yum -y install sudo
+
 ENV CROSS_TRIPLE x86_64-linux-gnu
 ENV CROSS_ROOT /opt/rh/devtoolset-2/root/usr/bin
 ENV AS=${CROSS_ROOT}/as \
