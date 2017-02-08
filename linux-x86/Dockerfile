@@ -3,6 +3,7 @@ MAINTAINER Matt McCormick "matt.mccormick@kitware.com"
 
 RUN dpkg --add-architecture i386 && \
   apt-get update && apt-get -y install \
+    sudo \
     gcc-multilib \
     g++-multilib \
     libc6:i386 \
