@@ -113,7 +113,6 @@ Dockerfile: Dockerfile.in common.docker common.debian
 	sed -e '/common.docker/ r common.docker' -e '/common.debian/ r common.debian' Dockerfile.in > Dockerfile
 
 base: Dockerfile imagefiles/
-	# $(DOCKER) pull $(ORG)/base
 	$(DOCKER) build -t $(ORG)/base \
 		--build-arg IMAGE=$(ORG)/base \
 		--build-arg VCS_URL=`git config --get remote.origin.url` \
