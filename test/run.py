@@ -44,7 +44,7 @@ def test_cmake_build_system(build_dir, language, source, emulator, linker_flags,
     print('Building ' + source + ' with CMake...')
 
     with open('CMakeLists.txt', 'w') as fp:
-        fp.write('cmake_minimum_required(VERSION 3.0)\n')
+        fp.write('cmake_minimum_required(VERSION 3.4)\n')
         fp.write('project(test-compiler)\n')
         fp.write('add_executable(a.out ' + os.path.basename(source) + ')\n')
         if emulator:
