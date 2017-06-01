@@ -16,6 +16,10 @@ ENV CC=/emsdk_portable/emscripten/tag-${EMSCRIPTEN_VERSION}/emcc \
   CXX=/emsdk_portable/emscripten/tag-${EMSCRIPTEN_VERSION}/em++ \
   AR=/emsdk_portable/emscripten/tag-${EMSCRIPTEN_VERSION}/emar
 
+# Workaround CMake + ninja parallel build libcxx.a instability
+# https://groups.google.com/forum/#!topic/emscripten-discuss/llX0HtHyxN8
+RUN cd $EMSCRIPTEN && python embuilder.py build ALL
+
 ENV DEFAULT_DOCKCROSS_IMAGE dockcross/browser-asmjs
 
 ENV CMAKE_TOOLCHAIN_FILE /emsdk_portable/emscripten/tag-${EMSCRIPTEN_VERSION}/cmake/Modules/Platform/Emscripten.cmake
