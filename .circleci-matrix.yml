@@ -2,6 +2,8 @@
 env:
   - IMAGE=android-arm
   - IMAGE=browser-asmjs
+  - IMAGE=bare-armv7
+  - IMAGE=bare-armv8
   - IMAGE=linux-arm64
   - IMAGE=linux-armv5
   - IMAGE=linux-armv6
