@@ -16,6 +16,7 @@ env:
   - IMAGE=windows-x86
 command:
   - |
+    set -e
     if [[ $STEP == "dependencies" ]]; then
       if [[ $CIRCLE_NODE_INDEX == 0 ]]; then
         if [[ ! -f ~/BASE_AVAILABLE ]]; then
