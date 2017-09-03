@@ -1,99 +1,179 @@
+
+#
+# Parameters
+#
+
+# Name of the docker executable
 DOCKER = docker
+
+# Docker organization to pull the images from
 ORG = dockcross
-BIN = bin
 
-images: base android-arm linux-x86 linux-x64 linux-arm64 linux-armv5 linux-armv6 linux-armv7 windows-x86 windows-x64
+# Directory where to generate the dockcross script for each images (e.g bin/dockcross-manylinux-x64)
+BIN = ./bin
 
-test: base.test android-arm.test linux-x86.test linux-x64.test linux-arm64.test linux-armv5.test linux-armv6.test linux-armv7.test windows-x86.test windows-x64.test
+# These images are built using the "build implicit rule"
+STANDARD_IMAGES = android-arm linux-x86 linux-x64 linux-arm64 linux-armv5 linux-armv6 linux-armv7 linux-mipsel linux-ppc64le windows-x86 windows-x64
 
-android-arm: base android-arm/Dockerfile
-	$(DOCKER) build -t $(ORG)/android-arm android-arm
+# These images are expected to have explicit rules for *both* build and testing
+NON_STANDARD_IMAGES = browser-asmjs manylinux-x64 manylinux-x86
 
-android-arm.test: android-arm test/run.py
-	$(DOCKER) run --rm dockcross/android-arm > $(BIN)/dockcross-android-arm && chmod +x $(BIN)/dockcross-android-arm
-	$(BIN)/dockcross-android-arm python test/run.py
+# This list all available images
+IMAGES = $(STANDARD_IMAGES) $(NON_STANDARD_IMAGES)
 
-browser-asmjs: base browser-asmjs/Dockerfile
+# Optional arguments for test runner (test/run.py) associated with "testing implicit rule"
+linux-ppc64le.test_ARGS = --languages C
+windows-x86.test_ARGS = --exe-suffix ".exe"
+windows-x64.test_ARGS = --exe-suffix ".exe"
+
+# On CircleCI, do not attempt to delete container
+# See https://circleci.com/docs/docker-btrfs-error/
+RM = --rm
+ifeq ("$(CIRCLECI)", "true")
+	RM =
+endif
+
+#
+# images: This target builds all IMAGES (because it is the first one, it is built by default)
+#
+images: base $(IMAGES)
+
+#
+# test: This target ensures all IMAGES are built and run the associated tests
+#
+test: base.test $(addsuffix .test,$(IMAGES))
+
+#
+# browser-asmjs
+#
+browser-asmjs: browser-asmjs/Dockerfile.in common.docker common.debian
+	sed -e '/common.docker/ r common.docker' -e '/common.debian/ r common.debian' $@/Dockerfile.in > $@/Dockerfile
+	mkdir -p $@/imagefiles && cp -r imagefiles $@/
 	cp -r test browser-asmjs/
-	$(DOCKER) build -t $(ORG)/browser-asmjs browser-asmjs
+	$(DOCKER) build -t $(ORG)/browser-asmjs:latest \
+		--build-arg IMAGE=$(ORG)/browser-asmjs \
+		--build-arg VCS_REF=`git rev-parse --short HEAD` \
+		--build-arg VCS_URL=`git config --get remote.origin.url` \
+		--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
+		browser-asmjs
+	rm -rf browser-asmjs/test
+	rm -rf $@/imagefiles
+
+browser-asmjs.test: browser-asmjs
+	cp -r test browser-asmjs/
+	$(DOCKER) run $(RM) dockcross/browser-asmjs > $(BIN)/dockcross-browser-asmjs && chmod +x $(BIN)/dockcross-browser-asmjs
+	$(BIN)/dockcross-browser-asmjs python test/run.py --exe-suffix ".js"
 	rm -rf browser-asmjs/test
 
-browser-asmjs.test: browser-asmjs test/run.py
-	$(DOCKER) run --rm dockcross/browser-asmjs > $(BIN)/dockcross-browser-asmjs && chmod +x $(BIN)/dockcross-browser-asmjs
-	$(BIN)/dockcross-browser-asmjs python test/run.py --exe-suffix ".js"
+#
+# manylinux-x64
+#
+manylinux-x64/Dockerfile: manylinux-x64/Dockerfile.in common.docker common.manylinux
+	sed -e '/common.docker/ r common.docker' -e '/common.manylinux/ r common.manylinux' manylinux-x64/Dockerfile.in > manylinux-x64/Dockerfile
 
-linux-x86: base linux-x86/Dockerfile linux-x86/Toolchain.cmake
-	$(DOCKER) build -t $(ORG)/linux-x86 linux-x86
+manylinux-x64: manylinux-x64/Dockerfile
+	mkdir -p $@/imagefiles && cp -r imagefiles $@/
+	$(DOCKER) build -t $(ORG)/manylinux-x64:latest \
+		--build-arg IMAGE=$(ORG)/manylinux-x64 \
+		--build-arg VCS_REF=`git rev-parse --short HEAD` \
+		--build-arg VCS_URL=`git config --get remote.origin.url` \
+		--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
+		-f manylinux-x64/Dockerfile .
+	rm -rf $@/imagefiles
 
-linux-x86.test: linux-x86 test/run.py
-	$(DOCKER) run --rm dockcross/linux-x86 > $(BIN)/dockcross-linux-x86 && chmod +x $(BIN)/dockcross-linux-x86
-	$(BIN)/dockcross-linux-x86 python test/run.py
+manylinux-x64.test: manylinux-x64
+	$(DOCKER) run $(RM) dockcross/manylinux-x64 > $(BIN)/dockcross-manylinux-x64 && chmod +x $(BIN)/dockcross-manylinux-x64
+	$(BIN)/dockcross-manylinux-x64 /opt/python/cp35-cp35m/bin/python test/run.py
 
-linux-x64: base linux-x64/Dockerfile
-	$(DOCKER) build -t $(ORG)/linux-x64 linux-x64
+#
+# manylinux-x86
+#
+manylinux-x86/Dockerfile: manylinux-x86/Dockerfile.in common.docker common.manylinux
+	sed -e '/common.docker/ r common.docker' -e '/common.manylinux/ r common.manylinux' manylinux-x86/Dockerfile.in > manylinux-x86/Dockerfile
 
-linux-x64.test: linux-x64 test/run.py
-	$(DOCKER) run --rm dockcross/linux-x64 > $(BIN)/dockcross-linux-x64 && chmod +x $(BIN)/dockcross-linux-x64
-	$(BIN)/dockcross-linux-x64 python test/run.py
+manylinux-x86: manylinux-x86/Dockerfile
+	mkdir -p $@/imagefiles && cp -r imagefiles $@/
+	$(DOCKER) build -t $(ORG)/manylinux-x86:latest \
+		--build-arg IMAGE=$(ORG)/manylinux-x86 \
+		--build-arg VCS_REF=`git rev-parse --short HEAD` \
+		--build-arg VCS_URL=`git config --get remote.origin.url` \
+		--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
+		-f manylinux-x86/Dockerfile .
+	rm -rf $@/imagefiles
 
-linux-arm64: base linux-arm64/Dockerfile linux-arm64/Toolchain.cmake
-	$(DOCKER) build -t $(ORG)/linux-arm64 linux-arm64
+manylinux-x86.test: manylinux-x86
+	$(DOCKER) run $(RM) dockcross/manylinux-x86 > $(BIN)/dockcross-manylinux-x86 && chmod +x $(BIN)/dockcross-manylinux-x86
+	$(BIN)/dockcross-manylinux-x86 /opt/python/cp35-cp35m/bin/python test/run.py
 
-linux-arm64.test: linux-arm64 test/run.py
-	$(DOCKER) run --rm dockcross/linux-arm64 > $(BIN)/dockcross-linux-arm64 && chmod +x $(BIN)/dockcross-linux-arm64
-	$(BIN)/dockcross-linux-arm64 python test/run.py
+#
+# Xtensa esp8266
+#
 
-linux-armv5: base linux-armv5/Dockerfile linux-armv5/Toolchain.cmake
-	$(DOCKER) build -t $(ORG)/linux-armv5 linux-armv5
-
-linux-armv5.test: linux-armv5 test/run.py
-	$(DOCKER) run --rm dockcross/linux-armv5 > $(BIN)/dockcross-linux-armv5 && chmod +x $(BIN)/dockcross-linux-armv5
-	$(BIN)/dockcross-linux-armv5 python test/run.py
-
-linux-armv6: base linux-armv6/Dockerfile linux-armv6/Toolchain.cmake
-	$(DOCKER) build -t $(ORG)/linux-armv6 linux-armv6
-
-linux-armv6.test: linux-armv6 test/run.py
-	$(DOCKER) run --rm dockcross/linux-armv6 > $(BIN)/dockcross-linux-armv6 && chmod +x $(BIN)/dockcross-linux-armv6
-	$(BIN)/dockcross-linux-armv6 python test/run.py
-
-linux-armv7: base linux-armv7/Dockerfile linux-armv7/Toolchain.cmake
-	$(DOCKER) build -t $(ORG)/linux-armv7 linux-armv7
-
-linux-armv7.test: linux-armv7 test/run.py
-	$(DOCKER) run --rm dockcross/linux-armv7 > $(BIN)/dockcross-linux-armv7 && chmod +x $(BIN)/dockcross-linux-armv7
-	$(BIN)/dockcross-linux-armv7 python test/run.py
-
-linux-ppc64le: base linux-ppc64le/Dockerfile linux-ppc64le/Toolchain.cmake
-	$(DOCKER) build -t $(ORG)/linux-ppc64le linux-ppc64le
-
-linux-ppc64le.test: linux-ppc64le test/run.py
-	$(DOCKER) run --rm dockcross/linux-ppc64le > $(BIN)/dockcross-linux-ppc64le && chmod +x $(BIN)/dockcross-linux-ppc64le
-	$(BIN)/dockcross-linux-ppc64le python test/run.py --languages C
-
-windows-x86: base windows-x86/Dockerfile windows-x86/settings.mk
-	$(DOCKER) build -t $(ORG)/windows-x86 windows-x86
-
-windows-x86.test: windows-x86 test/run.py
-	$(DOCKER) run --rm dockcross/windows-x86 > $(BIN)/dockcross-windows-x86 && chmod +x $(BIN)/dockcross-windows-x86
-	$(BIN)/dockcross-windows-x86 python test/run.py  --exe-suffix ".exe"
-
-windows-x64: base windows-x64/Dockerfile windows-x64/settings.mk
-	$(DOCKER) build -t $(ORG)/windows-x64 windows-x64
-
-windows-x64.test: windows-x64 test/run.py
-	$(DOCKER) run --rm dockcross/windows-x64 > $(BIN)/dockcross-windows-x64 && chmod +x $(BIN)/dockcross-windows-x64
-	$(BIN)/dockcross-windows-x64 python test/run.py --exe-suffix ".exe"
+xtensa-lx106: manylinux-x64/Dockerfile
+    mkdir -p $@/imagefiles && cp -r imagefiles $@/
+    $(DOCKER) build -t $(ORG)/xtensa-lx106:latest \
+        --build-arg IMAGE=$(ORG)/xtensa-lx106 \
+        --build-arg VCS_REF=`git rev-parse --short HEAD` \
+        --build-arg VCS_URL=`git config --get remote.origin.url` \
+        --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
+        -f xtensa-lx106/Dockerfile .
+    rm -rf $@/imagefiles
 
 xtensa-lx106.test: xtensa-lx106 test/run.py
-	$(DOCKER) run --rm dockcross/xtensa-lx106 > $(BIN)/dockcross-xtensa && chmod +x $(BIN)/dockcross-xtensa
-	$(BIN)/dockcross-xtensa python test/run.py
+    $(DOCKER) run --rm dockcross/xtensa-lx106 > $(BIN)/dockcross-xtensa && chmod +x $(BIN)/dockcross-xtensa
+    $(BIN)/dockcross-xtensa python test/run.py
 
-base: Dockerfile
-	$(DOCKER) build -t $(ORG)/base .
 
-base.test: base test/run.py
+#
+# base
+#
+Dockerfile: Dockerfile.in common.docker common.debian
+	sed -e '/common.docker/ r common.docker' -e '/common.debian/ r common.debian' Dockerfile.in > Dockerfile
+
+base: Dockerfile imagefiles/
+	$(DOCKER) build -t $(ORG)/base:latest \
+		--build-arg IMAGE=$(ORG)/base \
+		--build-arg VCS_URL=`git config --get remote.origin.url` \
+		.
+
+base.test: base
+	$(DOCKER) run $(RM) dockcross/base > $(BIN)/dockcross-base && chmod +x $(BIN)/dockcross-base
+
+#
+# display
+#
+display_images:
+	for image in $(IMAGES); do echo $$image; done
+
+$(VERBOSE).SILENT: display_images
+
+#
+# build implicit rule
+#
+$(STANDARD_IMAGES): base
+	mkdir -p $@/imagefiles && cp -r imagefiles $@/
+	$(DOCKER) build -t $(ORG)/$@:latest \
+		--build-arg IMAGE=$(ORG)/$@ \
+		--build-arg VCS_REF=`git rev-parse --short HEAD` \
+		--build-arg VCS_URL=`git config --get remote.origin.url` \
+		--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
+		$@
+	rm -rf $@/imagefiles
+
+#
+# testing implicit rule
+#
+.SECONDEXPANSION:
+$(addsuffix .test,$(STANDARD_IMAGES)): $$(basename $$@)
+	$(DOCKER) run $(RM) dockcross/$(basename $@) > $(BIN)/dockcross-$(basename $@) && chmod +x $(BIN)/dockcross-$(basename $@)
+	$(BIN)/dockcross-$(basename $@) python test/run.py $($@_ARGS)
+
+#
+# testing prerequisites implicit rule
+#
+test.prerequisites:
 	mkdir -p $(BIN)
-	$(DOCKER) run --rm dockcross/base > $(BIN)/dockcross-base && chmod +x $(BIN)/dockcross-base
 
-.PHONY: images base android-arm linux-x86 linux-x64 linux-arm64 linux-armv5 linux-armv6 linux-armv7 windows-x86 windows-x64 tests %.test
+$(addsuffix .test,base $(IMAGES)): test.prerequisites
+
+.PHONY: base images $(IMAGES) test %.test

@@ -38,7 +38,7 @@ RUN echo "deb http://ftp.de.debian.org/debian jessie main non-free" > /etc/apt/s
 RUN useradd -ms /bin/bash espbuild
 USER espbuild
 WORKDIR /home/espbuild
-RUN git clone --recursive https://github.com/pfalcon/esp-open-sdk.git && cd esp-open-sdk && make
+RUN git clone --recursive https://github.com/pfalcon/esp-open-sdk/tree/350c0e91744e3e88ea4b91a9261cfed223093db6 && cd esp-open-sdk && make
 
 ENV PATH=/home/espbuild/esp-open-sdk/xtensa-lx106-elf/bin:$PATH
 
@@ -54,4 +54,4 @@ ENV AS=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-as \
 ENV QEMU_LD_PREFIX ${CROSS_ROOT}/libc
 ENV QEMU_SET_ENV "LD_LIBRARY_PATH=${CROSS_ROOT}/lib:${CROSS_ROOT}/libc/lib/${CROSS_ROOT}/"
 
-ENV DEFAULT_DOCKCROSS_IMAGE brainstorm/dockcross-esp-open-sdk
+ENV DEFAULT_DOCKCROSS_IMAGE dockcross/xtensa-lx106

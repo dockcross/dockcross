@@ -1,4 +1,4 @@
-FROM dockcross/base
+FROM dockcross/base:latest
 MAINTAINER Matt McCormick "matt.mccormick@kitware.com"
 
 # WINE is used as an emulator for try_run and tests with CMake.
@@ -48,10 +48,10 @@ ENV WINEARCH win32
 RUN wine hostname
 
 WORKDIR /usr/src
-# mxe master 2016-07-21
+# mxe master 2016-10-25
 RUN git clone https://github.com/mxe/mxe.git && \
   cd mxe && \
-  git checkout 041ab69b457edd7b9944e6ae7b85f915e2596c2c
+  git checkout 2c8b747d9cf58672040ff7443d2c365dba978fa5
 WORKDIR /usr/src/mxe
 COPY settings.mk /usr/src/mxe/
 RUN make -j$(nproc)
@@ -70,3 +70,14 @@ WORKDIR /work
 
 ENV CMAKE_TOOLCHAIN_FILE /usr/src/mxe/usr/i686-w64-mingw32.static/share/cmake/mxe-conf.cmake
 RUN echo 'set(CMAKE_CROSSCOMPILING_EMULATOR "/usr/bin/wine")' >> ${CMAKE_TOOLCHAIN_FILE}
+
+# Build-time metadata as defined at http://label-schema.org
+ARG BUILD_DATE
+ARG IMAGE
+ARG VCS_REF
+ARG VCS_URL
+LABEL org.label-schema.build-date=$BUILD_DATE \
+      org.label-schema.name=$IMAGE \
+      org.label-schema.vcs-ref=$VCS_REF \
+      org.label-schema.vcs-url=$VCS_URL \
+      org.label-schema.schema-version="1.0"

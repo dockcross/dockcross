@@ -1,0 +1,45 @@
+WORKDIR /usr/share
+RUN git clone "https://github.com/nojhan/liquidprompt.git" && \
+  cd liquidprompt && \
+  git checkout v_1.11
+COPY imagefiles/.bashrc /root/
+
+WORKDIR /usr/src
+
+COPY imagefiles/install-openssl.sh imagefiles/install-cmake.sh /dockcross/
+RUN \
+  if [ "$DEFAULT_DOCKCROSS_IMAGE" = "dockcross/manylinux-x86" ]; then \
+    /dockcross/install-openssl.sh -32 && \
+    /dockcross/install-cmake.sh -32 || exit 1; \
+  else \
+    /dockcross/install-openssl.sh && \
+    /dockcross/install-cmake.sh || exit 1; \
+  fi; \
+  rm /dockcross/install-openssl.sh /dockcross/install-cmake.sh
+
+COPY imagefiles/cmake.sh /usr/local/bin/cmake
+COPY imagefiles/ccmake.sh /usr/local/bin/ccmake
+# /opt/rh/devtoolset-2/root/usr/bin/sudo expects sudo at this location
+COPY imagefiles/sudo.sh /usr/bin/sudo
+
+COPY imagefiles/install-ninja.sh /dockcross/
+RUN \
+  /dockcross/install-ninja.sh \
+    -python $([ -e /opt/python/cp35-cp35m/bin/python ] && echo "/opt/python/cp35-cp35m/bin/python" || echo "python") && \
+  rm /dockcross/install-ninja.sh
+
+RUN if [ -e /opt/python/cp35-cp35m/bin/python ]; then \
+    : nothing to do here since it is updated by manylinux-common/install-python-packages.sh ; \
+  else \
+    wget https://bootstrap.pypa.io/get-pip.py && \
+    python get-pip.py --ignore-installed && \
+    rm get-pip.py || exit 1; \
+  fi
+
+RUN $([ -e /opt/python/cp35-cp35m/bin/python ] && echo "/opt/python/cp35-cp35m/bin/python" || echo "python") -m pip install --ignore-installed conan
+
+RUN echo "root:root" | chpasswd
+WORKDIR /work
+ENTRYPOINT ["/dockcross/entrypoint.sh"]
+
+COPY imagefiles/entrypoint.sh imagefiles/dockcross /dockcross/

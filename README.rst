@@ -10,104 +10,127 @@ Cross compiling toolchains in Docker images.
 Features
 --------
 
-* Different toolchains for cross compiling.
+* Pre-built and configured toolchains for cross compiling.
 * Most images also contain an emulator for the target system.
 * Commands in the container are run as the calling user, so that any created files have the expected ownership, (i.e. not root).
 * Make variables (`CC`, `LD` etc) are set to point to the appropriate tools in the container.
-* Recent `CMake <https://cmake.org>`_ and ninja are precompiled. Toolchain files configured for CMake.
+* Recent `CMake <https://cmake.org>`_ and ninja are precompiled.
+* `Conan.io <https://www.conan.io>`_ can be used as a package manager.
+* Toolchain files configured for CMake.
 * Current directory is mounted as the container's workdir, ``/work``.
-* Works with the `Docker Toolbox <https://www.docker.com/products/docker-toolbox>`_ on Mac OSX.
+* Works with the `Docker for Mac <https://docs.docker.com/docker-for-mac/>`_ and `Docker for Windows <https://docs.docker.com/docker-for-windows/>`_.
 
 
 Cross compilers
 ---------------
 
-.. |base-images| image:: https://badge.imagelayers.io/dockcross/base:latest.svg
-  :target: https://imagelayers.io/?images=dockcross/base:latest
+.. |base-images| image:: https://images.microbadger.com/badges/image/dockcross/base.svg
+  :target: https://microbadger.com/images/dockcross/base
 
 dockcross/base
   |base-images| Base image for other toolchain images. From Debian Jessie with GCC,
   make, autotools, CMake, Ninja, Git, and Python.
 
 
-.. |android-arm-images| image:: https://badge.imagelayers.io/dockcross/android-arm:latest.svg
-  :target: https://imagelayers.io/?images=dockcross/android-arm:latest
+.. |android-arm-images| image:: https://images.microbadger.com/badges/image/dockcross/android-arm.svg
+  :target: https://microbadger.com/images/dockcross/android-arm
 
 dockcross/android-arm
   |android-arm-images| The Android NDK standalone toolchain for the arm
   architecture.
 
 
-.. |browser-asmjs-images| image:: https://badge.imagelayers.io/dockcross/browser-asmjs:latest.svg
-  :target: https://imagelayers.io/?images=dockcross/browser-asmjs:latest
+.. |browser-asmjs-images| image:: https://images.microbadger.com/badges/image/dockcross/browser-asmjs.svg
+  :target: https://microbadger.com/images/dockcross/browser-asmjs
 
 dockcross/browser-asmjs
   |browser-asmjs-images| The Emscripten JavaScript cross compiler.
 
 
-.. |linux-arm64-images| image:: https://badge.imagelayers.io/dockcross/linux-arm64:latest.svg
-  :target: https://imagelayers.io/?images=dockcross/linux-arm64:latest
+.. |linux-arm64-images| image:: https://images.microbadger.com/badges/image/dockcross/linux-arm64.svg
+  :target: https://microbadger.com/images/dockcross/linux-arm64
 
 dockcross/linux-arm64
   |linux-arm64-images| Cross compiler for the 64-bit ARM platform on Linux,
   also known as AArch64.
 
 
-.. |linux-armv5-images| image:: https://badge.imagelayers.io/dockcross/linux-armv5:latest.svg
-  :target: https://imagelayers.io/?images=dockcross/linux-armv5:latest
+.. |linux-armv5-images| image:: https://images.microbadger.com/badges/image/dockcross/linux-armv5.svg
+  :target: https://microbadger.com/images/dockcross/linux-armv5
 
 dockcross/linux-armv5
   |linux-armv5-images| Linux armv5 cross compiler toolchain for legacy devices
   like the Parrot AR Drone.
 
 
-.. |linux-armv6-images| image:: https://badge.imagelayers.io/dockcross/linux-armv6:latest.svg
-  :target: https://imagelayers.io/?images=dockcross/linux-armv6:latest
+.. |linux-armv6-images| image:: https://images.microbadger.com/badges/image/dockcross/linux-armv6.svg
+  :target: https://microbadger.com/images/dockcross/linux-armv6
 
 dockcross/linux-armv6
   |linux-armv6-images| Linux ARMv6 cross compiler toolchain for the Raspberry
   Pi, etc.
 
 
-.. |linux-armv7-images| image:: https://badge.imagelayers.io/dockcross/linux-armv7:latest.svg
-  :target: https://imagelayers.io/?images=dockcross/linux-armv7:latest
+.. |linux-armv7-images| image:: https://images.microbadger.com/badges/image/dockcross/linux-armv7.svg
+  :target: https://microbadger.com/images/dockcross/linux-armv7
 
 dockcross/linux-armv7
   |linux-armv7-images| Generic Linux armv7 cross compiler toolchain.
 
+.. |linux-mipsel-images| image:: https://images.microbadger.com/badges/image/dockcross/linux-mipsel.svg
+  :target: https://microbadger.com/images/dockcross/linux-mipsel
 
-.. |linux-ppc64le-images| image:: https://badge.imagelayers.io/dockcross/linux-ppc64le:latest.svg
-  :target: https://imagelayers.io/?images=dockcross/linux-ppc64le:latest
+dockcross/linux-mipsel
+  |linux-mipsel-images| Linux mipsel cross compiler toolchain for little endian MIPS GNU systems.
+
+.. |linux-ppc64le-images| image:: https://images.microbadger.com/badges/image/dockcross/linux-ppc64le.svg
+  :target: https://microbadger.com/images/dockcross/linux-ppc64le
 
 dockcross/linux-ppc64le
   |linux-ppc64le-images| Linux PowerPC 64 little endian cross compiler
   toolchain for the POWER8, etc.
 
 
-.. |linux-x64-images| image:: https://badge.imagelayers.io/dockcross/linux-x64:latest.svg
-  :target: https://imagelayers.io/?images=dockcross/linux-x64:latest
+.. |linux-x64-images| image:: https://images.microbadger.com/badges/image/dockcross/linux-x64.svg
+  :target: https://microbadger.com/images/dockcross/linux-x64
 
 dockcross/linux-x64
   |linux-x64-images| Linux x86_64 / amd64 compiler. Since the Docker image is
   natively x86_64, this is not actually a cross compiler.
 
 
-.. |linux-x86-images| image:: https://badge.imagelayers.io/dockcross/linux-x86:latest.svg
-  :target: https://imagelayers.io/?images=dockcross/linux-x86:latest
+.. |linux-x86-images| image:: https://images.microbadger.com/badges/image/dockcross/linux-x86.svg
+  :target: https://microbadger.com/images/dockcross/linux-x86
 
 dockcross/linux-x86
   |linux-x86-images| Linux i686 cross compiler.
 
 
-.. |windows-x64-images| image:: https://badge.imagelayers.io/dockcross/windows-x64:latest.svg
-  :target: https://imagelayers.io/?images=dockcross/windows-x64:latest
+.. |manylinux-x64-images| image:: https://images.microbadger.com/badges/image/dockcross/manylinux-x64.svg
+  :target: https://microbadger.com/images/dockcross/manylinux-x64
+
+dockcross/manylinux-x64
+  |manylinux-x64-images| Docker `manylinux <https://github.com/pypa/manylinux>`_ image for building Linux x86_64 / amd64 `Python wheel packages <http://pythonwheels.com/>`_.
+  Also has support for the dockcross script, and it has installations of CMake, Ninja, and `scikit-build <http://scikit-build.org>`_
+
+
+.. |manylinux-x86-images| image:: https://images.microbadger.com/badges/image/dockcross/manylinux-x86.svg
+  :target: https://microbadger.com/images/dockcross/manylinux-x86
+
+dockcross/manylinux-x86
+  |manylinux-x86-images| Docker `manylinux <https://github.com/pypa/manylinux>`_ image for building Linux i686 `Python wheel packages <http://pythonwheels.com/>`_.
+  Also has support for the dockcross script, and it has installations of CMake, Ninja, and `scikit-build <http://scikit-build.org>`_
+
+
+.. |windows-x64-images| image:: https://images.microbadger.com/badges/image/dockcross/windows-x64.svg
+  :target: https://microbadger.com/images/dockcross/windows-x64
 
 dockcross/windows-x64
   |windows-x64-images| 64-bit Windows cross-compiler based on MXE/MinGW-w64.
 
 
-.. |windows-x86-images| image:: https://badge.imagelayers.io/dockcross/windows-x86:latest.svg
-  :target: https://imagelayers.io/?images=dockcross/windows-x86:latest
+.. |windows-x86-images| image:: https://images.microbadger.com/badges/image/dockcross/windows-x86.svg
+  :target: https://microbadger.com/images/dockcross/windows-x86
 
 dockcross/windows-x86
   |windows-x86-images| 32-bit Windows cross-compiler based on MXE/MinGW-w64.
@@ -145,7 +168,7 @@ Note how invoking any toolchain command (make, gcc, etc.) is just a matter of pr
 
 The dockcross script will execute the given command-line inside the container,
 along with all arguments passed after the command. Commands that evaluate
-environmental variable in the image, like `$CC` above, should be executed in
+environmental variables in the image, like `$CC` above, should be executed in
 `bash -c`. The present working directory is mounted within the image, which
 can be used to make source code available in the Docker container.
 
@@ -162,8 +185,37 @@ source cross-compiler Docker image or the dockcross script itself.
 - ``dockcross update``: Update both the docker image, and the dockcross script.
 
 
-Configuration
--------------
+Download all images
+-------------------
+
+To easily download all images, the convenience target ``display_images`` could be used::
+
+  curl https://raw.githubusercontent.com/dockcross/dockcross/master/Makefile -o dockcross-Makefile
+  for image in $(make -f dockcross-Makefile display_images); do
+    echo "Pulling dockcross/$image"
+    docker pull dockcross/$image
+  done
+
+Install all dockcross scripts
+-----------------------------
+
+To automatically install in ``~/bin`` the dockcross scripts for each images already downloaded, the
+convenience target ``display_images`` could be used::
+
+  curl https://raw.githubusercontent.com/dockcross/dockcross/master/Makefile -o dockcross-Makefile
+  for image in $(make -f dockcross-Makefile display_images); do
+    if [[ $(docker images -q dockcross/$image) == "" ]]; then
+      echo "~/bin/dockcross-$image skipping: image not found locally"
+      continue
+    fi
+    echo "~/bin/dockcross-$image ok"
+    docker run dockcross/$image > ~/bin/dockcross-$image && \
+    chmod u+x  ~/bin/dockcross-$image
+  done
+
+
+Dockcross configuration
+-----------------------
 
 The following environmental variables and command-line options are used. In
 all cases, the command-line option overrides the environment variable.
@@ -186,7 +238,20 @@ Default: Image with which the script was created.
 DOCKCROSS_ARGS / --args|-a <docker-run-args>
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Extra arguments to pass to the ``docker run`` command.
+Extra arguments to pass to the ``docker run`` command. Quote the entire set of
+args if they contain spaces.
+
+
+Per-project dockcross configuration
+-----------------------------------
+
+If a shell script named ``.dockcross`` is found in the current directory where
+the dockcross script is started, it is executed before the dockcross script
+``command`` argument.  The shell script is expected to have a shebang like
+``#!/bin/bash``.
+
+For example, commands like ``git config --global advice.detachedHead false`` can
+be added to this script.
 
 
 Examples
@@ -205,6 +270,16 @@ Examples
 Note that commands are executed verbatim. If any shell processing for
 environment variable expansion or redirection is required, please use
 `bash -c 'command args...'`.
+
+
+Articles
+--------
+
+- `dockcross: C++ Write Once, Run Anywhere
+  <https://nbviewer.jupyter.org/format/slides/github/dockcross/cxx-write-once-run-anywhere/blob/master/dockcross_CXX_Write_Once_Run_Anywhere.ipynb#/>`_
+- `Cross-compiling binaries for multiple architectures with Docker
+  <http://blogs.nopcode.org/brainstorm/2016/07/26/cross-compiling-with-docker>`_
+
 
 ---
 

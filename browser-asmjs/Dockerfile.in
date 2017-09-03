@@ -1,0 +1,32 @@
+FROM trzeci/emscripten:sdk-tag-1.37.3-64bit
+MAINTAINER Matt McCormick "matt.mccormick@kitware.com"
+
+# Revert back to "/bin/sh" as default shell
+# See https://github.com/asRIA/emscripten-docker/blob/master/Dockerfile.in#L4
+RUN rm /bin/sh && ln -s /bin/dash /bin/sh
+
+#include "common.debian"
+
+#include "common.docker"
+
+ENV EMSCRIPTEN_VERSION 1.37.3
+
+ENV PATH /emsdk_portable:/emsdk_portable/clang/tag-e${EMSCRIPTEN_VERSION}/build_tag-e${EMSCRIPTEN_VERSION}_64/bin:/emsdk_portable/emscripten/tag-${EMSCRIPTEN_VERSION}:${PATH}
+ENV CC=/emsdk_portable/emscripten/tag-${EMSCRIPTEN_VERSION}/emcc \
+  CXX=/emsdk_portable/emscripten/tag-${EMSCRIPTEN_VERSION}/em++ \
+  AR=/emsdk_portable/emscripten/tag-${EMSCRIPTEN_VERSION}/emar
+
+ENV DEFAULT_DOCKCROSS_IMAGE dockcross/browser-asmjs
+
+ENV CMAKE_TOOLCHAIN_FILE /emsdk_portable/emscripten/tag-${EMSCRIPTEN_VERSION}/cmake/Modules/Platform/Emscripten.cmake
+
+# Build-time metadata as defined at http://label-schema.org
+ARG BUILD_DATE
+ARG IMAGE
+ARG VCS_REF
+ARG VCS_URL
+LABEL org.label-schema.build-date=$BUILD_DATE \
+      org.label-schema.name=$IMAGE \
+      org.label-schema.vcs-ref=$VCS_REF \
+      org.label-schema.vcs-url=$VCS_URL \
+      org.label-schema.schema-version="1.0"

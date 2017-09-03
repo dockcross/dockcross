@@ -1,4 +1,4 @@
-FROM dockcross/base
+FROM dockcross/base:latest
 MAINTAINER Matt McCormick "matt.mccormick@kitware.com"
 
 RUN dpkg --add-architecture i386 && \
@@ -9,8 +9,7 @@ RUN dpkg --add-architecture i386 && \
     libstdc++6:i386 \
     libbz2-dev:i386 \
     libexpat1-dev:i386 \
-    ncurses-dev:i386 \
-    libssl-dev:i386
+    ncurses-dev:i386
 
 ENV CROSS_TRIPLE i686-linux-gnu
 ENV CROSS_ROOT /usr/${CROSS_TRIPLE}
@@ -34,9 +33,29 @@ ENV AS=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-as \
     CC=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-gcc \
     CXX=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-g++
 
+
+COPY imagefiles/install-openssl.sh /dockcross/
+RUN \
+  /dockcross/install-openssl.sh -32 && \
+  rm /dockcross/install-openssl.sh
+
 ENV DEFAULT_DOCKCROSS_IMAGE dockcross/linux-x86
 
 # Note: Toolchain file support is currently in debian Experimental:
 # https://wiki.debian.org/CrossToolchains#In_jessie_.28Debian_8.29
 COPY Toolchain.cmake /usr/lib/${CROSS_TRIPLE}/
 ENV CMAKE_TOOLCHAIN_FILE /usr/lib/${CROSS_TRIPLE}/Toolchain.cmake
+
+COPY linux32-entrypoint.sh /dockcross/
+ENTRYPOINT ["/dockcross/linux32-entrypoint.sh"]
+
+# Build-time metadata as defined at http://label-schema.org
+ARG BUILD_DATE
+ARG IMAGE
+ARG VCS_REF
+ARG VCS_URL
+LABEL org.label-schema.build-date=$BUILD_DATE \
+      org.label-schema.name=$IMAGE \
+      org.label-schema.vcs-ref=$VCS_REF \
+      org.label-schema.vcs-url=$VCS_URL \
+      org.label-schema.schema-version="1.0"
