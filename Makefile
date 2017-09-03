@@ -110,18 +110,18 @@ manylinux-x86.test: manylinux-x86
 #
 
 xtensa-lx106: manylinux-x64/Dockerfile
-    mkdir -p $@/imagefiles && cp -r imagefiles $@/
-    $(DOCKER) build -t $(ORG)/xtensa-lx106:latest \
-        --build-arg IMAGE=$(ORG)/xtensa-lx106 \
-        --build-arg VCS_REF=`git rev-parse --short HEAD` \
-        --build-arg VCS_URL=`git config --get remote.origin.url` \
-        --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
-        -f xtensa-lx106/Dockerfile .
-    rm -rf $@/imagefiles
+	mkdir -p $@/imagefiles && cp -r imagefiles $@/
+	$(DOCKER) build -t $(ORG)/xtensa-lx106:latest \
+		--build-arg IMAGE=$(ORG)/xtensa-lx106 \
+		--build-arg VCS_REF=`git rev-parse --short HEAD` \
+		--build-arg VCS_URL=`git config --get remote.origin.url` \
+		--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
+		-f xtensa-lx106/Dockerfile .
+	rm -rf $@/imagefiles
 
 xtensa-lx106.test: xtensa-lx106 test/run.py
-    $(DOCKER) run --rm dockcross/xtensa-lx106 > $(BIN)/dockcross-xtensa && chmod +x $(BIN)/dockcross-xtensa
-    $(BIN)/dockcross-xtensa python test/run.py
+	$(DOCKER) run --rm dockcross/xtensa-lx106 > $(BIN)/dockcross-xtensa && chmod +x $(BIN)/dockcross-xtensa
+	$(BIN)/dockcross-xtensa python test/run.py
 
 
 #
