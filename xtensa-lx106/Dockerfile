@@ -1,4 +1,4 @@
-FROM dockcross/base
+FROM dockcross/base:latest
 MAINTAINER Roman Valls Guimera "brainstorm@nopcode.org"
 
 # For embedded IoT systems such as the ESP82xx from Espressif
