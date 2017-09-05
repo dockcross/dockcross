@@ -35,8 +35,6 @@ RUN echo "deb http://ftp.de.debian.org/debian jessie main non-free" > /etc/apt/s
 	git \
 && apt-get clean
 
-RUN useradd -ms /bin/bash espbuild
-USER espbuild
 WORKDIR /home/espbuild
 RUN git clone --recursive https://github.com/pfalcon/esp-open-sdk && cd esp-open-sdk && git checkout 350c0e91744e3e88ea4b91a9261c && make
 

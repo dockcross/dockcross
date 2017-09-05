@@ -13,7 +13,7 @@ ORG = dockcross
 BIN = ./bin
 
 # These images are built using the "build implicit rule"
-STANDARD_IMAGES = android-arm linux-x86 linux-x64 linux-arm64 linux-armv5 linux-armv6 linux-armv7 linux-mipsel linux-ppc64le windows-x86 windows-x64
+STANDARD_IMAGES = android-arm linux-x86 linux-x64 linux-arm64 linux-armv5 linux-armv6 linux-armv7 linux-mipsel linux-ppc64le windows-x86 windows-x64 xtensa-lx106
 
 # These images are expected to have explicit rules for *both* build and testing
 NON_STANDARD_IMAGES = browser-asmjs manylinux-x64 manylinux-x86
@@ -104,25 +104,6 @@ manylinux-x86: manylinux-x86/Dockerfile
 manylinux-x86.test: manylinux-x86
 	$(DOCKER) run $(RM) dockcross/manylinux-x86 > $(BIN)/dockcross-manylinux-x86 && chmod +x $(BIN)/dockcross-manylinux-x86
 	$(BIN)/dockcross-manylinux-x86 /opt/python/cp35-cp35m/bin/python test/run.py
-
-#
-# Xtensa esp8266
-#
-
-xtensa-lx106: manylinux-x64/Dockerfile
-	mkdir -p $@/imagefiles && cp -r imagefiles $@/
-	$(DOCKER) build -t $(ORG)/xtensa-lx106:latest \
-		--build-arg IMAGE=$(ORG)/xtensa-lx106 \
-		--build-arg VCS_REF=`git rev-parse --short HEAD` \
-		--build-arg VCS_URL=`git config --get remote.origin.url` \
-		--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
-		-f xtensa-lx106/Dockerfile .
-	rm -rf $@/imagefiles
-
-xtensa-lx106.test: xtensa-lx106 test/run.py
-	$(DOCKER) run --rm dockcross/xtensa-lx106 > $(BIN)/dockcross-xtensa && chmod +x $(BIN)/dockcross-xtensa
-	$(BIN)/dockcross-xtensa python test/run.py
-
 
 #
 # base
