@@ -169,6 +169,27 @@ jobs:
       - save_cache:
           key: linux-mipsel-assets-{{ .Revision }}
           paths: ~/docker/linux-mipsel.tar
+  linux-s390x:
+    machine: true
+    working_directory: ~/dockcross
+    resource_class: large
+    steps:
+      - restore_cache:
+          key: base-assets-{{ .Revision }}
+      - run:
+         name: linux-s390x build
+         no_output_timeout: 1.5h
+         command: |
+           docker load -i ~/docker/base.tar
+           make linux-s390x
+           docker save -o ~/docker/linux-s390x.tar dockcross/linux-s390x:latest
+      - run:
+         name: linux-s390x test
+         command: |
+           make linux-s390x.test
+      - save_cache:
+          key: linux-s390x-assets-{{ .Revision }}
+          paths: ~/docker/linux-s390x.tar
   linux-ppc64le:
     machine: true
     working_directory: ~/dockcross
@@ -423,6 +444,16 @@ jobs:
               docker push dockcross/linux-mipsel:latest
             fi
       - restore_cache:
+          key: linux-s390x-assets-{{ .Revision }}
+      - deploy:
+          name: Deploy linux-s390x
+          command: |
+            docker load -i ~/docker/linux-s390x.tar
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              docker login -u $DOCKER_USER -p $DOCKER_PASS
+              docker push dockcross/linux-s390x:latest
+            fi
+      - restore_cache:
           key: linux-ppc64le-assets-{{ .Revision }}
       - deploy:
           name: Deploy linux-ppc64le
@@ -529,6 +560,9 @@ workflows:
         - linux-mipsel:
             requires:
               - base
+        - linux-s390x:
+            requires:
+              - base
         - linux-ppc64le:
             requires:
               - base
@@ -563,6 +597,7 @@ workflows:
               - linux-armv6
               - linux-armv7
               - linux-mipsel
+              - linux-s390x
               - linux-ppc64le
               - linux-x64
               - linux-x86

@@ -13,10 +13,17 @@ ORG = dockcross
 BIN = ./bin
 
 # These images are built using the "build implicit rule"
-STANDARD_IMAGES = android-arm linux-x86 linux-x64 linux-arm64 linux-armv5 linux-armv6 linux-armv7 linux-mipsel linux-ppc64le windows-x86 windows-x64 xtensa-lx106
+
+STANDARD_IMAGES = linux-s390x android-arm linux-x86 linux-x64 linux-arm64 linux-armv5 linux-armv6 linux-armv7 linux-mips linux-mipsel linux-ppc64le windows-x86 windows-x64 xtensa-lx106
+
+# Generated Dockerfiles.
+GEN_IMAGES = linux-s390x linux-mips manylinux-x86 manylinux-x64 browser-asmjs
+GEN_IMAGE_DOCKERFILES = $(addsuffix /Dockerfile,$(GEN_IMAGES))
 
 # These images are expected to have explicit rules for *both* build and testing
 NON_STANDARD_IMAGES = browser-asmjs manylinux-x64 manylinux-x86
+
+DOCKER_COMPOSITE_SOURCES = common.docker common.debian common.manylinux common.crosstool
 
 # This list all available images
 IMAGES = $(STANDARD_IMAGES) $(NON_STANDARD_IMAGES)
@@ -44,10 +51,21 @@ images: base $(IMAGES)
 test: base.test $(addsuffix .test,$(IMAGES))
 
 #
+# Generic Targets (can specialize later).
+#
+
+$(GEN_IMAGE_DOCKERFILES) Dockerfile: %Dockerfile: %Dockerfile.in $(DOCKER_COMPOSITE_SOURCES)
+	sed \
+		-e '/common.docker/ r common.docker' \
+		-e '/common.debian/ r common.debian' \
+		-e '/common.manylinux/ r common.manylinux' \
+		-e '/common.crosstool/ r common.crosstool' \
+		$< > $@
+
+#
 # browser-asmjs
 #
-browser-asmjs: browser-asmjs/Dockerfile.in common.docker common.debian
-	sed -e '/common.docker/ r common.docker' -e '/common.debian/ r common.debian' $@/Dockerfile.in > $@/Dockerfile
+browser-asmjs: browser-asmjs/Dockerfile
 	mkdir -p $@/imagefiles && cp -r imagefiles $@/
 	cp -r test browser-asmjs/
 	$(DOCKER) build -t $(ORG)/browser-asmjs:latest \
@@ -67,9 +85,6 @@ browser-asmjs.test: browser-asmjs
 
 #
 # manylinux-x64
-#
-manylinux-x64/Dockerfile: manylinux-x64/Dockerfile.in common.docker common.manylinux
-	sed -e '/common.docker/ r common.docker' -e '/common.manylinux/ r common.manylinux' manylinux-x64/Dockerfile.in > manylinux-x64/Dockerfile
 
 manylinux-x64: manylinux-x64/Dockerfile
 	mkdir -p $@/imagefiles && cp -r imagefiles $@/
@@ -88,8 +103,6 @@ manylinux-x64.test: manylinux-x64
 #
 # manylinux-x86
 #
-manylinux-x86/Dockerfile: manylinux-x86/Dockerfile.in common.docker common.manylinux
-	sed -e '/common.docker/ r common.docker' -e '/common.manylinux/ r common.manylinux' manylinux-x86/Dockerfile.in > manylinux-x86/Dockerfile
 
 manylinux-x86: manylinux-x86/Dockerfile
 	mkdir -p $@/imagefiles && cp -r imagefiles $@/
@@ -108,8 +121,6 @@ manylinux-x86.test: manylinux-x86
 #
 # base
 #
-Dockerfile: Dockerfile.in common.docker common.debian
-	sed -e '/common.docker/ r common.docker' -e '/common.debian/ r common.debian' Dockerfile.in > Dockerfile
 
 base: Dockerfile imagefiles/
 	$(DOCKER) build -t $(ORG)/base:latest \
@@ -131,7 +142,8 @@ $(VERBOSE).SILENT: display_images
 #
 # build implicit rule
 #
-$(STANDARD_IMAGES): base
+
+$(STANDARD_IMAGES): %: %/Dockerfile base
 	mkdir -p $@/imagefiles && cp -r imagefiles $@/
 	$(DOCKER) build -t $(ORG)/$@:latest \
 		--build-arg IMAGE=$(ORG)/$@ \
