@@ -89,6 +89,12 @@ dockcross/linux-mipsel
 dockcross/linux-mips
   |linux-mips-images| Linux mips cross compiler toolchain for big endian 32-bit hard float MIPS GNU systems.
 
+.. |linux-s390x-images| image:: https://images.microbadger.com/badges/image/dockcross/linux-s390x.svg
+  :target: https://microbadger.com/images/dockcross/linux-s390x
+
+dockcross/linux-s390x
+  |linux-s390x-images| Linux s390x cross compiler toolchain for S390X GNU systems.
+
 .. |linux-ppc64le-images| image:: https://images.microbadger.com/badges/image/dockcross/linux-ppc64le.svg
   :target: https://microbadger.com/images/dockcross/linux-ppc64le
 

@@ -13,10 +13,10 @@ ORG = dockcross
 BIN = ./bin
 
 # These images are built using the "build implicit rule"
-STANDARD_IMAGES = android-arm linux-x86 linux-x64 linux-arm64 linux-armv5 linux-armv6 linux-armv7 linux-mips linux-mipsel linux-ppc64le windows-x86 windows-x64 xtensa-lx106
+STANDARD_IMAGES = linux-s390x android-arm linux-x86 linux-x64 linux-arm64 linux-armv5 linux-armv6 linux-armv7 linux-mips linux-mipsel linux-ppc64le windows-x86 windows-x64
 
 # Generated Dockerfiles.
-GEN_IMAGES = linux-mips manylinux-x86 manylinux-x64 browser-asmjs
+GEN_IMAGES = linux-s390x linux-mips manylinux-x86 manylinux-x64 browser-asmjs
 GEN_IMAGE_DOCKERFILES = $(addsuffix /Dockerfile,$(GEN_IMAGES))
 
 # These images are expected to have explicit rules for *both* build and testing
