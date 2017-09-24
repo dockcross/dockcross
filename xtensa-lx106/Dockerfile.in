@@ -1,0 +1,53 @@
+FROM dockcross/base:latest
+MAINTAINER Roman Valls Guimera "brainstorm@nopcode.org"
+
+# For embedded IoT systems such as the ESP82xx and ESP32 from Espressif
+
+#include "common.crosstool"
+
+# The cross-compiling emulator
+RUN apt-get update \
+&& apt-get install -y \
+  qemu-user \
+  qemu-user-static \
+&& apt-get clean --yes
+
+# esp8266 SDK/HAL without its builtin crosstool-NG
+RUN git clone https://github.com/pfalcon/esp-open-sdk && cd esp-open-sdk && git checkout 350c0e91744e3e88ea4b91a9261c
+RUN git clone https://github.com/pfalcon/esp-open-lwip && git checkout 8c39d2179a273553466043f388772abb6251a4ca
+RUN git clone https://github.com/tommie/lx106-hal && git checkout e4bcc63c9c016e4f8848e7e8f512438ca857531d
+RUN make STANDALONE=n
+
+# esp32
+ct-ng xtensa-esp32-elf
+
+ENV PATH=/workdir/esp-open-sdk/xtensa-lx106-elf/bin:$PATH
+
+ENV CROSS_TRIPLE xtensa-lx106-elf
+
+ENV CROSS_ROOT /home/espbuild/esp-open-sdk/xtensa-lx106-elf/bin
+ENV AS=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-as \
+    AR=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-ar \
+    CC=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-gcc \
+    CPP=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-cpp \
+    CXX=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-g++ \
+    LD=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-ld
+
+ENV QEMU_LD_PREFIX ${CROSS_ROOT}/libc
+ENV QEMU_SET_ENV "LD_LIBRARY_PATH=${CROSS_ROOT}/lib:${CROSS_ROOT}/libc/lib/${CROSS_ROOT}/"
+
+ENV DEFAULT_DOCKCROSS_IMAGE dockcross/xtensa-lx106
+
+COPY Toolchain.cmake ${CROSS_ROOT}/
+ENV CMAKE_TOOLCHAIN_FILE ${CROSS_ROOT}/Toolchain.cmake
+
+# Build-time metadata as defined at http://label-schema.org
+ARG BUILD_DATE
+ARG IMAGE
+ARG VCS_REF
+ARG VCS_URL
+LABEL org.label-schema.build-date=$BUILD_DATE \
+      org.label-schema.name=$IMAGE \
+      org.label-schema.vcs-ref=$VCS_REF \
+      org.label-schema.vcs-url=$VCS_URL \
+      org.label-schema.schema-version="1.0"
