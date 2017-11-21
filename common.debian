@@ -31,7 +31,9 @@ RUN apt-get update --yes && apt-get install --no-install-recommends --yes \
   pax \
   vim \
   wget \
-  xz-utils && \
+  xz-utils \
+  openjdk-7-jdk \
+  unzip && \
   apt-get clean --yes
 
 ENV GOSU_VERSION 1.10

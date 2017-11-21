@@ -36,7 +36,6 @@ RUN apt-get update && apt-get -y --force-yes install \
   ruby \
   scons \
   sed \
-  unzip \
   wget \
   wine \
   xz-utils
