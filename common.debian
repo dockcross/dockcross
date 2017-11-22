@@ -22,6 +22,7 @@ RUN apt-get update --yes && apt-get install --no-install-recommends --yes \
   libtool \
   python \
   python-pip \
+  python-dev \
   rsync \
   sed \
   ssh \
