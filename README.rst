@@ -286,6 +286,27 @@ Note that commands are executed verbatim. If any shell processing for
 environment variable expansion or redirection is required, please use
 `bash -c 'command args...'`.
 
+How to extend Dockcross images
+------------------------------
+In order to extend Dockcross images with your own commands, one must:
+1) Use `FROM dockcross/<name_of_image>`.
+2) Set `DEFAULT_DOCKCROSS_IMAGE` to a name of the tag you're planning to use for the image. This tag must then be used during the build phase, unless you mean to pass the resulting helper script the `DOCKCROSS_IMAGE` argument.
+
+An example Dockerfile would be:
+```
+FROM dockcross/linux-armv7
+
+ENV DEFAULT_DOCKCROSS_IMAGE my_cool_image
+RUN apt-get install nano
+```
+And then in the shell:
+```
+docker build -t my_cool_image .			# Builds the dockcross image.
+docker run my_cool_image > linux-armv7	# Creates a helper script named linux-armv7.
+chmod +x linux-armv7					# Gives the script execution permission.
+./linux-armv7 bash						# Runs the helper script with the argument "bash", which starts an interactive container using your extended image.
+```
+
 
 Articles
 --------
