@@ -25,6 +25,7 @@ RUN mkdir -p /build && \
     ./build/tools/make_standalone_toolchain.py \
       --arch arm \
       --api 16 \
+      --stl=libc++ \
       --install-dir=${CROSS_ROOT} && \
     cd / && \
     rm -rf /build && \
