@@ -58,7 +58,7 @@ cd "${CTNG}"
 
 # Download and install the "crosstool-ng" source.
 REV=1.23.0
-wget --progress=bar:force \
+curl -# -LO \
   "https://github.com/crosstool-ng/crosstool-ng/archive/crosstool-ng-${REV}.tar.gz"
 tar -xf "crosstool-ng-${REV}.tar.gz"
 cd "crosstool-ng-crosstool-ng-${REV}"

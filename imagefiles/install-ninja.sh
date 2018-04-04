@@ -27,7 +27,7 @@ done
 
 # Download
 REV=v1.7.2
-wget --progress=bar:force https://github.com/ninja-build/ninja/archive/$REV.tar.gz -O ninja.tar.gz
+curl -# -o ninja.tar.gz -LO https://github.com/ninja-build/ninja/archive/$REV.tar.gz
 mkdir ninja
 tar -xzvf ./ninja.tar.gz --strip-components=1 -C ./ninja
 

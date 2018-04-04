@@ -46,7 +46,7 @@ cd /usr/src
 
 # Download
 CMAKE_REV=v3.10.1
-wget --progress=bar:force https://github.com/kitware/cmake/archive/$CMAKE_REV.tar.gz -O CMake.tar.gz
+curl -# -o CMake.tar.gz -LO https://github.com/kitware/cmake/archive/$CMAKE_REV.tar.gz
 mkdir CMake
 tar -xzvf ./CMake.tar.gz --strip-components=1 -C ./CMake
 

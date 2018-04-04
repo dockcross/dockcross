@@ -31,7 +31,7 @@ RUN \
 RUN if [ -e /opt/python/cp35-cp35m/bin/python ]; then \
     : nothing to do here since it is updated by manylinux-common/install-python-packages.sh ; \
   else \
-    wget https://bootstrap.pypa.io/get-pip.py && \
+    curl -# -LO https://bootstrap.pypa.io/get-pip.py && \
     python get-pip.py --ignore-installed && \
     rm get-pip.py || exit 1; \
   fi
