@@ -28,6 +28,11 @@ RUN \
     -python $([ -e /opt/python/cp35-cp35m/bin/python ] && echo "/opt/python/cp35-cp35m/bin/python" || echo "python") && \
   rm /dockcross/install-ninja.sh
 
+COPY imagefiles/install-gradle.sh /dockcross/
+RUN \
+  /dockcross/install-gradle.sh && \
+  rm /dockcross/install-gradle.sh
+
 RUN if [ -e /opt/python/cp35-cp35m/bin/python ]; then \
     : nothing to do here since it is updated by manylinux-common/install-python-packages.sh ; \
   else \
