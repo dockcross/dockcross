@@ -3,7 +3,8 @@ WORKDIR /usr/src
 ARG GIT_VERSION=2.16.2
 ARG CMAKE_VERSION=3.11.0
 
-COPY imagefiles/build-and-install-git.sh \
+COPY \
+  imagefiles/build-and-install-git.sh \
   imagefiles/utils.sh \
   imagefiles/build-and-install-openssl.sh \
   imagefiles/build-and-install-openssh.sh \
@@ -26,13 +27,14 @@ RUN \
     /dockcross/build-and-install-git.sh && \
     /dockcross/install-cmake-binary.sh || exit 1; \
   fi; \
-  rm /dockcross/build-and-install-git.sh \
-  /dockcross/utils.sh \
-  /dockcross/build-and-install-openssl.sh \
-  /dockcross/build-and-install-openssh.sh \
-  /dockcross/build-and-install-cmake.sh \
-  /dockcross/install-cmake-binary.sh \
-  /dockcross/build-and-install-curl.sh
+  rm \
+    /dockcross/build-and-install-git.sh \
+    /dockcross/utils.sh \
+    /dockcross/build-and-install-openssl.sh \
+    /dockcross/build-and-install-openssh.sh \
+    /dockcross/build-and-install-cmake.sh \
+    /dockcross/install-cmake-binary.sh \
+    /dockcross/build-and-install-curl.sh
 
 COPY imagefiles/cmake.sh /usr/local/bin/cmake
 COPY imagefiles/ccmake.sh /usr/local/bin/ccmake

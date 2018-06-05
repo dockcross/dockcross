@@ -3,36 +3,39 @@ RUN REPO=http://cdn-fastly.deb.debian.org && \
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update --yes && apt-get install --no-install-recommends --yes \
-  automake \
-  autogen \
-  bash \
-  build-essential \
-  bc \
-  bzip2 \
-  ca-certificates \
-  curl \
-  file \
-  gettext \
-  gzip \
-  zip \
-  make \
-  ncurses-dev \
-  pkg-config \
-  libtool \
-  python \
-  python-pip \
-  rsync \
-  sed \
-  ssh \
-  bison \
-  flex \
-  tar \
-  pax \
-  vim \
-  wget \
-  xz-utils \
-  zlib1g-dev && \
+RUN \
+  apt-get update --yes && \
+  apt-get install --no-install-recommends --yes \
+    automake \
+    autogen \
+    bash \
+    build-essential \
+    bc \
+    bzip2 \
+    ca-certificates \
+    curl \
+    file \
+    gettext \
+    gzip \
+    zip \
+    make \
+    ncurses-dev \
+    pkg-config \
+    libtool \
+    python \
+    python-pip \
+    rsync \
+    sed \
+    ssh \
+    bison \
+    flex \
+    tar \
+    pax \
+    vim \
+    wget \
+    xz-utils \
+    zlib1g-dev \
+  && \
   apt-get clean --yes
 
 ENV GOSU_VERSION 1.10
