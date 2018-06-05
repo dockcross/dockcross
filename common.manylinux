@@ -1,4 +1,8 @@
-COPY imagefiles/install-gosu-binary.sh /dockcross/
+COPY \
+  imagefiles/install-gosu-binary.sh \
+  manylinux-common/install-python-packages.sh \
+  manylinux-common/pre_exec.sh \
+  /dockcross/
 
 RUN \
   set -x \
@@ -7,17 +11,15 @@ RUN \
     gpg \
     zlib-devel \
     gettext \
+    openssh-clients \
+    pax \
+    zip \
 	&& yum clean all
 	&& /dockcross/install-gosu-binary.sh \
   && rm /dockcross/install-gosu-binary.sh \
   # Remove sudo provided by "devtoolset-2" since it doesn't work with
   # our sudo wrapper calling gosu.
-  && rm /opt/rh/devtoolset-2/root/usr/bin/sudo
+  && rm /opt/rh/devtoolset-2/root/usr/bin/sudo \
+  && /dockcross/install-python-packages.sh \
+  && rm /dockcross/install-python-packages.sh
 
-COPY manylinux-common/install-python-packages.sh /usr/local/bin
-RUN /usr/local/bin/install-python-packages.sh
-
-COPY manylinux-common/pre_exec.sh /dockcross/pre_exec.sh
-
-RUN yum -y install pax zip openssh-clients \
-  && yum clean all
