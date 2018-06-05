@@ -5,7 +5,7 @@
 #
 # Usage:
 #
-#  install-ninja.sh [-python /path/to/bin/python]
+#  build-and-install-ninja.sh [-python /path/to/bin/python]
 
 set -e
 set -o pipefail

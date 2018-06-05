@@ -39,11 +39,11 @@ COPY imagefiles/ccmake.sh /usr/local/bin/ccmake
 # /opt/rh/devtoolset-2/root/usr/bin/sudo expects sudo at this location
 COPY imagefiles/sudo.sh /usr/bin/sudo
 
-COPY imagefiles/install-ninja.sh /dockcross/
+COPY imagefiles/build-and-install-ninja.sh /dockcross/
 RUN \
-  /dockcross/install-ninja.sh \
+  /dockcross/build-and-install-ninja.sh \
     -python $([ -e /opt/python/cp35-cp35m/bin/python ] && echo "/opt/python/cp35-cp35m/bin/python" || echo "python") && \
-  rm /dockcross/install-ninja.sh
+  rm /dockcross/build-and-install-ninja.sh
 
 RUN if [ -e /opt/python/cp35-cp35m/bin/python ]; then \
     : nothing to do here since it is updated by manylinux-common/install-python-packages.sh ; \
