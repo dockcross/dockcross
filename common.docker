@@ -38,7 +38,9 @@ RUN \
     /dockcross/build-and-install-cmake.sh \
     /dockcross/install-cmake-binary.sh \
     /dockcross/build-and-install-curl.sh \
-    /dockcross/build-and-install-ninja.sh
+    /dockcross/build-and-install-ninja.sh \
+  && \
+  ${PYTHON} -m pip install --ignore-installed conan
 
 COPY imagefiles/cmake.sh /usr/local/bin/cmake
 COPY imagefiles/ccmake.sh /usr/local/bin/ccmake
@@ -51,8 +53,6 @@ RUN if [ -e /opt/python/cp35-cp35m/bin/python ]; then \
     python get-pip.py --ignore-installed && \
     rm get-pip.py || exit 1; \
   fi
-
-RUN $([ -e /opt/python/cp35-cp35m/bin/python ] && echo "/opt/python/cp35-cp35m/bin/python" || echo "python") -m pip install --ignore-installed conan
 
 WORKDIR /usr/share
 RUN git clone "https://github.com/nojhan/liquidprompt.git" && \
