@@ -5,8 +5,8 @@ COPY \
   /dockcross/
 
 RUN \
-  set -x \
-  && yum -y install \
+  set -x && \
+  yum -y install \
     epel-release \
     gpg \
     zlib-devel \
@@ -14,12 +14,13 @@ RUN \
     openssh-clients \
     pax \
     zip \
-	&& yum clean all
-	&& /dockcross/install-gosu-binary.sh \
-  && rm /dockcross/install-gosu-binary.sh \
+  && \
+	yum clean all && \
+	/dockcross/install-gosu-binary.sh && \
+  rm /dockcross/install-gosu-binary.sh && \
   # Remove sudo provided by "devtoolset-2" since it doesn't work with
   # our sudo wrapper calling gosu.
-  && rm /opt/rh/devtoolset-2/root/usr/bin/sudo \
-  && /dockcross/install-python-packages.sh \
-  && rm /dockcross/install-python-packages.sh
+  rm /opt/rh/devtoolset-2/root/usr/bin/sudo && \
+  /dockcross/install-python-packages.sh && \
+  rm /dockcross/install-python-packages.sh
 
