@@ -1,4 +1,5 @@
-ENV GOSU_VERSION 1.10
+COPY imagefiles/install-gosu-binary.sh /dockcross/
+
 RUN \
   set -x \
   && yum -y install \
@@ -6,17 +7,12 @@ RUN \
     gpg \
     zlib-devel \
     gettext \
-  && dpkgArch=$(if test $(uname -m) = "x86_64"; then echo amd64; else echo i386; fi) \
-  && curl -o /usr/bin/gosu -LO "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch" \
-  && curl -o /tmp/gosu.asc -LO "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch.asc" \
-  && export GNUPGHOME="$(mktemp -d)" \
-  && gpg --keyserver ha.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4 \
-  && gpg --batch --verify /tmp/gosu.asc /usr/bin/gosu \
-  && rm -r "$GNUPGHOME" /tmp/gosu.asc \
-  && chmod +x /usr/bin/gosu \
-  && gosu nobody true \
-  && yum clean all
-RUN rm /opt/rh/devtoolset-2/root/usr/bin/sudo
+	&& yum clean all
+	&& /dockcross/install-gosu-binary.sh \
+  && rm /dockcross/install-gosu-binary.sh \
+  # Remove sudo provided by "devtoolset-2" since it doesn't work with
+  # our sudo wrapper calling gosu.
+  && rm /opt/rh/devtoolset-2/root/usr/bin/sudo
 
 COPY manylinux-common/install-python-packages.sh /usr/local/bin
 RUN /usr/local/bin/install-python-packages.sh
