@@ -11,6 +11,7 @@ COPY \
   imagefiles/build-and-install-cmake.sh \
   imagefiles/install-cmake-binary.sh \
   imagefiles/build-and-install-curl.sh \
+  imagefiles/build-and-install-ninja.sh \
   /dockcross/
 
 RUN \
@@ -27,6 +28,8 @@ RUN \
     /dockcross/build-and-install-git.sh && \
     /dockcross/install-cmake-binary.sh || exit 1; \
   fi; \
+  PYTHON=$([ -e /opt/python/cp35-cp35m/bin/python ] && echo "/opt/python/cp35-cp35m/bin/python" || echo "python") && \
+  /dockcross/build-and-install-ninja.sh -python ${PYTHON} && \
   rm \
     /dockcross/build-and-install-git.sh \
     /dockcross/utils.sh \
@@ -34,17 +37,12 @@ RUN \
     /dockcross/build-and-install-openssh.sh \
     /dockcross/build-and-install-cmake.sh \
     /dockcross/install-cmake-binary.sh \
-    /dockcross/build-and-install-curl.sh
+    /dockcross/build-and-install-curl.sh \
+    /dockcross/build-and-install-ninja.sh
 
 COPY imagefiles/cmake.sh /usr/local/bin/cmake
 COPY imagefiles/ccmake.sh /usr/local/bin/ccmake
 COPY imagefiles/sudo.sh /usr/bin/sudo
-
-COPY imagefiles/build-and-install-ninja.sh /dockcross/
-RUN \
-  /dockcross/build-and-install-ninja.sh \
-    -python $([ -e /opt/python/cp35-cp35m/bin/python ] && echo "/opt/python/cp35-cp35m/bin/python" || echo "python") && \
-  rm /dockcross/build-and-install-ninja.sh
 
 RUN if [ -e /opt/python/cp35-cp35m/bin/python ]; then \
     : nothing to do here since it is updated by manylinux-common/install-python-packages.sh ; \
