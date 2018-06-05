@@ -10,6 +10,7 @@ COPY \
   imagefiles/build-and-install-openssh.sh \
   imagefiles/build-and-install-cmake.sh \
   imagefiles/install-cmake-binary.sh \
+  imagefiles/install-liquidprompt-binary.sh \
   imagefiles/build-and-install-curl.sh \
   imagefiles/build-and-install-ninja.sh \
   /dockcross/
@@ -28,6 +29,7 @@ RUN \
     /dockcross/build-and-install-git.sh && \
     /dockcross/install-cmake-binary.sh || exit 1; \
   fi; \
+  /dockcross/install-liquidprompt-binary.sh && \
   PYTHON=$([ -e /opt/python/cp35-cp35m/bin/python ] && echo "/opt/python/cp35-cp35m/bin/python" || echo "python") && \
   /dockcross/build-and-install-ninja.sh -python ${PYTHON} && \
   rm \
@@ -37,6 +39,7 @@ RUN \
     /dockcross/build-and-install-openssh.sh \
     /dockcross/build-and-install-cmake.sh \
     /dockcross/install-cmake-binary.sh \
+    /dockcross/install-liquidprompt-binary.sh \
     /dockcross/build-and-install-curl.sh \
     /dockcross/build-and-install-ninja.sh \
   && \
@@ -53,12 +56,6 @@ RUN if [ -e /opt/python/cp35-cp35m/bin/python ]; then \
     python get-pip.py --ignore-installed && \
     rm get-pip.py || exit 1; \
   fi
-
-WORKDIR /usr/share
-RUN git clone "https://github.com/nojhan/liquidprompt.git" && \
-  cd liquidprompt && \
-  git checkout v_1.11
-COPY imagefiles/.bashrc /root/
 
 RUN echo "root:root" | chpasswd
 WORKDIR /work
