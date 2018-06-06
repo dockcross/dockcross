@@ -1,11 +1,5 @@
 #!/bin/bash
-#
-#  * build directory is /usr/src/CMake
-#
-#  * install directory is /usr
-#
-#  * after installation, archive, source and build directories are removed
-#
+
 set -ex
 
 WRAPPER=""
@@ -35,9 +29,7 @@ fi
 
 cd /usr/src
 
-git clone git://cmake.org/cmake.git CMake
-
-(cd CMake && git checkout v$CMAKE_VERSION)
+git clone git://cmake.org/cmake.git CMake -b v$CMAKE_VERSION --depth 1
 
 mkdir /usr/src/CMake-build
 cd /usr/src/CMake-build
@@ -48,21 +40,22 @@ ${WRAPPER} make -j$(grep -c processor /proc/cpuinfo)
 
 mkdir /usr/src/CMake-ssl-build
 cd /usr/src/CMake-ssl-build
+
 ${WRAPPER} /usr/src/CMake-build/bin/cmake \
   -DCMAKE_BUILD_TYPE:STRING=Release \
-  -DBUILD_TESTING:BOOL=ON \
+  -DBUILD_TESTING:BOOL=OFF \
   -DCMAKE_INSTALL_PREFIX:PATH=/usr/src/cmake-$CMAKE_VERSION \
   -DCMAKE_USE_OPENSSL:BOOL=ON \
   -DOPENSSL_ROOT_DIR:PATH=/usr/local/ssl \
   ../CMake
 ${WRAPPER} make -j$(grep -c processor /proc/cpuinfo) install
 
+# Cleanup install tree
 cd /usr/src/cmake-$CMAKE_VERSION
 rm -rf doc man
-find . -type f -exec install -D "{}" "/usr/{}" \;
 
-# Test
-ctest -R CMake.FileDownload
+# Install files
+find . -type f -exec install -D "{}" "/usr/{}" \;
 
 # Write test script
 cat <<EOF > cmake-test-https-download.cmake
@@ -86,4 +79,5 @@ EOF
 # Execute test script
 cmake -P cmake-test-https-download.cmake
 
+# Remove source and build trees
 rm -rf /usr/src/CMake*

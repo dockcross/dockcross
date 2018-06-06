@@ -3,13 +3,16 @@ WORKDIR /usr/src
 ARG GIT_VERSION=2.16.2
 ARG CMAKE_VERSION=3.11.0
 
-COPY imagefiles/build-and-install-git.sh \
+COPY \
+  imagefiles/build-and-install-git.sh \
   imagefiles/utils.sh \
   imagefiles/build-and-install-openssl.sh \
   imagefiles/build-and-install-openssh.sh \
   imagefiles/build-and-install-cmake.sh \
   imagefiles/install-cmake-binary.sh \
+  imagefiles/install-liquidprompt-binary.sh \
   imagefiles/build-and-install-curl.sh \
+  imagefiles/build-and-install-ninja.sh \
   /dockcross/
 
 RUN \
@@ -26,24 +29,25 @@ RUN \
     /dockcross/build-and-install-git.sh && \
     /dockcross/install-cmake-binary.sh || exit 1; \
   fi; \
-  rm /dockcross/build-and-install-git.sh \
-  /dockcross/utils.sh \
-  /dockcross/build-and-install-openssl.sh \
-  /dockcross/build-and-install-openssh.sh \
-  /dockcross/build-and-install-cmake.sh \
-  /dockcross/install-cmake-binary.sh \
-  /dockcross/build-and-install-curl.sh
+  /dockcross/install-liquidprompt-binary.sh && \
+  PYTHON=$([ -e /opt/python/cp35-cp35m/bin/python ] && echo "/opt/python/cp35-cp35m/bin/python" || echo "python") && \
+  /dockcross/build-and-install-ninja.sh -python ${PYTHON} && \
+  rm \
+    /dockcross/build-and-install-git.sh \
+    /dockcross/utils.sh \
+    /dockcross/build-and-install-openssl.sh \
+    /dockcross/build-and-install-openssh.sh \
+    /dockcross/build-and-install-cmake.sh \
+    /dockcross/install-cmake-binary.sh \
+    /dockcross/install-liquidprompt-binary.sh \
+    /dockcross/build-and-install-curl.sh \
+    /dockcross/build-and-install-ninja.sh \
+  && \
+  ${PYTHON} -m pip install --ignore-installed conan
 
 COPY imagefiles/cmake.sh /usr/local/bin/cmake
 COPY imagefiles/ccmake.sh /usr/local/bin/ccmake
-# /opt/rh/devtoolset-2/root/usr/bin/sudo expects sudo at this location
 COPY imagefiles/sudo.sh /usr/bin/sudo
-
-COPY imagefiles/install-ninja.sh /dockcross/
-RUN \
-  /dockcross/install-ninja.sh \
-    -python $([ -e /opt/python/cp35-cp35m/bin/python ] && echo "/opt/python/cp35-cp35m/bin/python" || echo "python") && \
-  rm /dockcross/install-ninja.sh
 
 RUN if [ -e /opt/python/cp35-cp35m/bin/python ]; then \
     : nothing to do here since it is updated by manylinux-common/install-python-packages.sh ; \
@@ -52,14 +56,6 @@ RUN if [ -e /opt/python/cp35-cp35m/bin/python ]; then \
     python get-pip.py --ignore-installed && \
     rm get-pip.py || exit 1; \
   fi
-
-RUN $([ -e /opt/python/cp35-cp35m/bin/python ] && echo "/opt/python/cp35-cp35m/bin/python" || echo "python") -m pip install --ignore-installed conan
-
-WORKDIR /usr/share
-RUN git clone "https://github.com/nojhan/liquidprompt.git" && \
-  cd liquidprompt && \
-  git checkout v_1.11
-COPY imagefiles/.bashrc /root/
 
 RUN echo "root:root" | chpasswd
 WORKDIR /work

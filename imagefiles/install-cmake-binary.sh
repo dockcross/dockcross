@@ -17,17 +17,17 @@ if [[ "${CMAKE_VERSION}" == "" ]]; then
   exit 1
 fi
 
-cd /tmp
+cd /usr/src
 
-filename=cmake-${CMAKE_VERSION}-Centos5-x86_64
-url=https://github.com/dockbuild/CMake/releases/download/v${CMAKE_VERSION}/${filename}.tar.gz
+CMAKE_ROOT=cmake-${CMAKE_VERSION}-Centos5-x86_64
+url=https://github.com/dockbuild/CMake/releases/download/v${CMAKE_VERSION}/${CMAKE_ROOT}.tar.gz
 echo "Downloading $url"
 curl -# -LO $url
 
-tar -xzvf ${filename}.tar.gz
-rm -f ${filename}.tar.gz
+tar -xzvf ${CMAKE_ROOT}.tar.gz
+rm -f ${CMAKE_ROOT}.tar.gz
 
-cd ${filename}
+cd ${CMAKE_ROOT}
 
 rm -rf doc man
 rm -rf bin/cmake-gui
