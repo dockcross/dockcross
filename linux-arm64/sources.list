@@ -3,10 +3,10 @@
 #------------------------------------------------------------------------------#
 
 ###### Debian Main Repos
-deb http://deb.debian.org/debian/ oldstable main contrib non-free
+deb http://cdn-fastly.deb.debian.org/debian/ oldstable main contrib non-free
 
-deb http://deb.debian.org/debian/ oldstable-updates main contrib non-free
+deb http://cdn-fastly.deb.debian.org/debian/ oldstable-updates main contrib non-free
 
-deb http://deb.debian.org/debian-security oldstable/updates main
+deb http://cdn-fastly.deb.debian.org/debian-security oldstable/updates main
 
-deb http://ftp.debian.org/debian jessie-backports main
+deb http://cdn-fastly.deb.debian.org/debian jessie-backports main
