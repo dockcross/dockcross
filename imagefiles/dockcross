@@ -178,7 +178,7 @@ UBUNTU_ON_WINDOWS=$([ -e /proc/version ] && grep -l Microsoft /proc/version || e
 MSYS=$([ -e /proc/version ] && grep -l MINGW /proc/version || echo "")
 
 if [ -z "$UBUNTU_ON_WINDOWS" -a -z "$MSYS" ]; then
-    USER_IDS="-e BUILDER_UID=$( id -u ) -e BUILDER_GID=$( id -g ) -e BUILDER_USER=$( id -un ) -e BUILDER_GROUP=$( id -gn )"
+    USER_IDS="-e BUILDER_UID=$( id -u ) -e BUILDER_GID=$( id -g ) -e BUILDER_USER=$( id -un ) -e BUILDER_GROUP=$( id -gn | tr -d ' ')"
 fi
 
 # Change the PWD when working in Docker on Windows
