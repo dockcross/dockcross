@@ -1,6 +1,8 @@
 FROM dockcross/base:latest
 MAINTAINER Matt McCormick "matt.mccormick@kitware.com"
 
+#include "common.crosstool"
+
 # Enable 32 bits binaries
 RUN dpkg --add-architecture i386 && \
     apt-get update && \
