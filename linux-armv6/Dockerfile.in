@@ -13,15 +13,15 @@ RUN apt-get update && apt-get install -y \
   qemu-user \
   qemu-user-static
 
-ENV CROSS_TRIPLE armv6-unknown-linux-gnueabihf
-ENV CROSS_ROOT /usr/${CROSS_TRIPLE}
-ENV AS=/usr/bin/${CROSS_TRIPLE}-as \
-    AR=/usr/bin/${CROSS_TRIPLE}-ar \
-    CC=/usr/bin/${CROSS_TRIPLE}-gcc \
-    CPP=/usr/bin/${CROSS_TRIPLE}-cpp \
-    CXX=/usr/bin/${CROSS_TRIPLE}-g++ \
-    LD=/usr/bin/${CROSS_TRIPLE}-ld \
-    FC=/usr/bin/${CROSS_TRIPLE}-gfortran
+ENV CROSS_TRIPLE arm-linux-gnueabihf
+ENV CROSS_ROOT ${XCC_PREFIX}/${CROSS_TRIPLE}
+ENV AS=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-as \
+    AR=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-ar \
+    CC=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-gcc \
+    CPP=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-cpp \
+    CXX=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-g++ \
+    LD=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-ld \
+    FC=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-gfortran
 
 # Raspberry Pi is ARMv6+VFP2, Debian armhf is ARMv7+VFP3
 # Since this Dockerfile is targeting linux-arm from Raspberry Pi onward,
@@ -39,8 +39,8 @@ RUN mkdir rpi_tools && cd rpi_tools && git init && git remote add -f origin http
     git pull --depth=1 origin master && rsync -av arm-bcm2708/gcc-linaro-${CROSS_TRIPLE}-raspbian/ /usr/ && rm -rf ../rpi_tools
 
 # Allow dynamically linked executables to run with qemu-arm
-ENV QEMU_LD_PREFIX ${CROSS_ROOT}/libc
-ENV QEMU_SET_ENV "LD_LIBRARY_PATH=${CROSS_ROOT}/lib:${CROSS_ROOT}/libc/lib/${CROSS_TRIPLE}/"
+ENV QEMU_LD_PREFIX "${CROSS_ROOT}/${CROSS_TRIPLE}/sysroot"
+ENV QEMU_SET_ENV "LD_LIBRARY_PATH=${CROSS_ROOT}/lib:${QEMU_LD_PREFIX}"
 
 COPY Toolchain.cmake ${CROSS_ROOT}/
 ENV CMAKE_TOOLCHAIN_FILE ${CROSS_ROOT}/Toolchain.cmake
