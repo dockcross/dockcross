@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y \
   qemu-user \
   qemu-user-static
 
-ENV CROSS_TRIPLE arm-linux-gnueabihf
+ENV CROSS_TRIPLE armv6-unknown-linux-gnueabihf
 ENV CROSS_ROOT /usr/${CROSS_TRIPLE}
 ENV AS=/usr/bin/${CROSS_TRIPLE}-as \
     AR=/usr/bin/${CROSS_TRIPLE}-ar \
@@ -49,6 +49,7 @@ ENV CMAKE_TOOLCHAIN_FILE ${CROSS_ROOT}/Toolchain.cmake
 ENV PATH ${PATH}:${CROSS_ROOT}/bin
 ENV CROSS_COMPILE ${CROSS_TRIPLE}-
 ENV ARCH arm
+ENV PKG_CONFIG_PATH /usr/lib/arm-linux-gnueabihf/
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
