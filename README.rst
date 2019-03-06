@@ -134,6 +134,12 @@ dockcross/linux-armv6
 dockcross/linux-armv7
   |linux-armv7-images| Generic Linux armv7 cross compiler toolchain.
 
+.. |linux-armv7a-images| image:: https://images.microbadger.com/badges/image/dockcross/linux-armv7a.svg
+  :target: https://microbadger.com/images/dockcross/linux-armv7a
+
+dockcross/linux-armv7a
+  |linux-armv7a-images| Toolchain configured for ARMv7-A used in Beaglebone Black single board PC with TI SoC AM3358 on board, Cortex-A8.
+
 .. |linux-armv7-hf-gcc8_5-images| image:: https://images.microbadger.com/badges/image/dockcross/linux-armv7-hf-gcc8_5.svg
   :target: https://microbadger.com/images/dockcross/linux-armv7-hf-gcc8_5
 

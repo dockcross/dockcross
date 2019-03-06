@@ -164,6 +164,26 @@ jobs:
       - save_cache:
           key: linux-armv7-assets-{{ .Revision }}
           paths: ~/docker/linux-armv7.tar
+  linux-armv7a:
+    <<: *build-settings
+    steps:
+      - restore_cache:
+          key: base-assets-{{ .Revision }}
+      - run:
+         name: linux-armv7a build
+         no_output_timeout: 1.5h
+         command: |
+           docker load -i ~/docker/base.tar
+           make linux-armv7a
+           tagged=$(docker images -q -f 'since=dockcross/linux-armv7a:latest' --format '{{.Repository}}:{{.Tag}}' | grep linux-armv7a)
+           docker save -o ~/docker/linux-armv7a.tar dockcross/linux-armv7a:latest $tagged
+      - run:
+         name: linux-armv7a test
+         command: |
+           make linux-armv7a.test
+      - save_cache:
+          key: linux-armv7a-assets-{{ .Revision }}
+          paths: ~/docker/linux-armv7a.tar          
   linux-armv7-hf-gcc8_5:
     <<: *build-settings
     steps:
@@ -543,6 +563,30 @@ jobs:
               tagged=$(docker images -q -f 'since=dockcross/linux-armv7:latest' --format '{{.Repository}}:{{.Tag}}' | grep linux-armv7)
               docker push $tagged
             fi
+      - restore_cache:
+          key: linux-armv7a-assets-{{ .Revision }}
+      - deploy:
+          name: Deploy linux-armv7a
+          command: |
+            docker load -i ~/docker/linux-armv7a.tar
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              docker login -u $DOCKER_USER -p $DOCKER_PASS
+              docker push dockcross/linux-armv7a:latest
+              tagged=$(docker images -q -f 'since=dockcross/linux-armv7a:latest' --format '{{.Repository}}:{{.Tag}}' | grep linux-armv7a)
+              docker push $tagged
+            fi               
+      - restore_cache:
+          key: linux-armv7-hf-gcc8_5-assets-{{ .Revision }}
+      - deploy:
+          name: Deploy linux-armv7-hf-gcc8_5
+          command: |
+            docker load -i ~/docker/linux-armv7-hf-gcc8_5.tar
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              docker login -u $DOCKER_USER -p $DOCKER_PASS
+              docker push dockcross/linux-armv7-hf-gcc8_5:latest
+              tagged=$(docker images -q -f 'since=dockcross/linux-armv7-hf-gcc8_5:latest' --format '{{.Repository}}:{{.Tag}}' | grep linux-armv7-hf-gcc8_5)
+              docker push $tagged
+            fi            
       # Image build currently broken. See #209
       #- restore_cache:
           #key: linux-mipsel-assets-{{ .Revision }}
@@ -726,6 +770,12 @@ workflows:
             requires:
               - base
         - linux-armv7:
+            requires:
+              - base
+        - linux-armv7a:
+            requires:
+              - base
+        - linux-armv7-hf-gcc8_5:
             requires:
               - base
         # Image build currently broken. See #209
