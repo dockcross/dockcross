@@ -183,8 +183,13 @@ jobs:
            make linux-armv7a.test
       - save_cache:
           key: linux-armv7a-assets-{{ .Revision }}
+<<<<<<< HEAD
           paths: ~/docker/linux-armv7a.tar
 linux-armv7-hf-gcc8_5:
+=======
+          paths: ~/docker/linux-armv7a.tar          
+  linux-armv7-hf-gcc8_5:
+>>>>>>> add linux-armv7a to circleci and readme
     <<: *build-settings
     steps:
       - restore_cache:

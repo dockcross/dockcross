@@ -134,7 +134,6 @@ dockcross/linux-armv6
 dockcross/linux-armv7
   |linux-armv7-images| Generic Linux armv7 cross compiler toolchain.
 
-
 .. |linux-armv7a-images| image:: https://images.microbadger.com/badges/image/dockcross/linux-armv7a.svg
   :target: https://microbadger.com/images/dockcross/linux-armv7a
 
