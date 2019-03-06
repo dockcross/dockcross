@@ -134,6 +134,12 @@ dockcross/linux-armv6
 dockcross/linux-armv7
   |linux-armv7-images| Generic Linux armv7 cross compiler toolchain.
 
+.. |linux-armv7-hf-gcc8_5-images| image:: https://images.microbadger.com/badges/image/dockcross/linux-armv7-hf-gcc8_5.svg
+  :target: https://microbadger.com/images/dockcross/linux-armv7-hf-gcc8_5
+
+dockcross/linux-armv7-hf-gcc8_5
+  |linux-armv7-hf-gcc8_5-images| Generic Linux armv7 cross compiler toolchain with GCC v8.5.
+
 .. |linux-mipsel-images| image:: https://images.microbadger.com/badges/image/dockcross/linux-mipsel.svg
   :target: https://microbadger.com/images/dockcross/linux-mipsel
 

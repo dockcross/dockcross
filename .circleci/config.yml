@@ -164,6 +164,26 @@ jobs:
       - save_cache:
           key: linux-armv7-assets-{{ .Revision }}
           paths: ~/docker/linux-armv7.tar
+  linux-armv7-hf-gcc8_5:
+    <<: *build-settings
+    steps:
+      - restore_cache:
+          key: base-assets-{{ .Revision }}
+      - run:
+         name: linux-armv7-hf-gcc8_5 build
+         no_output_timeout: 1.5h
+         command: |
+           docker load -i ~/docker/base.tar
+           make linux-armv7-hf-gcc8_5
+           tagged=$(docker images -q -f 'since=dockcross/linux-armv7-hf-gcc8_5:latest' --format '{{.Repository}}:{{.Tag}}' | grep linux-armv7-hf-gcc8_5)
+           docker save -o ~/docker/linux-armv7-hf-gcc8_5.tar dockcross/linux-armv7-hf-gcc8_5:latest $tagged
+      - run:
+         name: linux-armv7-hf-gcc8_5 test
+         command: |
+           make linux-armv7-hf-gcc8_5.test
+      - save_cache:
+          key: linux-armv7-hf-gcc8_5-assets-{{ .Revision }}
+          paths: ~/docker/linux-armv7-hf-gcc8_5.tar          
   linux-mipsel:
     <<: *build-settings
     steps:
@@ -759,6 +779,7 @@ workflows:
               - linux-armv5
               - linux-armv6
               - linux-armv7
+              - linux-armv7-hf-gcc8_5
               #- linux-mipsel
               - linux-s390x
               # Image build currently broken. See #209
