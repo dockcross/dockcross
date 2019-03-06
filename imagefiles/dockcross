@@ -208,14 +208,15 @@ if [ -z "$SSH_DIR" ]; then
 fi
 
 HOST_VOLUMES=
-if [ -e "$SSH_DIR" ]; then
+if [ -e "$SSH_DIR" -a -z "$MSYS"]; then
     HOST_VOLUMES+="-v $SSH_DIR:/home/$(id -un)/.ssh"
 fi
 
 #------------------------------------------------------------------------------
 # Now, finally, run the command in a container
 #
-tty -s && TTY_ARGS=-ti || TTY_ARGS=
+TTY_ARGS=
+tty -s && [ -z "$MSYS" ] && TTY_ARGS=-ti
 CONTAINER_NAME=dockcross_$RANDOM
 docker run $TTY_ARGS --name $CONTAINER_NAME \
     -v "$HOST_PWD":/work \
