@@ -141,6 +141,12 @@ dockcross/linux-armv7
 dockcross/linux-armv7a
   |linux-armv7a-images| Toolchain configured for ARMv7-A used in Beaglebone Black single board PC with TI SoC AM3358 on board, Cortex-A8.
 
+.. |linux-armv7-hf-gcc8_5-images| image:: https://images.microbadger.com/badges/image/dockcross/linux-armv7-hf-gcc8_5.svg
+  :target: https://microbadger.com/images/dockcross/linux-armv7-hf-gcc8_5
+
+dockcross/linux-armv7-hf-gcc8_5
+  |linux-armv7-hf-gcc8_5-images| Generic Linux armv7 cross compiler toolchain with GCC v8.5.
+
 .. |linux-mipsel-images| image:: https://images.microbadger.com/badges/image/dockcross/linux-mipsel.svg
   :target: https://microbadger.com/images/dockcross/linux-mipsel
 
