@@ -2,7 +2,7 @@
 
 set -ex
 
-OPENSSH_ROOT=V_7_9_P1
+OPENSSH_ROOT=V_8_1_P1
 
 cd /usr/src
 curl -LO https://github.com/openssh/openssh-portable/archive/${OPENSSH_ROOT}.tar.gz
