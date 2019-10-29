@@ -20,7 +20,7 @@ CURL_DOWNLOAD_URL=http://deb.debian.org/debian/pool/main/c/curl
 function do_curl_build {
     # We do this shared to avoid obnoxious linker issues where git couldn't
     # link properly. If anyone wants to make this build statically go for it.
-    LIBS=-ldl CFLAGS=-Wl,--exclude-libs,ALL ./configure --with-ssl --disable-static > /dev/null
+    LIBS="-ldl -lpthread" CFLAGS="-Wl,--exclude-libs,ALL" ./configure --with-ssl --disable-static 2>/dev/null
     make > /dev/null
     make install > /dev/null
 }

@@ -47,6 +47,7 @@ ${WRAPPER} /usr/src/CMake-build/bin/cmake \
   -DCMAKE_INSTALL_PREFIX:PATH=/usr/src/cmake-$CMAKE_VERSION \
   -DCMAKE_USE_OPENSSL:BOOL=ON \
   -DOPENSSL_ROOT_DIR:PATH=/usr/local/ssl \
+  -DCMAKE_LINKER_FLAGS="-pthread"
   ../CMake
 ${WRAPPER} make -j$(grep -c processor /proc/cpuinfo) install
 
