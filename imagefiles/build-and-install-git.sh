@@ -23,12 +23,12 @@ ldconfig
 
 cd /usr/src
 
-url="https://www.kernel.org/pub/software/scm/git/git-${GIT_VERSION}.tar.gz"
+url="https://www.kernel.org/pub/software/scm/git/git-${GIT_VERSION}.tar.xz"
 echo "Downloading $url"
 curl -# -LO $url
 
-tar xovf git-${GIT_VERSION}.tar.gz
-rm -f git-${GIT_VERSION}.tar.gz
+tar xovf git-${GIT_VERSION}.tar.xz
+rm -f git-${GIT_VERSION}.tar.xz
 
 pushd git-${GIT_VERSION}
 LDFLAGS="-pthread" \
