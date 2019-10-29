@@ -27,7 +27,7 @@ url="https://www.kernel.org/pub/software/scm/git/git-${GIT_VERSION}.tar.gz"
 echo "Downloading $url"
 curl -# -LO $url
 
-tar xvzf git-${GIT_VERSION}.tar.gz
+tar xovf git-${GIT_VERSION}.tar.gz
 rm -f git-${GIT_VERSION}.tar.gz
 
 pushd git-${GIT_VERSION}
