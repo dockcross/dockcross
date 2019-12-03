@@ -95,7 +95,7 @@ RUN \
   # Build MXE
   #
   cd /usr/src/mxe && \
-  make -j$(nproc) && \
+  make JOBS=$(nproc) && \
   #
   # Cleanup: By keeping the MXE build system (Makefile, ...), derived images will be able to install
   #          additional packages.
