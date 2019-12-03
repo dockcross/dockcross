@@ -15,8 +15,8 @@
 #  ARG MXE_TARGET_LINK=shared
 #
 
-# mxe master 2019-02-27
-ARG MXE_GIT_TAG=2ce5587c94fc355b2c826c786a3ee018479d88d1
+# mxe master 2019-06-17
+ARG MXE_GIT_TAG=0567f17d34463abda1790957812c54e8c0cf59fe
 
 ENV CMAKE_TOOLCHAIN_FILE /usr/src/mxe/usr/${MXE_TARGET_ARCH}-w64-mingw32.${MXE_TARGET_LINK}${MXE_TARGET_THREAD}/share/cmake/mxe-conf.cmake
 
