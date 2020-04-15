@@ -18,7 +18,7 @@ if [[ $# == 0 ]]; then
     exit 0
 fi
 
-# If we are running docker natively, we want to create a user in the container
+# If we are running a container natively, we want to create a user in the container
 # with the same UID and GID as the user on the host machine, so that any files
 # created are owned by that user. Without this they are all owned by root.
 # The dockcross script sets the BUILDER_UID and BUILDER_GID vars.

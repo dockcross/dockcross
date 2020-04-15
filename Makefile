@@ -3,11 +3,11 @@
 # Parameters
 #
 
-# Name of the docker executable
-DOCKER = docker
+# Name of the container engine executable
+OCI_EXE ?= docker
 
 # Docker organization to pull the images from
-ORG = dockcross
+ORG ?= dockcross
 
 # Directory where to generate the dockcross script for each images (e.g bin/dockcross-manylinux1-x64)
 BIN = ./bin
@@ -75,13 +75,13 @@ $(GEN_IMAGE_DOCKERFILES) Dockerfile: %Dockerfile: %Dockerfile.in $(DOCKER_COMPOS
 web-wasm: web-wasm/Dockerfile
 	mkdir -p $@/imagefiles && cp -r imagefiles $@/
 	cp -r test web-wasm/
-	$(DOCKER) build -t $(ORG)/web-wasm:latest \
+	$(OCI_EXE) build --tag $(ORG)/web-wasm:latest \
 		--build-arg IMAGE=$(ORG)/web-wasm \
 		--build-arg VCS_REF=`git rev-parse --short HEAD` \
 		--build-arg VCS_URL=`git config --get remote.origin.url` \
 		--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
 		web-wasm
-	$(DOCKER) build -t $(ORG)/web-wasm:$(TAG) \
+	$(OCI_EXE) build --tag $(ORG)/web-wasm:$(TAG) \
 		--build-arg IMAGE=$(ORG)/web-wasm \
 		--build-arg VERSION=$(TAG) \
 		--build-arg VCS_REF=`git rev-parse --short HEAD` \
@@ -93,7 +93,7 @@ web-wasm: web-wasm/Dockerfile
 
 web-wasm.test: web-wasm
 	cp -r test web-wasm/
-	$(DOCKER) run $(RM) dockcross/web-wasm > $(BIN)/dockcross-web-wasm && chmod +x $(BIN)/dockcross-web-wasm
+	$(OCI_EXE) run $(RM) $(ORG)/web-wasm > $(BIN)/dockcross-web-wasm && chmod +x $(BIN)/dockcross-web-wasm
 	$(BIN)/dockcross-web-wasm python test/run.py --exe-suffix ".js"
 	rm -rf web-wasm/test
 
@@ -102,23 +102,23 @@ web-wasm.test: web-wasm
 #
 manylinux2014-x64: manylinux2014-x64/Dockerfile
 	mkdir -p $@/imagefiles && cp -r imagefiles $@/
-	$(DOCKER) build -t $(ORG)/manylinux2014-x64:latest \
+	$(OCI_EXE) build --tag $(ORG)/manylinux2014-x64:latest \
 		--build-arg IMAGE=$(ORG)/manylinux2014-x64 \
 		--build-arg VCS_REF=`git rev-parse --short HEAD` \
 		--build-arg VCS_URL=`git config --get remote.origin.url` \
 		--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
-		-f manylinux2014-x64/Dockerfile .
-	$(DOCKER) build -t $(ORG)/manylinux2014-x64:$(TAG) \
+		--file manylinux2014-x64/Dockerfile .
+	$(OCI_EXE) build --tag $(ORG)/manylinux2014-x64:$(TAG) \
 		--build-arg IMAGE=$(ORG)/manylinux2014-x64 \
 		--build-arg VERSION=$(TAG) \
 		--build-arg VCS_REF=`git rev-parse --short HEAD` \
 		--build-arg VCS_URL=`git config --get remote.origin.url` \
 		--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
-		-f manylinux2014-x64/Dockerfile .
+		--file manylinux2014-x64/Dockerfile .
 	rm -rf $@/imagefiles
 
 manylinux2014-x64.test: manylinux2014-x64
-	$(DOCKER) run $(RM) dockcross/manylinux2014-x64 > $(BIN)/dockcross-manylinux2014-x64 && chmod +x $(BIN)/dockcross-manylinux2014-x64
+	$(OCI_EXE) run $(RM) $(ORG)/manylinux2014-x64 > $(BIN)/dockcross-manylinux2014-x64 && chmod +x $(BIN)/dockcross-manylinux2014-x64
 	$(BIN)/dockcross-manylinux2014-x64 /opt/python/cp35-cp35m/bin/python test/run.py
 
 #
@@ -127,23 +127,23 @@ manylinux2014-x64.test: manylinux2014-x64
 
 manylinux2010-x64: manylinux2010-x64/Dockerfile
 	mkdir -p $@/imagefiles && cp -r imagefiles $@/
-	$(DOCKER) build -t $(ORG)/manylinux2010-x64:latest \
+	$(OCI_EXE) build --tag $(ORG)/manylinux2010-x64:latest \
 		--build-arg IMAGE=$(ORG)/manylinux2010-x64 \
 		--build-arg VCS_REF=`git rev-parse --short HEAD` \
 		--build-arg VCS_URL=`git config --get remote.origin.url` \
 		--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
-		-f manylinux2010-x64/Dockerfile .
-	$(DOCKER) build -t $(ORG)/manylinux2010-x64:$(TAG) \
+		--file manylinux2010-x64/Dockerfile .
+	$(OCI_EXE) build --tag $(ORG)/manylinux2010-x64:$(TAG) \
 		--build-arg IMAGE=$(ORG)/manylinux2010-x64 \
 		--build-arg VERSION=$(TAG) \
 		--build-arg VCS_REF=`git rev-parse --short HEAD` \
 		--build-arg VCS_URL=`git config --get remote.origin.url` \
 		--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
-		-f manylinux2010-x64/Dockerfile .
+		--file manylinux2010-x64/Dockerfile .
 	rm -rf $@/imagefiles
 
 manylinux2010-x64.test: manylinux2010-x64
-	$(DOCKER) run $(RM) dockcross/manylinux2010-x64 > $(BIN)/dockcross-manylinux2010-x64 && chmod +x $(BIN)/dockcross-manylinux2010-x64
+	$(OCI_EXE) run $(RM) $(ORG)/manylinux2010-x64 > $(BIN)/dockcross-manylinux2010-x64 && chmod +x $(BIN)/dockcross-manylinux2010-x64
 	$(BIN)/dockcross-manylinux2010-x64 /opt/python/cp35-cp35m/bin/python test/run.py
 
 #
@@ -152,23 +152,23 @@ manylinux2010-x64.test: manylinux2010-x64
 
 manylinux2010-x86: manylinux2010-x86/Dockerfile
 	mkdir -p $@/imagefiles && cp -r imagefiles $@/
-	$(DOCKER) build -t $(ORG)/manylinux2010-x86:latest \
+	$(OCI_EXE) build --tag $(ORG)/manylinux2010-x86:latest \
 		--build-arg IMAGE=$(ORG)/manylinux2010-x86 \
 		--build-arg VCS_REF=`git rev-parse --short HEAD` \
 		--build-arg VCS_URL=`git config --get remote.origin.url` \
 		--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
-		-f manylinux2010-x86/Dockerfile .
-	$(DOCKER) build -t $(ORG)/manylinux2010-x86:$(TAG) \
+		--file manylinux2010-x86/Dockerfile .
+	$(OCI_EXE) build --tag $(ORG)/manylinux2010-x86:$(TAG) \
 		--build-arg IMAGE=$(ORG)/manylinux2010-x86 \
 		--build-arg VERSION=$(TAG) \
 		--build-arg VCS_REF=`git rev-parse --short HEAD` \
 		--build-arg VCS_URL=`git config --get remote.origin.url` \
 		--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
-		-f manylinux2010-x86/Dockerfile .
+		--file manylinux2010-x86/Dockerfile .
 	rm -rf $@/imagefiles
 
 manylinux2010-x86.test: manylinux2010-x86
-	$(DOCKER) run $(RM) dockcross/manylinux2010-x86 > $(BIN)/dockcross-manylinux2010-x86 && chmod +x $(BIN)/dockcross-manylinux2010-x86
+	$(OCI_EXE) run $(RM) $(ORG)/manylinux2010-x86 > $(BIN)/dockcross-manylinux2010-x86 && chmod +x $(BIN)/dockcross-manylinux2010-x86
 	$(BIN)/dockcross-manylinux2010-x86 /opt/python/cp35-cp35m/bin/python test/run.py
 
 #
@@ -177,23 +177,23 @@ manylinux2010-x86.test: manylinux2010-x86
 
 manylinux1-x64: manylinux1-x64/Dockerfile
 	mkdir -p $@/imagefiles && cp -r imagefiles $@/
-	$(DOCKER) build -t $(ORG)/manylinux1-x64:latest \
+	$(OCI_EXE) build --tag $(ORG)/manylinux1-x64:latest \
 		--build-arg IMAGE=$(ORG)/manylinux1-x64 \
 		--build-arg VCS_REF=`git rev-parse --short HEAD` \
 		--build-arg VCS_URL=`git config --get remote.origin.url` \
 		--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
-		-f manylinux1-x64/Dockerfile .
-	$(DOCKER) build -t $(ORG)/manylinux1-x64:$(TAG) \
+		--file manylinux1-x64/Dockerfile .
+	$(OCI_EXE) build --tag $(ORG)/manylinux1-x64:$(TAG) \
 		--build-arg IMAGE=$(ORG)/manylinux1-x64 \
 		--build-arg VERSION=$(TAG) \
 		--build-arg VCS_REF=`git rev-parse --short HEAD` \
 		--build-arg VCS_URL=`git config --get remote.origin.url` \
 		--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
-		-f manylinux1-x64/Dockerfile .
+		--file manylinux1-x64/Dockerfile .
 	rm -rf $@/imagefiles
 
 manylinux1-x64.test: manylinux1-x64
-	$(DOCKER) run $(RM) dockcross/manylinux1-x64 > $(BIN)/dockcross-manylinux1-x64 && chmod +x $(BIN)/dockcross-manylinux1-x64
+	$(OCI_EXE) run $(RM) $(ORG)/manylinux1-x64 > $(BIN)/dockcross-manylinux1-x64 && chmod +x $(BIN)/dockcross-manylinux1-x64
 	$(BIN)/dockcross-manylinux1-x64 /opt/python/cp35-cp35m/bin/python test/run.py
 
 #
@@ -202,23 +202,23 @@ manylinux1-x64.test: manylinux1-x64
 
 manylinux1-x86: manylinux1-x86/Dockerfile
 	mkdir -p $@/imagefiles && cp -r imagefiles $@/
-	$(DOCKER) build -t $(ORG)/manylinux1-x86:latest \
+	$(OCI_EXE) build --tag $(ORG)/manylinux1-x86:latest \
 		--build-arg IMAGE=$(ORG)/manylinux1-x86 \
 		--build-arg VCS_REF=`git rev-parse --short HEAD` \
 		--build-arg VCS_URL=`git config --get remote.origin.url` \
 		--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
-		-f manylinux1-x86/Dockerfile .
-	$(DOCKER) build -t $(ORG)/manylinux1-x86:$(TAG) \
+		--file manylinux1-x86/Dockerfile .
+	$(OCI_EXE) build --tag $(ORG)/manylinux1-x86:$(TAG) \
 		--build-arg IMAGE=$(ORG)/manylinux1-x86 \
 		--build-arg VERSION=$(TAG) \
 		--build-arg VCS_REF=`git rev-parse --short HEAD` \
 		--build-arg VCS_URL=`git config --get remote.origin.url` \
 		--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
-		-f manylinux1-x86/Dockerfile .
+		--file manylinux1-x86/Dockerfile .
 	rm -rf $@/imagefiles
 
 manylinux1-x86.test: manylinux1-x86
-	$(DOCKER) run $(RM) dockcross/manylinux1-x86 > $(BIN)/dockcross-manylinux1-x86 && chmod +x $(BIN)/dockcross-manylinux1-x86
+	$(OCI_EXE) run $(RM) $(ORG)/manylinux1-x86 > $(BIN)/dockcross-manylinux1-x86 && chmod +x $(BIN)/dockcross-manylinux1-x86
 	$(BIN)/dockcross-manylinux1-x86 /opt/python/cp35-cp35m/bin/python test/run.py
 
 #
@@ -226,13 +226,13 @@ manylinux1-x86.test: manylinux1-x86
 #
 
 base: Dockerfile imagefiles/
-	$(DOCKER) build -t $(ORG)/base:latest \
+	$(OCI_EXE) build --tag $(ORG)/base:latest \
 		--build-arg IMAGE=$(ORG)/base \
 		--build-arg VCS_URL=`git config --get remote.origin.url` \
 		.
 
 base.test: base
-	$(DOCKER) run $(RM) dockcross/base > $(BIN)/dockcross-base && chmod +x $(BIN)/dockcross-base
+	$(OCI_EXE) run $(RM) $(ORG)/base > $(BIN)/dockcross-base && chmod +x $(BIN)/dockcross-base
 
 #
 # display
@@ -248,13 +248,13 @@ $(VERBOSE).SILENT: display_images
 
 $(STANDARD_IMAGES): %: %/Dockerfile base
 	mkdir -p $@/imagefiles && cp -r imagefiles $@/
-	$(DOCKER) build -t $(ORG)/$@:latest \
+	$(OCI_EXE) build --tag $(ORG)/$@:latest \
 		--build-arg IMAGE=$(ORG)/$@ \
 		--build-arg VCS_REF=`git rev-parse --short HEAD` \
 		--build-arg VCS_URL=`git config --get remote.origin.url` \
 		--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
 		$@
-	$(DOCKER) build -t $(ORG)/$@:$(TAG) \
+	$(OCI_EXE) build --tag $(ORG)/$@:$(TAG) \
 		--build-arg IMAGE=$(ORG)/$@ \
 		--build-arg VERSION=$(TAG) \
 		--build-arg VCS_REF=`git rev-parse --short HEAD` \
@@ -268,7 +268,7 @@ $(STANDARD_IMAGES): %: %/Dockerfile base
 #
 .SECONDEXPANSION:
 $(addsuffix .test,$(STANDARD_IMAGES)): $$(basename $$@)
-	$(DOCKER) run $(RM) dockcross/$(basename $@) > $(BIN)/dockcross-$(basename $@) && chmod +x $(BIN)/dockcross-$(basename $@)
+	$(OCI_EXE) run $(RM) $(ORG)/$(basename $@) > $(BIN)/dockcross-$(basename $@) && chmod +x $(BIN)/dockcross-$(basename $@)
 	$(BIN)/dockcross-$(basename $@) python test/run.py $($@_ARGS)
 
 #
