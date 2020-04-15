@@ -14,7 +14,7 @@ jobs:
            docker pull debian:10.3-slim
            make base
            mkdir -p ~/docker
-           docker save -o ~/docker/base.tar debian:10.3-slim dockcross/base:latest
+           docker save -o ~/docker/base.tar debian:10.3-slim dockcross/dockcross-base:latest
       - run:
          name: base test
          command: |
@@ -536,7 +536,7 @@ jobs:
             docker load -i ~/docker/base.tar
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               docker login -u $DOCKER_USER -p $DOCKER_PASS
-              docker push dockcross/base:latest
+              docker push dockcross/dockcross-base:latest
             fi
       - restore_cache:
           key: android-arm-assets-{{ .Revision }}

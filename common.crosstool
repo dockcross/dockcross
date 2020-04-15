@@ -3,7 +3,7 @@
 # Common Docker instructions to install "crosstool-ng" and build a full
 # cross-compiler suite from a crosstool-ng configuration, CROSSTOOL_CONFIG.
 #
-# This import complements the "dockcross/base" image, adding:
+# This import complements the "dockcross-base" image, adding:
 # - "ct-ng", a cross-compiler building utilty.
 # - A cross-compiler suite configured in "crosstool-ng.config".
 #
@@ -43,5 +43,5 @@ RUN mkdir /dockcross/crosstool \
   -c /dockcross/crosstool-ng.config \
 && rm -rf /dockcross/crosstool /dockcross/install-crosstool-ng-toolchain.sh
 
-# Restore our default workdir (from "dockcross/base").
+# Restore our default workdir (from "dockcross-base" image).
 WORKDIR /work

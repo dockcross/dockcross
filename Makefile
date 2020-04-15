@@ -232,7 +232,7 @@ base: Dockerfile imagefiles/
 		.
 
 base.test: base
-	$(DOCKER) run $(RM) dockcross/base > $(BIN)/dockcross-base && chmod +x $(BIN)/dockcross-base
+	$(DOCKER) run $(RM) $(ORG)/base > $(BIN)/dockcross-base && chmod +x $(BIN)/dockcross-base
 
 #
 # display

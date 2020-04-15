@@ -1,4 +1,14 @@
-FROM dockcross/base:latest
+# NOTE: Arguments are reset to empty after the FROM statement.
+#       Unless they are not.
+#       This funkyness is from Docker world: 
+#       https://docs.docker.com/engine/reference/builder/#understand-how-arg-and-from-interact
+#       https://docs.docker.com/engine/reference/builder/#scope
+ARG DOCKCROSS_ORG=dockcross
+ARG DOCKCROSS_VERSION=latest
+FROM ${DOCKCROSS_ORG}/dockcross-base:${DOCKCROSS_VERSION}
+ARG DOCKCROSS_ORG
+ARG DOCKCROSS_VERSION
+
 MAINTAINER Matt McCormick "matt.mccormick@kitware.com"
 
 # This is for 32-bit ARMv7 Linux

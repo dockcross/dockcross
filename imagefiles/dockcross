@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-
-DEFAULT_DOCKCROSS_IMAGE=dockcross/base  # DO NOT MOVE THIS LINE (see entrypoint.sh)
+DOCKCROSS_ORG=${DOCKCROSS_ORG:-dockcross}
+DOCKCROSS_VERSION=${DOCKCROSS_VERSION:-latet}
+DEFAULT_DOCKCROSS_IMAGE=${DOCKCROSS_ORG:}/dockcross-base:${DOCKCROSS_VERSION}  # DO NOT MOVE THIS LINE (see entrypoint.sh)
 
 #------------------------------------------------------------------------------
 # Helpers
