@@ -11,10 +11,10 @@ jobs:
       - run:
          name: base build
          command: |
-           docker pull debian:stretch-slim
+           docker pull debian:10.3-slim
            make base
            mkdir -p ~/docker
-           docker save -o ~/docker/base.tar debian:stretch-slim dockcross/base:latest
+           docker save -o ~/docker/base.tar debian:10.3-slim dockcross/base:latest
       - run:
          name: base test
          command: |
