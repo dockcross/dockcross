@@ -12,9 +12,12 @@ RUN echo "deb http://emdebian.org/tools/debian/ jessie main" > /etc/apt/sources.
 && apt-get update && apt-get install -y crossbuild-essential-mipsel
 
 # The cross-compiling emulator
-RUN apt-get update && apt-get install -y \
-  qemu-user \
-  qemu-user-static
+RUN dpkg --add-architecture mips64el && \
+    apt-get update && \
+    apt-get install --yes \
+            libelf-dev:mips64el \
+            qemu-user \
+            qemu-user-static
 
 ENV CROSS_TRIPLE mipsel-linux-gnu
 ENV CROSS_ROOT /usr/bin
