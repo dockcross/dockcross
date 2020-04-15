@@ -7,6 +7,7 @@ FROM dockcross/base:latest
 # The cross-compiling emulator
 RUN apt-get update \
 && apt-get install -y \
+  bash \
   qemu-user \
   qemu-user-static \
 && apt-get clean --yes
