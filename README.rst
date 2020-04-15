@@ -80,10 +80,10 @@ can be used to make source code available in the Docker container.
 Cross compilers
 ---------------
 
-.. |base-images| image:: https://images.microbadger.com/badges/image/dockcross/base.svg
-  :target: https://microbadger.com/images/dockcross/base
+.. |base-images| image:: https://images.microbadger.com/badges/image/dockcross/dockcross-base.svg
+  :target: https://microbadger.com/images/dockcross/dockcross-base
 
-dockcross/base
+dockcross/dockcross-base
   |base-images| Base image for other toolchain images. From Debian Jessie with GCC,
   make, autotools, CMake, Ninja, Git, and Python.
 
