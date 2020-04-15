@@ -5,11 +5,13 @@ FROM dockcross/base:latest
 #include "common.crosstool"
 
 # The cross-compiling emulator
-RUN apt-get update \
-&& apt-get install -y \
-  qemu-user \
-  qemu-user-static \
-&& apt-get clean --yes
+RUN dpkg --add-architecture mips && \
+    apt-get update && \
+    apt-get install --yes \
+            libelf-dev:mips \
+            qemu-user \
+            qemu-user-static && \
+    apt-get clean --yes
 
 # The CROSS_TRIPLE is a configured alias of the "mips-unknown-linux-gnu" target.
 ENV CROSS_TRIPLE mips-unknown-linux-gnu

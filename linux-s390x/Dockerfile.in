@@ -5,11 +5,13 @@ FROM dockcross/base:latest
 #include "common.crosstool"
 
 # The cross-compiling emulator
-RUN apt-get update \
-&& apt-get install -y \
-  qemu-user \
-  qemu-user-static \
-&& apt-get clean --yes
+RUN dpkg --add-architecture s390x && \
+    apt-get update && \
+    apt-get install --yes \
+            libelf-dev:s390x \
+            qemu-user \
+            qemu-user-static && \
+    apt-get clean --yes
 
 # The CROSS_TRIPLE is a configured alias of the "s390x-ibm-linux-gnu" target.
 ENV CROSS_TRIPLE s390x-ibm-linux-gnu
