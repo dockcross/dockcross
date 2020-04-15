@@ -30,6 +30,7 @@ RUN \
     gettext \
     gzip \
     gnupg \
+    initramfs-tools \
     libtool \
     make \
     ncurses-dev \
