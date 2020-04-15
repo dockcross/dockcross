@@ -1,7 +1,7 @@
 dockcross
 =========
 
-Cross compiling toolchains in Docker images.
+Cross compiling toolchains in OCI container images.
 
 .. image:: https://circleci.com/gh/dockcross/dockcross/tree/master.svg?style=svg
   :target: https://circleci.com/gh/dockcross/dockcross/tree/master
@@ -10,6 +10,10 @@ Cross compiling toolchains in Docker images.
 Features
 --------
 
+* Supports `Docker <https://www.docker.com/>`_ and `Podman <https://podman.io/>`_
+  container engines.
+* Supports `Open Container Initiative (OCI) <https://www.opencontainers.org/>`_
+  compatible containers and registries. 
 * Pre-built and configured toolchains for cross compiling.
 * Most images also contain an emulator for the target system.
 * Clean separation of build tools, source code, and build artifacts.
@@ -52,41 +56,52 @@ redirect the output to a file::
   chmod +x ./dockcross
   mv ./dockcross ~/bin/
 
+Podman users can replace `docker` with `podman` in all documentation examples::
+
+  podman run --rm CROSS_COMPILER_IMAGE_NAME > ./dockcross
+  chmod +x ./dockcross
+  mv ./dockcross ~/bin/
+
 Where `CROSS_COMPILER_IMAGE_NAME` is the name of the cross-compiler toolchain
-Docker instance, e.g. `dockcross/linux-armv7`.
+container 'slug', e.g. `dockcross/linux-armv7`.
 
 Only 64-bit x86_64 images are provided; a 64-bit x86_64 host system is required.
 
 Usage
 -----
 
-For the impatient, here's how to compile a hello world for armv7::
+For the impatient, here's how to compile a hello world for armv7 using Docker::
 
   cd ~/src/dockcross
   docker run --rm dockcross/linux-armv7 > ./dockcross-linux-armv7
   chmod +x ./dockcross-linux-armv7
   ./dockcross-linux-armv7 bash -c '$CC test/C/hello.c -o hello_arm'
 
-Note how invoking any toolchain command (make, gcc, etc.) is just a matter of prepending the **dockcross** script on the commandline::
+Note how invoking any toolchain command (make, gcc, etc.) is just a matter of
+prepending the **dockcross** script on the commandline::
 
   ./dockcross-linux-armv7 [command] [args...]
 
-The dockcross script will execute the given command-line inside the container,
-along with all arguments passed after the command. Commands that evaluate
-environmental variables in the image, like `$CC` above, should be executed in
-`bash -c`. The present working directory is mounted within the image, which
-can be used to make source code available in the Docker container.
+The **dockcross** script will select between the `docker` and `podman` container
+engines, then execute the given command-line inside the container,
+along with all arguments passed after the command. 
+If `podman` is installed and responds to `command -v podman` it is selected.
+Otherwise, the default container engine executable is `docker`. 
+
+Commands that evaluate environmental variables in the image, like `$CC` above,
+should be executed in `bash -c`. 
+The present working directory is mounted within the image, which can be used to
+make source code available in the container.
 
 Cross compilers
 ---------------
 
-.. |base-images| image:: https://images.microbadger.com/badges/image/dockcross/base.svg
-  :target: https://microbadger.com/images/dockcross/base
+.. |base-images| image:: https://images.microbadger.com/badges/image/dockcross/dockcross-base.svg
+  :target: https://microbadger.com/images/dockcross/dockcross-base
 
 dockcross/base
-  |base-images| Base image for other toolchain images. From Debian Jessie with GCC,
-  make, autotools, CMake, Ninja, Git, and Python.
-
+  |base-images| Base image for other toolchain images. From Debian 10 (Buster)
+   with GCC, make, autotools, CMake, Ninja, Git, and Python.
 
 .. |android-arm-images| image:: https://images.microbadger.com/badges/image/dockcross/android-arm.svg
   :target: https://microbadger.com/images/dockcross/android-arm
@@ -178,7 +193,7 @@ dockcross/linux-ppc64le
   :target: https://microbadger.com/images/dockcross/linux-x64
 
 dockcross/linux-x64
-  |linux-x64-images| Linux x86_64 / amd64 compiler. Since the Docker image is
+  |linux-x64-images| Linux x86_64 / amd64 compiler. Since the container image is
   natively x86_64, this is not actually a cross compiler.
 
 
@@ -193,7 +208,7 @@ dockcross/linux-x86
   :target: https://microbadger.com/images/dockcross/manylinux2014-x64
 
 dockcross/manylinux2014-x64
-  |manylinux2014-x64-images| Docker `manylinux2014 <https://github.com/pypa/manylinux>`_ image for building Linux x86_64 / amd64 `Python wheel packages <http://pythonwheels.com/>`_. It includes Python 2.7, 3.4, 3.5, 3.6, 3.7 and 3.8.
+  |manylinux2014-x64-images| `manylinux2014 <https://github.com/pypa/manylinux>`_ container image for building Linux x86_64 / amd64 `Python wheel packages <http://pythonwheels.com/>`_. It includes Python 2.7, 3.4, 3.5, 3.6, 3.7 and 3.8.
   Also has support for the dockcross script, and it has installations of CMake, Ninja, and `scikit-build <http://scikit-build.org>`_. For CMake, it sets `MANYLINUX2014` to "TRUE" in the toolchain.
 
 
@@ -201,7 +216,7 @@ dockcross/manylinux2014-x64
   :target: https://microbadger.com/images/dockcross/manylinux2010-x64
 
 dockcross/manylinux2010-x64
-  |manylinux2010-x64-images| Docker `manylinux2010 <https://github.com/pypa/manylinux>`_ image for building Linux x86_64 / amd64 `Python wheel packages <http://pythonwheels.com/>`_. It includes Python 2.7, 3.4, 3.5, 3.6, 3.7 and 3.8.
+  |manylinux2010-x64-images| `manylinux2010 <https://github.com/pypa/manylinux>`_ container image for building Linux x86_64 / amd64 `Python wheel packages <http://pythonwheels.com/>`_. It includes Python 2.7, 3.4, 3.5, 3.6, 3.7 and 3.8.
   Also has support for the dockcross script, and it has installations of CMake, Ninja, and `scikit-build <http://scikit-build.org>`_. For CMake, it sets `MANYLINUX2010` to "TRUE" in the toolchain.
 
 
@@ -209,7 +224,7 @@ dockcross/manylinux2010-x64
   :target: https://microbadger.com/images/dockcross/manylinux2010-x86
 
 dockcross/manylinux2010-x86
-  |manylinux2010-x86-images| Docker `manylinux2010 <https://github.com/pypa/manylinux>`_ image for building Linux i686 `Python wheel packages <http://pythonwheels.com/>`_. It includes Python 2.7, 3.4, 3.5, 3.6, 3.7 and 3.8.
+  |manylinux2010-x86-images| `manylinux2010 <https://github.com/pypa/manylinux>`_ container image for building Linux i686 `Python wheel packages <http://pythonwheels.com/>`_. It includes Python 2.7, 3.4, 3.5, 3.6, 3.7 and 3.8.
   Also has support for the dockcross script, and it has installations of CMake, Ninja, and `scikit-build <http://scikit-build.org>`_. For CMake, it sets `MANYLINUX2010` to "TRUE" in the toolchain.
 
 
@@ -217,7 +232,7 @@ dockcross/manylinux2010-x86
   :target: https://microbadger.com/images/dockcross/manylinux1-x64
 
 dockcross/manylinux1-x64
-  |manylinux1-x64-images| Docker `manylinux1 <https://github.com/pypa/manylinux/tree/manylinux1>`_ image for building Linux x86_64 / amd64 `Python wheel packages <http://pythonwheels.com/>`_. It includes Python 2.7, 3.4, 3.5, 3.6, 3.7 and 3.8.
+  |manylinux1-x64-images| `manylinux1 <https://github.com/pypa/manylinux/tree/manylinux1>`_ container image for building Linux x86_64 / amd64 `Python wheel packages <http://pythonwheels.com/>`_. It includes Python 2.7, 3.4, 3.5, 3.6, 3.7 and 3.8.
   Also has support for the dockcross script, and it has installations of CMake, Ninja, and `scikit-build <http://scikit-build.org>`_. For CMake, it sets `MANYLINUX1` to "TRUE" in the toolchain.
 
 
@@ -225,7 +240,7 @@ dockcross/manylinux1-x64
   :target: https://microbadger.com/images/dockcross/manylinux1-x86
 
 dockcross/manylinux1-x86
-  |manylinux1-x86-images| Docker `manylinux1 <https://github.com/pypa/manylinux/tree/manylinux1>`_ image for building Linux i686 `Python wheel packages <http://pythonwheels.com/>`_. It includes Python 2.7, 3.4, 3.5, 3.6, 3.7 and 3.8.
+  |manylinux1-x86-images| `manylinux1 <https://github.com/pypa/manylinux/tree/manylinux1>`_ container image for building Linux i686 `Python wheel packages <http://pythonwheels.com/>`_. It includes Python 2.7, 3.4, 3.5, 3.6, 3.7 and 3.8.
   Also has support for the dockcross script, and it has installations of CMake, Ninja, and `scikit-build <http://scikit-build.org>`_. For CMake, it sets `MANYLINUX1` to "TRUE" in the toolchain.
 
 
@@ -290,18 +305,22 @@ Built-in update commands
 ------------------------
 
 A special update command can be executed that will update the
-source cross-compiler Docker image or the dockcross script itself.
+source cross-compiler container image or the dockcross script itself.
 
-- ``dockcross [--] command [args...]``: Forces a command to run inside the container (in case of a name clash with a built-in command), use ``--`` before the command.
-- ``dockcross update-image``: Fetch the latest version of the docker image.
-- ``dockcross update-script``: Update the installed dockcross script with the one bundled in the image.
-- ``dockcross update``: Update both the docker image, and the dockcross script.
+- ``dockcross [--] command [args...]``: Forces a command to run inside the
+  container (in case of a name clash with a built-in command), use ``--``
+  before the command.
+- ``dockcross update-image``: Fetch the latest version of the container image.
+- ``dockcross update-script``: Update the installed dockcross script with the
+  one bundled in the image.
+- ``dockcross update``: Update both the container image, and the dockcross script.
 
 
 Download all images
 -------------------
 
-To easily download all images, the convenience target ``display_images`` could be used::
+To easily download all images, the convenience target ``display_images`` could
+be used::
 
   curl https://raw.githubusercontent.com/dockcross/dockcross/master/Makefile -o dockcross-Makefile
   for image in $(make -f dockcross-Makefile display_images); do
@@ -309,11 +328,19 @@ To easily download all images, the convenience target ``display_images`` could b
     docker pull dockcross/$image
   done
 
+For Podman users, set ``OCI_EXE=podman`` when invoking a ``make`` target::
+
+  curl https://raw.githubusercontent.com/dockcross/dockcross/master/Makefile -o dockcross-Makefile
+  for image in $(make OCI_EXE=podman -f dockcross-Makefile display_images); do
+    echo "Pulling dockcross/$image"
+    podman pull dockcross/$image
+  done
+
 Install all dockcross scripts
 -----------------------------
 
-To automatically install in ``~/bin`` the dockcross scripts for each images already downloaded, the
-convenience target ``display_images`` could be used::
+To automatically install in ``~/bin`` the dockcross scripts for each images
+already downloaded, the convenience target ``display_images`` could be used::
 
   curl https://raw.githubusercontent.com/dockcross/dockcross/master/Makefile -o dockcross-Makefile
   for image in $(make -f dockcross-Makefile display_images); do
@@ -326,6 +353,18 @@ convenience target ``display_images`` could be used::
     chmod u+x  ~/bin/dockcross-$image
   done
 
+For Podman users, set ``OCI_EXE=podman`` when invoking a ``make`` target::
+
+  curl https://raw.githubusercontent.com/dockcross/dockcross/master/Makefile -o dockcross-Makefile
+  for image in $(make OCI_EXE=podman -f dockcross-Makefile display_images); do
+    if [[ $(podman images -q dockcross/$image) == "" ]]; then
+      echo "~/bin/dockcross-$image skipping: image not found locally"
+      continue
+    fi
+    echo "~/bin/dockcross-$image ok"
+    podman run dockcross/$image > ~/bin/dockcross-$image && \
+    chmod u+x  ~/bin/dockcross-$image
+  done
 
 Dockcross configuration
 -----------------------
@@ -341,18 +380,18 @@ script.
 
 Default: ``~/.dockcross``
 
-DOCKCROSS_IMAGE / --image|-i <docker-image-name>
+DOCKCROSS_IMAGE / --image|-i <container-image-name>
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The Docker cross-compiler image to run.
+The cross-compiler container image to run.
 
 Default: Image with which the script was created.
 
-DOCKCROSS_ARGS / --args|-a <docker-run-args>
+DOCKCROSS_ARGS / --args|-a <container-run-args>
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Extra arguments to pass to the ``docker run`` command. Quote the entire set of
-args if they contain spaces.
+Extra arguments to pass to the ``docker run`` or ``podman run`` command.
+Quote the entire set of args if they contain spaces.
 
 
 Per-project dockcross configuration
@@ -372,7 +411,9 @@ How to extend Dockcross images
 In order to extend Dockcross images with your own commands, one must:
 
 1. Use ``FROM dockcross/<name_of_image>``.
-2. Set ``DEFAULT_DOCKCROSS_IMAGE`` to a name of the tag you're planning to use for the image. This tag must then be used during the build phase, unless you mean to pass the resulting helper script the ``DOCKCROSS_IMAGE`` argument.
+2. Set ``DEFAULT_DOCKCROSS_IMAGE`` to a name of the tag you're planning to use
+   for the image. This tag must then be used during the build phase, unless you
+   mean to pass the resulting helper script the ``DOCKCROSS_IMAGE`` argument.
 
 An example Dockerfile would be::
 
@@ -383,10 +424,10 @@ An example Dockerfile would be::
 
 And then in the shell::
 
-  docker build -t my_cool_image .					# Builds the dockcross image.
-  docker run my_cool_image > linux-armv7				# Creates a helper script named linux-armv7.
-  chmod +x linux-armv7							# Gives the script execution permission.
-  ./linux-armv7 bash							# Runs the helper script with the argument "bash", which starts an interactive container using your extended image.
+  docker build -t my_cool_image .         # Builds the dockcross image.
+  docker run my_cool_image > linux-armv7  # Creates a helper script named linux-armv7.
+  chmod +x linux-armv7                    # Gives the script execution permission.
+  ./linux-armv7 bash                      # Runs the helper script with the argument "bash", which starts an interactive container using your extended image.
 
 
 What is the difference between `dockcross` and `dockbuild` ?
@@ -402,15 +443,16 @@ to conveniently isolate the build environment as `dockcross
 
 `dockbuild` is used to build binaries for Linux x86_64 / amd64 that will work
 across most Linux  distributions. `dockbuild` performs a native Linux build
-where the host build system is a Linux x86_64 / amd64 Docker image (so that it
-can be used for building binaries on any system which can run Docker images)
-and the target runtime system is Linux x86_x64 / amd64.
+where the host build system is a Linux x86_64 / amd64 container image (so that
+it can be used for building binaries on any system which can run Open Container
+Initiative compatible container images) and the target runtime system is Linux
+x86_x64 / amd64.
 
 `dockcross` is used to build binaries for many different platforms.
 `dockcross` performs a cross compilation where the host build system is a
-Linux x86_64 / amd64 Docker image (so that it can be used for building
-binaries on any system which can run Docker images) and the target runtime
-system varies.
+Linux x86_64 / amd64 container image (so that it can be used for building
+binaries on any system which can run Open Container Initiative compatible
+container images) and the target runtime system varies.
 
 
 ---

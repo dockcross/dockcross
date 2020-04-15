@@ -1,15 +1,26 @@
-FROM dockcross/base:latest
+# NOTE: Arguments are reset to empty after the FROM statement.
+#       Unless they are not.
+#       This funkyness is from Docker world: 
+#       https://docs.docker.com/engine/reference/builder/#understand-how-arg-and-from-interact
+#       https://docs.docker.com/engine/reference/builder/#scope
+ARG DOCKCROSS_ORG=dockcross
+ARG DOCKCROSS_VERSION=latest
+FROM ${DOCKCROSS_ORG}/dockcross-base:${DOCKCROSS_VERSION}
+ARG DOCKCROSS_ORG
+ARG DOCKCROSS_VERSION
 
 # This is for 64-bit ARM Linux machine
 
 #include "common.crosstool"
 
 # The cross-compiling emulator
-RUN apt-get update \
-&& apt-get install -y \
-  qemu-user \
-  qemu-user-static \
-&& apt-get clean --yes
+RUN dpkg --add-architecture arm64 && \
+    apt-get update && \
+    apt-get install --yes \
+            libelf-dev:arm64 \
+            qemu-user \
+            qemu-user-static && \
+    apt-get clean --yes
 
 # The CROSS_TRIPLE is a configured alias of the "aarch64-unknown-linux-gnueabi" target.
 ENV CROSS_TRIPLE aarch64-unknown-linux-gnueabi

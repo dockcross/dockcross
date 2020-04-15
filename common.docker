@@ -18,7 +18,7 @@ COPY \
   /buildscripts/
 
 RUN \
-  X86_FLAG=$([ "$DEFAULT_DOCKCROSS_IMAGE" = "dockcross/manylinux1-x86" -o "$DEFAULT_DOCKCROSS_IMAGE" = "dockcross/manylinux2010-x86" ] && echo "-32" || echo "") && \
+  X86_FLAG=$([ "$DEFAULT_DOCKCROSS_IMAGE" = "${DOCKCROSS_ORG}/manylinux1-x86" -o "$DEFAULT_DOCKCROSS_IMAGE" = "${DOCKCROSS_ORG}/manylinux2010-x86" ] && echo "-32" || echo "") && \
   /buildscripts/build-and-install-openssl.sh $X86_FLAG && \
   /buildscripts/build-and-install-openssh.sh && \
   /buildscripts/build-and-install-curl.sh && \

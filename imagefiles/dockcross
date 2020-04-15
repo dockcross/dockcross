@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-
-DEFAULT_DOCKCROSS_IMAGE=dockcross/base  # DO NOT MOVE THIS LINE (see entrypoint.sh)
+DOCKCROSS_ORG=${DOCKCROSS_ORG:-dockcross}
+DOCKCROSS_VERSION=${DOCKCROSS_VERSION:-latet}
+DEFAULT_DOCKCROSS_IMAGE=${DOCKCROSS_ORG:}/dockcross-base:${DOCKCROSS_VERSION}  # DO NOT MOVE THIS LINE (see entrypoint.sh)
 
 #------------------------------------------------------------------------------
 # Helpers
@@ -22,11 +23,27 @@ has() {
     type -t $kind:$name | grep -q function
 }
 
+# DESC: Select a container engine executable.  
+# ARGS: None
+# OUTS: $OCI_EXE: Either `docker` or `podman`. If `podman` is not available the
+#       default is `docker`.
+# NOTE: The selected tool manages Open Container Initative (OCI) compatible
+#       container runtime, storage/format and images. Docker and
+#       Podman are implementations of (some) of the OCI specifications. Podman
+#       is compatible with Docker command and option syntax.
+oci_exe() {
+  if [ -x "$(command -v podman)" ]; then
+    OCI_EXE=podman
+  else
+    OCI_EXE=docker
+  fi
+}
+
 #------------------------------------------------------------------------------
 # Command handlers
 #
 command:update-image() {
-    docker pull $FINAL_IMAGE
+    ${OCI_EXE} pull $FINAL_IMAGE
 }
 
 help:update-image() {
@@ -34,11 +51,11 @@ help:update-image() {
 }
 
 command:update-script() {
-    if cmp -s <( docker run --rm $FINAL_IMAGE ) $0; then
+    if cmp -s <( ${OCI_EXE} run --rm $FINAL_IMAGE ) $0; then
         echo $0 is up to date
     else
         echo -n Updating $0 '... '
-        docker run --rm $FINAL_IMAGE > $0 && echo ok
+        ${OCI_EXE} run --rm $FINAL_IMAGE > $0 && echo ok
     fi
 }
 
@@ -73,7 +90,7 @@ By default, run the given *command* in an dockcross Docker container.
 
 The *options* can be one of:
 
-    --args|-a           Extra args to the *docker run* command
+    --args|-a           Extra args to the *${OCI_EXE} run* command
     --image|-i          Docker cross-compiler image to use
     --config|-c         Bash script to source before running this script
 
@@ -144,7 +161,7 @@ FINAL_CONFIG=${ARG_CONFIG-${DOCKCROSS_CONFIG-$DEFAULT_DOCKCROSS_CONFIG}}
 
 [[ -f "$FINAL_CONFIG" ]] && source "$FINAL_CONFIG"
 
-# Set the docker image
+# Set the OCI image
 FINAL_IMAGE=${ARG_IMAGE-${DOCKCROSS_IMAGE-$DEFAULT_DOCKCROSS_IMAGE}}
 
 # Handle special update command
@@ -169,7 +186,7 @@ if [ "$special_update_command" != "" ]; then
     esac
 fi
 
-# Set the docker run extra args (if any)
+# Set the OCI engine `run` command extra args (if any)
 FINAL_ARGS=${ARG_ARGS-${DOCKCROSS_ARGS}}
 
 # Bash on Ubuntu on Windows
@@ -216,10 +233,11 @@ fi
 # Now, finally, run the command in a container
 #
 TTY_ARGS=
+oci_exe
 tty -s && [ -z "$MSYS" ] && TTY_ARGS=-ti
 CONTAINER_NAME=dockcross_$RANDOM
-docker run $TTY_ARGS --name $CONTAINER_NAME \
-    -v "$HOST_PWD":/work \
+${OCI_EXE} run $TTY_ARGS --name $CONTAINER_NAME \
+    --volume "$HOST_PWD":/work \
     $HOST_VOLUMES \
     "${USER_IDS[@]}" \
     $FINAL_ARGS \
@@ -227,7 +245,7 @@ docker run $TTY_ARGS --name $CONTAINER_NAME \
 run_exit_code=$?
 
 # Attempt to delete container
-rm_output=$(docker rm -f $CONTAINER_NAME 2>&1)
+rm_output=$(${OCI_EXE} rm -f $CONTAINER_NAME 2>&1)
 rm_exit_code=$?
 if [[ $rm_exit_code != 0 ]]; then
   if [[ "$CIRCLECI" == "true" ]] && [[ $rm_output == *"Driver btrfs failed to remove"* ]]; then
@@ -245,9 +263,9 @@ exit $run_exit_code
 # This image is not intended to be run manually.
 #
 # To create a dockcross helper script for the
-# dockcross/linux-armv7 image, run:
+# ${DOCKCROSS_ORG}/linux-armv7 image, run:
 #
-# docker run --rm dockcross/linux-armv7 > dockcross-linux-armv7
+# ${OCI_EXE} run --rm dockcross/linux-armv7 > dockcross-linux-armv7
 # chmod +x dockcross-linux-armv7
 #
 # You may then wish to move the dockcross script to your PATH.
