@@ -10,9 +10,9 @@ Cross compiling toolchains in OCI container images.
 Features
 --------
 
-* Supports `Docker <https://www.docker.com/>` and `Podman <https://podman.io/>`
+* Supports `Docker <https://www.docker.com/>`_ and `Podman <https://podman.io/>`_
   container engines.
-* Supports `Open Container Initiative (OCI) <https://www.opencontainers.org/>`
+* Supports `Open Container Initiative (OCI) <https://www.opencontainers.org/>`_
   compatible containers and registries. 
 * Pre-built and configured toolchains for cross compiling.
 * Most images also contain an emulator for the target system.
@@ -56,7 +56,7 @@ redirect the output to a file::
   chmod +x ./dockcross
   mv ./dockcross ~/bin/
 
-Podman users can replace `docker` with `podman` in all documentation examples:
+Podman users can replace `docker` with `podman` in all documentation examples::
 
   podman run --rm CROSS_COMPILER_IMAGE_NAME > ./dockcross
   chmod +x ./dockcross
@@ -329,7 +329,7 @@ be used::
     docker pull dockcross/$image
   done
 
-For Podman users, set `OCI_EXE=podman` when invoking a `make` target:
+For Podman users, set ``OCI_EXE=podman`` when invoking a ``make`` target::
 
   curl https://raw.githubusercontent.com/dockcross/dockcross/master/Makefile -o dockcross-Makefile
   for image in $(make OCI_EXE=podman -f dockcross-Makefile display_images); do
@@ -354,7 +354,7 @@ already downloaded, the convenience target ``display_images`` could be used::
     chmod u+x  ~/bin/dockcross-$image
   done
 
-For Podman users, set `OCI_EXE=podman` when invoking a `make` target:
+For Podman users, set ``OCI_EXE=podman`` when invoking a ``make`` target::
 
   curl https://raw.githubusercontent.com/dockcross/dockcross/master/Makefile -o dockcross-Makefile
   for image in $(make OCI_EXE=podman -f dockcross-Makefile display_images); do
@@ -425,10 +425,10 @@ An example Dockerfile would be::
 
 And then in the shell::
 
-  docker build -t my_cool_image .					# Builds the dockcross image.
-  docker run my_cool_image > linux-armv7	# Creates a helper script named linux-armv7.
-  chmod +x linux-armv7							      # Gives the script execution permission.
-  ./linux-armv7 bash							        # Runs the helper script with the argument "bash", which starts an interactive container using your extended image.
+  docker build -t my_cool_image .         # Builds the dockcross image.
+  docker run my_cool_image > linux-armv7  # Creates a helper script named linux-armv7.
+  chmod +x linux-armv7                    # Gives the script execution permission.
+  ./linux-armv7 bash                      # Runs the helper script with the argument "bash", which starts an interactive container using your extended image.
 
 
 What is the difference between `dockcross` and `dockbuild` ?
