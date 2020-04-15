@@ -15,36 +15,36 @@ RUN \
   bash -c "echo \"deb http://ftp.debian.org/debian buster-backports main\" >> /etc/apt/sources.list" && \
   apt-get update --yes && \
   apt-get install --no-install-recommends --yes \
-    automake \
     autogen \
+    automake \
     bash \
-    build-essential \
     bc \
+    bison \
+    build-essential \
     bzip2 \
     ca-certificates \
     curl \
     dirmngr \
     file \
+    flex \
     gettext \
     gzip \
     gnupg \
-    zip \
+    libtool \
     make \
     ncurses-dev \
     pkg-config \
-    libtool \
+    pax \
     python \
     python-pip \
     rsync \
     sed \
     ssh \
-    bison \
-    flex \
     tar \
-    pax \
     vim \
     wget \
     xz-utils \
+    zip \
     zlib1g-dev \
   && \
   apt-get clean --yes && \
