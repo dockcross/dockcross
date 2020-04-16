@@ -49,4 +49,4 @@ LABEL org.opencontainers.image.created=$BUILD_DATE \
       org.opencontainers.image.url=$DOCKCROSS_URL \
       org.opencontainers.image.vendor=$DOCKCROSS_ORG \
       org.opencontainers.image.version=$DOCKCROSS_VERSION
-ENV DEFAULT_DOCKCROSS_IMAGE ${IMAGE}:${VERSION}
+ENV DEFAULT_DOCKCROSS_IMAGE ${IMAGE}:${DOCKCROSS_VERSION}

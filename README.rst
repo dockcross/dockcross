@@ -417,7 +417,7 @@ In order to extend Dockcross images with your own commands, one must:
 
 An example Dockerfile would be::
 
-  FROM dockcross/linux-armv7
+  FROM dockcross/linux-armv7:2.0.0
 
   ENV DEFAULT_DOCKCROSS_IMAGE my_cool_image
   RUN apt-get install nano
