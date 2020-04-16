@@ -1,4 +1,14 @@
-FROM dockcross/base:latest
+# NOTE: Arguments are reset to empty after the FROM statement.
+#       Unless they are not.
+#       This funkyness is from Docker world: 
+#       https://docs.docker.com/engine/reference/builder/#understand-how-arg-and-from-interact
+#       https://docs.docker.com/engine/reference/builder/#scope
+ARG DOCKCROSS_ORG=dockcross
+ARG DOCKCROSS_VERSION=latest
+FROM ${DOCKCROSS_ORG}/dockcross-base:${DOCKCROSS_VERSION}
+ARG DOCKCROSS_ORG
+ARG DOCKCROSS_VERSION
+
 MAINTAINER Matt McCormick "matt.mccormick@kitware.com"
 
 RUN apt-get update && \
@@ -22,8 +32,9 @@ ENV CMAKE_TOOLCHAIN_FILE /usr/lib/${CROSS_TRIPLE}/Toolchain.cmake
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
-ARG IMAGE=dockcross/linux-x64
-ARG VERSION=latest
+ARG DOCKCROSS_ORG=dockcross
+ARG IMAGE=${DOCKCROSS_ORG}/linux-x64
+ARG DOCKCROSS_VERSION
 ARG VCS_REF
 ARG VCS_URL
 LABEL org.label-schema.build-date=$BUILD_DATE \

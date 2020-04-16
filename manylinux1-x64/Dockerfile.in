@@ -1,7 +1,10 @@
 FROM quay.io/pypa/manylinux1_x86_64:latest
 MAINTAINER Matt McCormick "matt.mccormick@kitware.com"
 
-ENV DEFAULT_DOCKCROSS_IMAGE dockcross/manylinux1-x64
+ARG DOCKCROSS_ORG=dockcross
+ARG DOCKCROSS_VERSION
+
+ENV DEFAULT_DOCKCROSS_IMAGE ${DOCKCROSS_ORG}/manylinux1-x64:${DOCKCROSS_VERSION}
 
 #include "common.manylinux"
 
@@ -24,8 +27,9 @@ ENV CMAKE_TOOLCHAIN_FILE ${CROSS_ROOT}/../lib/Toolchain.cmake
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
-ARG IMAGE=dockcross/manylinux1-x64
-ARG VERSION=latest
+ARG DOCKCROSS_ORG=dockcross
+ARG IMAGE=${DOCKCROSS_ORG}/manylinux1-x64
+ARG DOCKCROSS_VERSION
 ARG VCS_REF
 ARG VCS_URL
 LABEL org.label-schema.build-date=$BUILD_DATE \

@@ -1,7 +1,10 @@
 FROM quay.io/pypa/manylinux2010_i686:latest
 MAINTAINER Matt McCormick "matt.mccormick@kitware.com"
 
-ENV DEFAULT_DOCKCROSS_IMAGE dockcross/manylinux2010-x86
+ARG DOCKCROSS_ORG=dockcross
+ARG DOCKCROSS_VERSION
+
+ENV DEFAULT_DOCKCROSS_IMAGE ${DOCKCROSS_ORG}/manylinux2010-x86:${DOCKCROSS_VERSION}
 
 #include "common.manylinux"
 
@@ -32,8 +35,9 @@ ENTRYPOINT ["/dockcross/linux32-entrypoint.sh"]
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
-ARG IMAGE=dockcross/manylinux2010-x86
-ARG VERSION=latest
+ARG DOCKCROSS_ORG=dockcross
+ARG IMAGE=${DOCKCROSS_ORG}/manylinux2010-x86
+ARG DOCKCROSS_VERSION
 ARG VCS_REF
 ARG VCS_URL
 LABEL org.label-schema.build-date=$BUILD_DATE \

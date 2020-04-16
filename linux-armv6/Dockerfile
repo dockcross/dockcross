@@ -1,4 +1,14 @@
-FROM dockcross/base:latest
+# NOTE: Arguments are reset to empty after the FROM statement.
+#       Unless they are not.
+#       This funkyness is from Docker world: 
+#       https://docs.docker.com/engine/reference/builder/#understand-how-arg-and-from-interact
+#       https://docs.docker.com/engine/reference/builder/#scope
+ARG DOCKCROSS_ORG=dockcross
+ARG DOCKCROSS_VERSION=latest
+FROM ${DOCKCROSS_ORG}/dockcross-base:${DOCKCROSS_VERSION}
+ARG DOCKCROSS_ORG
+ARG DOCKCROSS_VERSION
+
 MAINTAINER Matt McCormick "matt.mccormick@kitware.com"
 
 # Enable 32 bits binaries
@@ -50,13 +60,14 @@ ENV ARCH arm
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
-ARG IMAGE=dockcross/linux-armv6
-ARG VERSION=latest
+ARG DOCKCROSS_ORG=dockcross
+ARG DOCKCROSS_VERSION
+ARG IMAGE=${DOCKCROSS_ORG}/linux-armv6
 ARG VCS_REF
 ARG VCS_URL
 LABEL org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.name=$IMAGE \
-      org.label-schema.version=$VERSION \
+      org.label-schema.version=$DOCKCROSS_VERSION \
       org.label-schema.vcs-ref=$VCS_REF \
       org.label-schema.vcs-url=$VCS_URL \
       org.label-schema.schema-version="1.0"

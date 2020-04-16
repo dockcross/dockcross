@@ -1,4 +1,14 @@
-FROM dockcross/base:latest
+# NOTE: Arguments are reset to empty after the FROM statement.
+#       Unless they are not.
+#       This funkyness is from Docker world: 
+#       https://docs.docker.com/engine/reference/builder/#understand-how-arg-and-from-interact
+#       https://docs.docker.com/engine/reference/builder/#scope
+ARG DOCKCROSS_ORG=dockcross
+ARG DOCKCROSS_VERSION=latest
+FROM ${DOCKCROSS_ORG}/dockcross-base:${DOCKCROSS_VERSION}
+ARG DOCKCROSS_ORG
+ARG DOCKCROSS_VERSION
+
 MAINTAINER Matt McCormick "matt.mccormick@kitware.com"
 RUN \
   sed -i '/debian-security/d' /etc/apt/sources.list && \
@@ -44,8 +54,9 @@ ENV CMAKE_TOOLCHAIN_FILE ${CROSS_ROOT}/Toolchain.cmake
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
-ARG IMAGE=dockcross/android-arm64
-ARG VERSION=latest
+ARG DOCKCROSS_ORG=dockcross
+ARG IMAGE=${DOCKCROSS_ORG}/android-arm64
+ARG DOCKCROSS_VERSION
 ARG VCS_REF
 ARG VCS_URL
 LABEL org.label-schema.build-date=$BUILD_DATE \

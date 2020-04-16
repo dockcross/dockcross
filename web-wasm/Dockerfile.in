@@ -68,8 +68,9 @@ ENV CMAKE_TOOLCHAIN_FILE /emsdk_portable/emscripten/sdk/cmake/Modules/Platform/E
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
-ARG IMAGE=dockcross/web-wasm
-ARG VERSION=latest
+ARG DOCKCROSS_ORG=dockcross
+ARG IMAGE=${DOCKCROSS_ORG}/web-wasm
+ARG DOCKCROSS_VERSION
 ARG VCS_REF
 ARG VCS_URL
 LABEL org.label-schema.build-date=$BUILD_DATE \

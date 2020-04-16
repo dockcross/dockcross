@@ -37,7 +37,7 @@ ENV AS=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-as \
 ENV QEMU_LD_PREFIX "${CROSS_ROOT}/${CROSS_TRIPLE}/sysroot"
 ENV QEMU_SET_ENV "LD_LIBRARY_PATH=${CROSS_ROOT}/lib:${QEMU_LD_PREFIX}"
 
-ENV DEFAULT_DOCKCROSS_IMAGE dockcross/linux-armv7a
+ENV DEFAULT_DOCKCROSS_IMAGE ${DOCKCROSS_ORG}/linux-armv7a:${DOCKCROSS_VERSION}
 
 COPY Toolchain.cmake ${CROSS_ROOT}/
 ENV CMAKE_TOOLCHAIN_FILE ${CROSS_ROOT}/Toolchain.cmake
@@ -51,8 +51,9 @@ ENV ARCH arm
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
-ARG IMAGE=dockcross/linux-armv7a
-ARG VERSION=latest
+ARG DOCKCROSS_ORG=dockcross
+ARG IMAGE=${DOCKCROSS_ORG}/linux-armv7a
+ARG DOCKCROSS_VERSION
 ARG VCS_REF
 ARG VCS_URL
 LABEL org.label-schema.build-date=$BUILD_DATE \
