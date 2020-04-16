@@ -32,11 +32,10 @@ ENV CMAKE_TOOLCHAIN_FILE ${CROSS_ROOT}/../lib/Toolchain.cmake
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
-ARG DOCKCROSS_ORG=dockcross
 ARG IMAGE=${DOCKCROSS_ORG}/manylinux2010-x64
-ARG DOCKCROSS_VERSION
 ARG VCS_REF
 ARG VCS_URL
+ARG DOCKCROSS_URL="https://github.com/${DOCKCROSS_ORG}/dockcross/blob/master/README.rst"
 LABEL org.opencontainers.image.created=$BUILD_DATE \
       org.opencontainers.image.description=$IMAGE \
       org.opencontainers.image.documentation=$DOCKCROSS_URL \
