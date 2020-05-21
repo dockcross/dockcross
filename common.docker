@@ -14,6 +14,7 @@ COPY \
   imagefiles/install-cmake-binary.sh \
   imagefiles/install-liquidprompt-binary.sh \
   imagefiles/install-python-packages.sh \
+  imagefiles/install-rustup.sh \
   imagefiles/utils.sh \
   /buildscripts/
 
@@ -28,7 +29,10 @@ RUN \
   PYTHON=$([ -e /opt/python/cp35-cp35m/bin/python ] && echo "/opt/python/cp35-cp35m/bin/python" || echo "python") && \
   /buildscripts/install-python-packages.sh -python ${PYTHON} && \
   /buildscripts/build-and-install-ninja.sh -python ${PYTHON} && \
+  /buildscripts/install-rustup.sh && \
   rm -rf /buildscripts
+
+ENV PATH /root/.cargo/bin:$PATH
 
 RUN echo "root:root" | chpasswd
 WORKDIR /work
