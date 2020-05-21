@@ -36,6 +36,12 @@ ENV AS=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-as \
 COPY Toolchain.cmake /usr/lib/${CROSS_TRIPLE}/
 ENV CMAKE_TOOLCHAIN_FILE /usr/lib/${CROSS_TRIPLE}/Toolchain.cmake
 
+# Rust compiler
+
+RUN rustup target add i686-unknown-linux-gnu && \
+    rustup install stable-i686-unknown-linux-gnu && \
+    rustup default stable-i686-unknown-linux-gnu
+
 # Linux kernel cross compilation variables
 ENV CROSS_COMPILE ${CROSS_TRIPLE}-
 ENV ARCH x86
