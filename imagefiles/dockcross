@@ -22,11 +22,22 @@ has() {
     type -t $kind:$name | grep -q function
 }
 
+# If OCI_EXE is not already set, search for a container executor (OCI stands for "Open Container Initiative")
+if [ -z "$OCI_EXE" ]; then
+    if which docker >/dev/null 2>/dev/null; then
+        OCI_EXE=docker
+    elif which podman >/dev/null 2>/dev/null; then
+        OCI_EXE=podman
+    else
+        die "Cannot find a container executor. Search for docker and podman."
+    fi
+fi
+
 #------------------------------------------------------------------------------
 # Command handlers
 #
 command:update-image() {
-    docker pull $FINAL_IMAGE
+    $OCI_EXE pull $FINAL_IMAGE
 }
 
 help:update-image() {
@@ -34,11 +45,11 @@ help:update-image() {
 }
 
 command:update-script() {
-    if cmp -s <( docker run --rm $FINAL_IMAGE ) $0; then
+    if cmp -s <( $OCI_EXE run --rm $FINAL_IMAGE ) $0; then
         echo $0 is up to date
     else
         echo -n Updating $0 '... '
-        docker run --rm $FINAL_IMAGE > $0 && echo ok
+        $OCI_EXE run --rm $FINAL_IMAGE > $0 && echo ok
     fi
 }
 
@@ -219,7 +230,7 @@ fi
 TTY_ARGS=
 tty -s && [ -z "$MSYS" ] && TTY_ARGS=-ti
 CONTAINER_NAME=dockcross_$RANDOM
-docker run $TTY_ARGS --name $CONTAINER_NAME \
+$OCI_EXE run $TTY_ARGS --name $CONTAINER_NAME \
     -v "$HOST_PWD":/work \
     $HOST_VOLUMES \
     "${USER_IDS[@]}" \
@@ -228,7 +239,7 @@ docker run $TTY_ARGS --name $CONTAINER_NAME \
 run_exit_code=$?
 
 # Attempt to delete container
-rm_output=$(docker rm -f $CONTAINER_NAME 2>&1)
+rm_output=$($OCI_EXE rm -f $CONTAINER_NAME 2>&1)
 rm_exit_code=$?
 if [[ $rm_exit_code != 0 ]]; then
   if [[ "$CIRCLECI" == "true" ]] && [[ $rm_output == *"Driver btrfs failed to remove"* ]]; then

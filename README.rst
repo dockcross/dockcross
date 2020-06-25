@@ -20,6 +20,7 @@ Features
 * Toolchain files configured for CMake.
 * Current directory is mounted as the container's workdir, ``/work``.
 * Works with the `Docker for Mac <https://docs.docker.com/docker-for-mac/>`_ and `Docker for Windows <https://docs.docker.com/docker-for-windows/>`_.
+* Support using alternative container executor by setting `OCI_EXE` environment variable. By default, it searches for `docker` and [`podman`](https://podman.io/) executable.
 
 Examples
 --------
