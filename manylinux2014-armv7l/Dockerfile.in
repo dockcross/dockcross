@@ -1,0 +1,59 @@
+# manylinux2014-armv7l is based on manylinux2014-x64 and the armv7l toolchain installed. This allows to
+# run the container on a x86_64 host.
+# This image is not based on "pypa/manylinux2014_armv7l" because it would require the host to be armv7l.
+# For more details, read https://github.com/dockcross/dockcross/issues/367
+FROM dockcross/manylinux2014-x64
+
+# This is for 64-bit ARM Manylinux machine
+
+#include "common-manylinux.crosstool"
+
+# The cross-compiling emulator
+RUN \
+  yum update && \
+  yum -y install \
+    qemu-user \
+    qemu-system-arm && \
+  yum clean all
+
+# The CROSS_TRIPLE is a configured alias of the "armv7l-unknown-linux-gnueabi" target.
+ENV CROSS_TRIPLE armv7-unknown-linux-gnueabi
+
+ENV CROSS_ROOT ${XCC_PREFIX}/${CROSS_TRIPLE}
+ENV AS=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-as \
+    AR=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-ar \
+    CC=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-gcc \
+    CPP=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-cpp \
+    CXX=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-g++ \
+    LD=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-ld \
+    FC=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-gfortran
+
+ENV QEMU_LD_PREFIX "${CROSS_ROOT}/${CROSS_TRIPLE}/sysroot"
+ENV QEMU_SET_ENV "LD_LIBRARY_PATH=${CROSS_ROOT}/lib:${QEMU_LD_PREFIX}"
+
+COPY manylinux2014-armv7l/Toolchain.cmake ${CROSS_ROOT}/
+ENV CMAKE_TOOLCHAIN_FILE ${CROSS_ROOT}/Toolchain.cmake
+
+ENV PKG_CONFIG_PATH /usr/lib/armv7-linux-gnu/pkgconfig
+
+# Linux kernel cross compilation variables
+ENV PATH ${PATH}:${CROSS_ROOT}/bin
+ENV CROSS_COMPILE ${CROSS_TRIPLE}-
+ENV ARCH arm
+
+ENV AUDITWHEEL_ARCH armv7l
+ENV AUDITWHEEL_PLAT manylinux2014_$AUDITWHEEL_ARCH
+
+# Build-time metadata as defined at http://label-schema.org
+ARG BUILD_DATE
+ARG IMAGE=dockcross/manylinux2014-armv7l
+ARG VERSION=latest
+ARG VCS_REF
+ARG VCS_URL
+LABEL org.label-schema.build-date=$BUILD_DATE \
+      org.label-schema.name=$IMAGE \
+      org.label-schema.version=$VERSION \
+      org.label-schema.vcs-ref=$VCS_REF \
+      org.label-schema.vcs-url=$VCS_URL \
+      org.label-schema.schema-version="1.0"
+ENV DEFAULT_DOCKCROSS_IMAGE ${IMAGE}:${VERSION}
