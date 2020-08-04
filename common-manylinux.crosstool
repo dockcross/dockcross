@@ -45,9 +45,14 @@ ENV XCC_PREFIX=/usr/xcc
 #
 # Afterwards, we will leave the "ct-ng" config in the image as a reference
 # for users.
+# COPY \
+#   imagefiles/install-crosstool-ng-toolchain.sh \
+#   manylinux2014-aarch64/crosstool-ng.config \
+#   /dockcross/
+
 COPY \
   imagefiles/install-crosstool-ng-toolchain.sh \
-  manylinux2014-aarch64/crosstool-ng.config \
+  manylinux2014-armv7l/crosstool-ng.config \
   /dockcross/
 
 # Build and install the toolchain, cleaning up artifacts afterwards.
