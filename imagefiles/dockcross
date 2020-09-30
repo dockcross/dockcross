@@ -116,6 +116,12 @@ while [[ $# != 0 ]]; do
             ARG_IMAGE="$2"
             shift 2
             ;;
+
+        --host-ssh|-s)
+            MOUNT_HOST_SSH=true
+            shift 1
+            ;;
+
         update|update-image|update-script)
             special_update_command=$1
             break
@@ -209,7 +215,7 @@ if [ -z "$SSH_DIR" ]; then
 fi
 
 HOST_VOLUMES=
-if [ -e "$SSH_DIR" -a -z "$MSYS" ]; then
+if [ -e MOUNT_HOST_SSH -a -e "$SSH_DIR" -a -z "$MSYS" ]; then
     HOST_VOLUMES+="-v $SSH_DIR:/home/$(id -un)/.ssh"
 fi
 
