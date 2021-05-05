@@ -1,12 +1,12 @@
-name: Dockcross CI
+name: Dockcross CI update-toolchain
 
 on:
   push:
     branches:
-    - 'dev'
+    - 'update-toolchain'
   pull_request:
     branches:
-    - 'dev'
+    - 'update-toolchain'
 
 jobs:
   base:
