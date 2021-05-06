@@ -325,7 +325,7 @@ $(STANDARD_IMAGES): %: %/Dockerfile base
 .SECONDEXPANSION:
 $(addsuffix .test,$(STANDARD_IMAGES)): $$(basename $$@)
 	$(DOCKER) run $(RM) dockcross/$(basename $@) > $(BIN)/dockcross-$(basename $@) && chmod +x $(BIN)/dockcross-$(basename $@)
-	$(BIN)/dockcross-$(basename $@) python test/run.py $($@_ARGS)
+	$(BIN)/dockcross-$(basename $@) python3 test/run.py $($@_ARGS)
 
 #
 # testing prerequisites implicit rule

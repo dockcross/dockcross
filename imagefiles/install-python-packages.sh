@@ -3,7 +3,7 @@
 set -e
 set -o pipefail
 
-PYTHON=python
+PYTHON=python3
 while [ $# -gt 0 ]; do
   case "$1" in
     -python)
@@ -22,8 +22,8 @@ cd /tmp
 
 # Todo: Need to update base image from Debian Stretch for the required Python
 # 3.6 or later
-# curl -# -LO https://bootstrap.pypa.io/pip/get-pip.py
-curl -# -LO https://bootstrap.pypa.io/pip/2.7/get-pip.py
+curl -# -LO https://bootstrap.pypa.io/pip/get-pip.py
+#curl -# -LO https://bootstrap.pypa.io/pip/2.7/get-pip.py
 ${PYTHON} get-pip.py --ignore-installed
 rm get-pip.py
 
