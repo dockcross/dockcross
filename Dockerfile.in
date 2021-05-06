@@ -1,4 +1,4 @@
-FROM debian:stable-20210408-slim
+FROM debian:stable-20200130-slim
 MAINTAINER Matt McCormick "matt.mccormick@kitware.com"
 
 #include "common.debian"
