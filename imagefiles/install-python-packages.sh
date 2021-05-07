@@ -3,7 +3,7 @@
 set -e
 set -o pipefail
 
-PYTHON=python3
+PYTHON=python
 while [ $# -gt 0 ]; do
   case "$1" in
     -python)
