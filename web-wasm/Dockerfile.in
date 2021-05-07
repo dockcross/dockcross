@@ -1,4 +1,4 @@
-FROM emscripten/emsdk:2.0.4
+FROM emscripten/emsdk:2.0.20
 MAINTAINER Matt McCormick "matt.mccormick@kitware.com"
 
 # Revert back to "/bin/sh" as default shell
@@ -9,10 +9,6 @@ ARG DEBIAN_FRONTEND=noninteractive
 ARG REPO=http://cdn-fastly.deb.debian.org
 
 RUN \
-  bash -c "echo \"deb $REPO/debian buster main contrib non-free\" > /etc/apt/sources.list"  && \
-  bash -c "echo \"deb $REPO/debian buster-updates main contrib non-free\" >> /etc/apt/sources.list"  && \
-  bash -c "echo \"deb $REPO/debian-security buster/updates main\" >> /etc/apt/sources.list" && \
-  bash -c "echo \"deb http://ftp.debian.org/debian buster-backports main\" >> /etc/apt/sources.list" && \
   apt-get update --yes && \
   apt-get install --no-install-recommends --yes \
     automake \
@@ -35,8 +31,8 @@ RUN \
     ncurses-dev \
     pkg-config \
     libtool \
-    python \
-    python-pip \
+    python3 \
+    python3-pip \
     rsync \
     sed \
     ssh \
@@ -50,6 +46,9 @@ RUN \
     zlib1g-dev \
   && \
   apt-get clean --yes
+
+# Add symlink for compatibility
+RUN ln -s /usr/bin/python3 /usr/bin/python
 
 #include "common.dockcross"
 

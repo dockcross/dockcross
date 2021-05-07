@@ -16,7 +16,7 @@
 
 ENV MANYLINUX_DEPS="glibc-devel glibc-devel.i686 libstdc++-devel glib2-devel libX11-devel libXext-devel libXrender-devel mesa-libGL-devel libICE-devel libSM-devel"
 
-ENV PYTHON_COMPILE_DEPS="python-devel zlib-devel bzip2-devel expat-devel ncurses-devel readline-devel tk-devel gdbm-devel libdb-devel libpcap-devel xz-devel openssl-devel keyutils-libs-devel krb5-devel libcom_err-devel libidn-devel curl-devel perl-devel"
+ENV PYTHON_COMPILE_DEPS="python3-devel zlib-devel bzip2-devel expat-devel ncurses-devel readline-devel tk-devel gdbm-devel libdb-devel libpcap-devel xz-devel openssl-devel keyutils-libs-devel krb5-devel libcom_err-devel libidn-devel curl-devel perl-devel"
 
 ENV TOOLCHAIN_DEPS="devtoolset-9-binutils devtoolset-9-gcc devtoolset-9-gcc-c++ devtoolset-9-gcc-gfortran"
 
@@ -38,6 +38,9 @@ RUN \
     ${MANYLINUX_DEPS} && \
   yum clean all
 
+# Add symlink for compatibility
+RUN ln -s /usr/bin/python3 /usr/bin/python
+
 ENV XCC_PREFIX=/usr/xcc
 
 # Add the crosstool-ng script and image-specific toolchain configuration into
@@ -47,7 +50,6 @@ ENV XCC_PREFIX=/usr/xcc
 # for users.
 COPY \
   imagefiles/install-crosstool-ng-toolchain.sh \
-  imagefiles/crosstool-ng-expat.patch \
   manylinux2014-aarch64/crosstool-ng.config \
   /dockcross/
 
