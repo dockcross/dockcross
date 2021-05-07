@@ -121,19 +121,19 @@ dockcross/android-x86_64
   architecture.
 
 
-.. |linux-arm64-images| image:: https://images.microbadger.com/badges/image/dockcross/linux-arm64.svg
-  :target: https://microbadger.com/images/dockcross/linux-arm64
+.. |linux-armv8-images| image:: https://images.microbadger.com/badges/image/dockcross/linux-armv8.svg
+  :target: https://microbadger.com/images/dockcross/linux-armv8
 
-dockcross/linux-arm64
-  |linux-arm64-images| Cross compiler for the 64-bit ARM platform on Linux,
+dockcross/linux-armv8
+  |linux-armv8-images| Cross compiler for the 64-bit ARM platform on Linux,
   also known as AArch64.
 
 
-.. |linux-arm64-musl-images| image:: https://images.microbadger.com/badges/image/dockcross/linux-arm64-musl.svg
-  :target: https://microbadger.com/images/dockcross/linux-arm64-musl
+.. |linux-armv8-musl-images| image:: https://images.microbadger.com/badges/image/dockcross/linux-armv8-musl.svg
+  :target: https://microbadger.com/images/dockcross/linux-armv8-musl
 
-dockcross/linux-arm64-musl
-  |linux-arm64-musl-images| Cross compiler for the 64-bit ARM platform on Linux (also known as AArch64), using `musl <https://www.musl-libc.org/>`_ as base "libc".
+dockcross/linux-armv8-musl
+  |linux-armv8-musl-images| Cross compiler for the 64-bit ARM platform on Linux (also known as AArch64), using `musl <https://www.musl-libc.org/>`_ as base "libc".
 
 
 .. |linux-armv5-images| image:: https://images.microbadger.com/badges/image/dockcross/linux-armv5.svg
