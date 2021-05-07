@@ -22,14 +22,14 @@ if ! command -v git &> /dev/null; then
 	exit 1
 fi
 
-if [[ "${CMAKE_VERSION}" == "" ]]; then
-  echo >&2 'error: CMAKE_VERSION env. variable must be set to a non-empty value'
+if [[ "${CMAKE_VERSION_OFF}" == "" ]]; then
+  echo >&2 'error: CMAKE_VERSION_OFF env. variable must be set to a non-empty value'
   exit 1
 fi
 
 cd /usr/src
 
-git clone https://gitlab.kitware.com/cmake/cmake.git CMake -b v$CMAKE_VERSION --depth 1
+git clone https://gitlab.kitware.com/cmake/cmake.git CMake -b v$CMAKE_VERSION_OFF --depth 1
 
 mkdir /usr/src/CMake-build
 cd /usr/src/CMake-build
@@ -44,14 +44,14 @@ cd /usr/src/CMake-ssl-build
 ${WRAPPER} /usr/src/CMake-build/bin/cmake \
   -DCMAKE_BUILD_TYPE:STRING=Release \
   -DBUILD_TESTING:BOOL=OFF \
-  -DCMAKE_INSTALL_PREFIX:PATH=/usr/src/cmake-$CMAKE_VERSION \
+  -DCMAKE_INSTALL_PREFIX:PATH=/usr/src/cmake-$CMAKE_VERSION_OFF \
   -DCMAKE_USE_OPENSSL:BOOL=ON \
   -DOPENSSL_ROOT_DIR:PATH=/usr/local/ssl \
   ../CMake
 ${WRAPPER} make -j$(grep -c processor /proc/cpuinfo) install
 
 # Cleanup install tree
-cd /usr/src/cmake-$CMAKE_VERSION
+cd /usr/src/cmake-$CMAKE_VERSION_OFF
 rm -rf doc man
 
 # Install files

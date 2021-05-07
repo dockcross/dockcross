@@ -42,7 +42,7 @@ COPY manylinux-common/pre_exec.sh /dockcross/
 #include "common.docker"
 WORKDIR /usr/src
 
-ARG GIT_VERSION=2.22.0
+ARG GIT_VERSION=2.31.1
 ARG CMAKE_VERSION=3.17.1
 
 # Image build scripts
