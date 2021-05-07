@@ -5,6 +5,9 @@ on:
     branches:
     - 'master'
     - 'dev'
+    paths-ignore:
+      - '**/README.md'
+      - '**/README.rst'
   pull_request:
     branches:
     - '*'
@@ -60,3 +63,6 @@ jobs:
         run: |
             docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASS }}
             docker image push dockcross/${{ matrix.arch_name }}
+# Docker images need to remove after deploy or tests, not enough memory to build all images on github action (14 GB of SSD)
+      - name: clean
+        run: docker image rm -f dockcross/${{ matrix.arch_name }}
