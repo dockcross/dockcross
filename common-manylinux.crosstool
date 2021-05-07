@@ -38,9 +38,6 @@ RUN \
     ${MANYLINUX_DEPS} && \
   yum clean all
 
-# Add symlink for compatibility
-RUN ln -s /usr/bin/python3 /usr/bin/python
-
 ENV XCC_PREFIX=/usr/xcc
 
 # Add the crosstool-ng script and image-specific toolchain configuration into
