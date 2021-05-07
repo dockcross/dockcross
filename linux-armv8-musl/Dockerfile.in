@@ -26,7 +26,7 @@ ENV ARCH arm64
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
-ARG IMAGE=dockcross/linux-arm64-musl
+ARG IMAGE=dockcross/linux-armv8-musl
 ARG VERSION=latest
 ARG VCS_REF
 ARG VCS_URL
