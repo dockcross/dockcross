@@ -11,8 +11,8 @@ RUN apt-get update \
   qemu-user-static \
 && apt-get clean --yes
 
-# The CROSS_TRIPLE is a configured alias of the "mips64-unknown-linux-gnu" target.
-ENV CROSS_TRIPLE mips64-unknown-linux-gnu
+# The CROSS_TRIPLE is a configured alias of the "mips64el-unknown-linux-gnu" target.
+ENV CROSS_TRIPLE mips64el-unknown-linux-gnu
 
 ENV CROSS_ROOT ${XCC_PREFIX}/${CROSS_TRIPLE}
 ENV AS=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-as \
