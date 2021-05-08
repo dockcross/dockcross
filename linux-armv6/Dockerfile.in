@@ -12,8 +12,8 @@ RUN apt-get update \
 && apt-get clean --yes
 
 
-# The CROSS_TRIPLE is a configured alias of the "arm-unknown-linux-gnueabi" target.
-ENV CROSS_TRIPLE arm-unknown-linux-gnueabi
+# The CROSS_TRIPLE is a configured alias of the "armv6-unknown-linux-gnueabi" target.
+ENV CROSS_TRIPLE armv6-unknown-linux-gnueabi
 ENV CROSS_ROOT ${XCC_PREFIX}/${CROSS_TRIPLE}
 ENV AS=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-as \
     AR=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-ar \
