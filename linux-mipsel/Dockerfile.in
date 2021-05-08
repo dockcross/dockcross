@@ -5,16 +5,13 @@ MAINTAINER Sergi Alvarez "pancake@nopcode.org"
 # VFP instructions (mipshf).
 
 # From https://wiki.debian.org/CrossToolchains, installing for stretch
-RUN echo "deb http://emdebian.org/tools/debian/ stretch main" > /etc/apt/sources.list.d/emdebian.list \
-&& curl http://emdebian.org/tools/debian/emdebian-toolchain-archive.key | apt-key add - \
-&& sed -i 's/httpredir.debian.org/http.debian.net/' /etc/apt/sources.list \
-&& dpkg --add-architecture mipsel \
-&& apt-get update && apt-get install -y crossbuild-essential-mipsel
+RUN apt-get update && apt-get install -y crossbuild-essential-mipsel
 
 # The cross-compiling emulator
 RUN apt-get update && apt-get install -y \
   qemu-user \
-  qemu-user-static
+  qemu-user-static \
+  && apt-get clean --yes
 
 ENV CROSS_TRIPLE mipsel-linux-gnu
 ENV CROSS_ROOT /usr/bin
