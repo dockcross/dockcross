@@ -4,8 +4,8 @@ MAINTAINER Sergi Alvarez "pancake@nopcode.org"
 # This is for ARMv5 "legacy" (mipsel) devices which do NOT support hard float
 # VFP instructions (mipshf).
 
-# From https://wiki.debian.org/CrossToolchains, installing for jessie
-RUN echo "deb http://emdebian.org/tools/debian/ jessie main" > /etc/apt/sources.list.d/emdebian.list \
+# From https://wiki.debian.org/CrossToolchains, installing for stretch
+RUN echo "deb http://emdebian.org/tools/debian/ stretch main" > /etc/apt/sources.list.d/emdebian.list \
 && curl http://emdebian.org/tools/debian/emdebian-toolchain-archive.key | apt-key add - \
 && sed -i 's/httpredir.debian.org/http.debian.net/' /etc/apt/sources.list \
 && dpkg --add-architecture mipsel \

@@ -1,7 +1,8 @@
 set(CMAKE_SYSTEM_NAME Linux)
 set(CMAKE_SYSTEM_VERSION 1)
 set(CMAKE_SYSTEM_PROCESSOR arm)
-set(cross_triple "arm-cortexa8_neon-linux-gnueabihf")
+set(cross_triple "armv7-unknown-linux-gnueabi")
+#arm-cortexa8_neon-linux-gnueabihf
 set(cross_root /usr/xcc/${cross_triple})
 
 set(CMAKE_C_COMPILER $ENV{CC})

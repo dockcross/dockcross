@@ -12,9 +12,8 @@ RUN apt-get update \
 && apt-get clean --yes
 
 
-# The CROSS_TRIPLE is a configured alias of the "aarch64-unknown-linux-gnueabi" target.
-#ENV CROSS_TRIPLE armv7-unknown-linux-gnueabi
-ENV CROSS_TRIPLE arm-cortexa8_neon-linux-gnueabihf
+# The CROSS_TRIPLE is a configured alias of the "armv7-unknown-linux-gnueabi" target.
+ENV CROSS_TRIPLE armv7-unknown-linux-gnueabi
 ENV CROSS_ROOT ${XCC_PREFIX}/${CROSS_TRIPLE}
 ENV AS=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-as \
     AR=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-ar \
@@ -26,8 +25,6 @@ ENV AS=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-as \
 
 ENV QEMU_LD_PREFIX "${CROSS_ROOT}/${CROSS_TRIPLE}/sysroot"
 ENV QEMU_SET_ENV "LD_LIBRARY_PATH=${CROSS_ROOT}/lib:${QEMU_LD_PREFIX}"
-
-ENV DEFAULT_DOCKCROSS_IMAGE dockcross/linux-armv7a
 
 COPY Toolchain.cmake ${CROSS_ROOT}/
 ENV CMAKE_TOOLCHAIN_FILE ${CROSS_ROOT}/Toolchain.cmake
