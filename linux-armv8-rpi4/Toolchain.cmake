@@ -1,7 +1,8 @@
 set(CMAKE_SYSTEM_NAME Linux)
 set(CMAKE_SYSTEM_VERSION 1)
-set(CMAKE_SYSTEM_PROCESSOR arm)
-set(cross_triple "armv-unknown-linux-gnueabi")
+set(CMAKE_SYSTEM_PROCESSOR aarch64)
+
+set(cross_triple "aarch64-unknown-linux-gnueabi")
 set(cross_root /usr/xcc/${cross_triple})
 
 set(CMAKE_C_COMPILER $ENV{CC})
@@ -16,5 +17,4 @@ set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY BOTH)
 set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE BOTH)
 set(CMAKE_SYSROOT ${cross_root}/${cross_triple}/sysroot)
 
-set(CMAKE_CROSSCOMPILING_EMULATOR /usr/bin/qemu-arm)
-
+set(CMAKE_CROSSCOMPILING_EMULATOR /usr/bin/qemu-aarch64)
