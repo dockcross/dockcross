@@ -1,8 +1,8 @@
 set(CMAKE_SYSTEM_NAME Linux)
 set(CMAKE_SYSTEM_VERSION 1)
-set(CMAKE_SYSTEM_PROCESSOR powerpc64)
+set(CMAKE_SYSTEM_PROCESSOR powerpc)
 
-set(cross_triple "powerpc64-unknown-linux-gnueabi")
+set(cross_triple "powerpc-unknown-linux-gnu")
 set(cross_root /usr/xcc/${cross_triple})
 
 set(CMAKE_C_COMPILER $ENV{CC})
@@ -17,4 +17,4 @@ set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY BOTH)
 set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE BOTH)
 set(CMAKE_SYSROOT ${cross_root}/${cross_triple}/sysroot)
 
-set(CMAKE_CROSSCOMPILING_EMULATOR /usr/bin/qemu-powerpc64)
+set(CMAKE_CROSSCOMPILING_EMULATOR /usr/bin/qemu-powerpc)
