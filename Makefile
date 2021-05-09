@@ -22,7 +22,7 @@ GEN_IMAGE_DOCKERFILES = $(addsuffix /Dockerfile,$(GEN_IMAGES))
 # These images are expected to have explicit rules for *both* build and testing
 NON_STANDARD_IMAGES = web-wasm manylinux1-x64 manylinux1-x86 manylinux2010-x64 manylinux2010-x86 manylinux2014-x64 manylinux2014-x86 manylinux2014-aarch64
 
-DOCKER_COMPOSITE_SOURCES = common.docker common.debian common.manylinux common.crosstool common.windows common-manylinux.crosstool common.dockcross common.label-and-env
+DOCKER_COMPOSITE_SOURCES = common.docker common.debian common.manylinux common.crosstool common.windows common-manylinux.crosstool common.dockcross common.lib common.label-and-env
 
 # This list all available images
 IMAGES = $(STANDARD_IMAGES) $(NON_STANDARD_IMAGES)
@@ -69,6 +69,7 @@ $(GEN_IMAGE_DOCKERFILES) Dockerfile: %Dockerfile: %Dockerfile.in $(DOCKER_COMPOS
 		-e '/common-manylinux.crosstool/ r common-manylinux.crosstool' \
 		-e '/common.windows/ r common.windows' \
 		-e '/common.dockcross/ r common.dockcross' \
+		-e '/common.lib/ r common.lib' \
 		-e '/common.label-and-env/ r common.label-and-env' \
 		$< > $@
 

@@ -36,7 +36,10 @@ fi
 cd /usr/src
 
 CMAKE_ROOT=cmake-${CMAKE_VERSION}-Centos5-${ARCH}
-url=https://github.com/dockbuild/CMake/releases/download/v${CMAKE_VERSION}/${CMAKE_ROOT}.tar.gz
+#Change the url when there is a new version (Currently 3.17.1 of April 2020)
+#url=https://github.com/dockbuild/CMake/releases/download/v${CMAKE_VERSION}/${CMAKE_ROOT}.tar.gz
+url=https://github.com/bensuperpc/CMake/releases/download/v${CMAKE_VERSION}/${CMAKE_ROOT}.tar.gz
+
 echo "Downloading $url"
 curl -# -LO $url
 
