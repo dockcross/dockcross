@@ -43,7 +43,7 @@ COPY manylinux-common/pre_exec.sh /dockcross/
 WORKDIR /usr/src
 
 ARG GIT_VERSION=2.31.1
-ARG CMAKE_VERSION=3.17.1
+ARG CMAKE_VERSION=3.20.2
 
 # Image build scripts
 COPY \
@@ -55,7 +55,7 @@ COPY \
   imagefiles/build-and-install-openssh.sh \
   imagefiles/install-cmake-binary.sh \
   imagefiles/install-liquidprompt-binary.sh \
-  imagefiles/install-python-packages.sh \
+  imagefiles/install-python2-packages.sh \
   imagefiles/utils.sh \
   /buildscripts/
 
@@ -68,7 +68,7 @@ RUN \
   /buildscripts/install-cmake-binary.sh $X86_FLAG && \
   /buildscripts/install-liquidprompt-binary.sh && \
   PYTHON=$([ -e /opt/python/cp35-cp35m/bin/python ] && echo "/opt/python/cp35-cp35m/bin/python" || echo "python") && \
-  /buildscripts/install-python-packages.sh -python ${PYTHON} && \
+  /buildscripts/install-python2-packages.sh -python ${PYTHON} && \
   /buildscripts/build-and-install-ninja.sh -python ${PYTHON} && \
   rm -rf /buildscripts
 

@@ -13,10 +13,10 @@ ORG = dockcross
 BIN = ./bin
 
 # These images are built using the "build implicit rule"
-STANDARD_IMAGES = linux-s390x android-arm android-arm64 android-x86 android-x86_64 linux-x86 linux-x64 linux-armv8 linux-armv8-musl linux-armv8-rpi4 linux-armv5 linux-armv5-musl linux-armv6 linux-armv6-musl linux-armv6-rpi linux-armv7 linux-armv7a linux-armv7l-musl linux-mips linux-mips64 linux-mipsel linux-ppc32 linux-ppc64 windows-static-x86 windows-static-x64 windows-static-x64-posix windows-shared-x86 windows-shared-x64 windows-shared-x64-posix
+STANDARD_IMAGES = linux-s390x android-arm android-arm64 android-x86 android-x86_64 linux-x86 linux-x64 linux-armv8 linux-armv8-musl linux-armv8-rpi4 linux-armv5 linux-m68k linux-armv5-musl linux-armv6 linux-armv6-musl linux-armv6-rpi linux-armv7 linux-armv7a linux-armv7l-musl linux-mips linux-mips64 linux-mipsel linux-ppc32 linux-ppc64 windows-static-x86 windows-static-x64 windows-static-x64-posix windows-shared-x86 windows-shared-x64 windows-shared-x64-posix
 
 # Generated Dockerfiles.
-GEN_IMAGES = linux-s390x android-arm android-arm64 linux-x86 linux-x64 linux-mips linux-mips64 linux-mipsel manylinux1-x64 manylinux1-x86 manylinux2010-x64 manylinux2010-x86 manylinux2014-x64 manylinux2014-x86 manylinux2014-aarch64 web-wasm linux-armv8 linux-armv8-musl linux-armv8-rpi4 linux-ppc32 linux-ppc64 windows-static-x86 windows-static-x64 windows-static-x64-posix windows-shared-x86 windows-shared-x64 windows-shared-x64-posix linux-armv7 linux-armv7a linux-armv7l-musl linux-armv6 linux-armv6-musl linux-armv6-rpi linux-armv5 linux-armv5-musl
+GEN_IMAGES = linux-s390x android-arm android-arm64 linux-x86 linux-x64 linux-mips linux-mips64 linux-mipsel manylinux1-x64 manylinux1-x86 manylinux2010-x64 manylinux2010-x86 manylinux2014-x64 manylinux2014-x86 manylinux2014-aarch64 linux-m68k web-wasm linux-armv8 linux-armv8-musl linux-armv8-rpi4 linux-ppc32 linux-ppc64 windows-static-x86 windows-static-x64 windows-static-x64-posix windows-shared-x86 windows-shared-x64 windows-shared-x64-posix linux-armv7 linux-armv7a linux-armv7l-musl linux-armv6 linux-armv6-musl linux-armv6-rpi linux-armv5 linux-armv5-musl
 GEN_IMAGE_DOCKERFILES = $(addsuffix /Dockerfile,$(GEN_IMAGES))
 
 # These images are expected to have explicit rules for *both* build and testing
