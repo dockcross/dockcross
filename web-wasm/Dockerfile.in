@@ -1,4 +1,4 @@
-FROM emscripten/emsdk:2.0.22
+FROM emscripten/emsdk:2.0.24
 MAINTAINER Matt McCormick "matt.mccormick@kitware.com"
 
 # Revert back to "/bin/sh" as default shell
