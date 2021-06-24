@@ -40,3 +40,6 @@ RUN \
     && apt-get clean autoclean --yes \
     && apt-get autoremove --yes \
     && rm -rf /var/lib/{apt,dpkg,cache,log}/
+
+RUN ln -s /usr/bin/python3 /usr/bin/python \
+    && ln -s /usr/bin/pip3 /usr/bin/pip
