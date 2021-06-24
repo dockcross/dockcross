@@ -330,7 +330,7 @@ clean:
 .SECONDEXPANSION:
 $(addsuffix .test,$(STANDARD_IMAGES)): $$(basename $$@)
 	$(DOCKER) run $(RM) $(ORG)/$(basename $@) > $(BIN)/dockcross-$(basename $@) && chmod +x $(BIN)/dockcross-$(basename $@)
-	$(BIN)/dockcross-$(basename $@) python test/run.py $($@_ARGS)
+	$(BIN)/dockcross-$(basename $@) python3 test/run.py $($@_ARGS)
 
 #
 # testing prerequisites implicit rule

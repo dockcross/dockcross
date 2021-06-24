@@ -16,12 +16,14 @@
 
 # Install Debian packages required for `ct-ng`.
 RUN apt-get update --yes && apt-get install --no-install-recommends --yes \
-  gawk \
-  gperf \
-  help2man \
-  python-dev \
-  texinfo \
-&& apt-get clean --yes
+    gawk \
+    gperf \
+    help2man \
+    python3-dev \
+    texinfo \
+    && apt-get clean autoclean --yes \
+    && apt-get autoremove --yes \
+    && rm -rf /var/lib/{apt,dpkg,cache,log}/
 
 ENV XCC_PREFIX=/usr/xcc
 
@@ -33,6 +35,7 @@ ENV XCC_PREFIX=/usr/xcc
 COPY \
   imagefiles/install-crosstool-ng-toolchain.sh \
   imagefiles/crosstool-ng-expat.patch \
+  imagefiles/Fix-error-with-bash-5-and-up.patch \
   crosstool-ng.config \
   /dockcross/
 

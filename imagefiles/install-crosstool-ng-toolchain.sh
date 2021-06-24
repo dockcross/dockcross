@@ -77,6 +77,8 @@ git checkout ${REV}
 
 if [ ${REV} = "crosstool-ng-1.23.0" ]; then
   patch scripts/build/companion_libs/210-expat.sh -i /dockcross/crosstool-ng-expat.patch
+  # Patch to fix error with bash 5 and up: https://github.com/pfalcon/esp-open-sdk/issues/365
+  patch configure.ac -i /dockcross/Fix-error-with-bash-5-and-up.patch
 fi
 
 # Bootstrap and install the tool.
@@ -112,5 +114,5 @@ unset LD_LIBRARY_PATH
 
 # Build and install the toolchain!
 # Print last 250 lines if build fail
-"${BOOTSTRAP_PREFIX}/bin/ct-ng" build || tail -250 build.log
+"${BOOTSTRAP_PREFIX}/bin/ct-ng" build || (tail -250 build.log && exit 1)
 

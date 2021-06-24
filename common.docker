@@ -25,7 +25,7 @@ RUN \
   /buildscripts/build-and-install-git.sh && \
   /buildscripts/install-cmake-binary.sh $X86_FLAG && \
   /buildscripts/install-liquidprompt-binary.sh && \
-  PYTHON=$([ -e /opt/python/cp38-cp38/bin/python ] && echo "/opt/python/cp38-cp38/bin/python" || echo "python") && \
+  PYTHON=$([ -e /opt/python/cp38-cp38/bin/python ] && echo "/opt/python/cp38-cp38/bin/python" || echo "python3") && \
   /buildscripts/install-python-packages.sh -python ${PYTHON} && \
   /buildscripts/build-and-install-ninja.sh -python ${PYTHON} && \
   rm -rf /buildscripts

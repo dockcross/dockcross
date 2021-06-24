@@ -1,11 +1,6 @@
 ARG DEBIAN_FRONTEND=noninteractive
-ARG REPO=http://cdn-fastly.deb.debian.org
 
 RUN \
-  bash -c "echo \"deb $REPO/debian stretch main contrib non-free\" > /etc/apt/sources.list"  && \
-  bash -c "echo \"deb $REPO/debian stretch-updates main contrib non-free\" >> /etc/apt/sources.list"  && \
-  bash -c "echo \"deb $REPO/debian-security stretch/updates main\" >> /etc/apt/sources.list" && \
-  bash -c "echo \"deb http://ftp.debian.org/debian stretch-backports main\" >> /etc/apt/sources.list" && \
   apt-get update --yes && \
   apt-get install --no-install-recommends --yes \
     autogen \
@@ -30,8 +25,8 @@ RUN \
     ncurses-dev \
     pkg-config \
     pax \
-#    python3 \
-#    python3-pip \
+    python3 \
+    python3-pip \
     rsync \
     sed \
     ssh \
@@ -41,23 +36,7 @@ RUN \
     xz-utils \
     zip \
     zlib1g-dev \
-# python build
-    libncurses5-dev \
-    libgdbm-dev \
-    libnss3-dev \
-    libssl-dev \
-    libsqlite3-dev \
-    libreadline-dev \
-    libffi-dev \
-    libbz2-dev\
-  && \
-  apt-get clean --yes
-
-# build and install python
-COPY \
-  imagefiles/build-and-install-python.sh \
-  /buildscripts/
-RUN \
-  set -x && \
-  /buildscripts/build-and-install-python.sh && \
-  rm -rf /buildscripts
+#    python-is-python3 \
+    && apt-get clean autoclean --yes \
+    && apt-get autoremove --yes \
+    && rm -rf /var/lib/{apt,dpkg,cache,log}/

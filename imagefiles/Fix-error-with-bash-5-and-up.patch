@@ -1,0 +1,28 @@
+From 67368ebe9d9259e9f34a4f9166a33357858813f1 Mon Sep 17 00:00:00 2001
+From: Bensuperpc <bensuperpc@gmail.com>
+Date: Thu, 24 Jun 2021 11:55:48 +0200
+Subject: [PATCH 1/1] Fix error with bash 5 and up
+
+Fix error with bash 5 and up
+
+Signed-off-by: Bensuperpc <bensuperpc@gmail.com>
+---
+ configure.ac | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index d10bf71d..e2302b4c 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -274,7 +274,7 @@ ACX_PROG_VERSION_REQ_STRICT([BASH_SHELL],
+     [GNU bash >= 3.1],
+     [bash],
+     [bash],
+-    ['^GNU bash, version (3\.[1-9]|4)'])
++    ['^GNU bash, version (3\.[1-9]|4|5)'])
+ 
+ # We need a awk that *is* GNU awk
+ ACX_PROG_VERSION_REQ_STRICT([AWK],
+-- 
+2.32.0
+

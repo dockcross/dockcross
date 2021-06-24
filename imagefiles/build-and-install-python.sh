@@ -6,6 +6,8 @@
 # Usage:
 #
 #  build-and-install-python.sh [-version 3.9.5]
+# needed packages : libncurses5-dev libgdbm-dev libnss3-dev 
+#   libssl-dev libsqlite3-dev libreadline-dev libffi-dev libbz2-dev
 
 PYTHON_VERSION=3.9.5
 while [ $# -gt 0 ]; do

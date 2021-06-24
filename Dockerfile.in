@@ -1,4 +1,4 @@
-FROM debian:stretch-20190326-slim
+FROM debian:buster-slim
 MAINTAINER Matt McCormick "matt.mccormick@kitware.com"
 
 #include "common.debian"

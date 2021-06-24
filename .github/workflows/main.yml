@@ -7,6 +7,8 @@ on:
   pull_request:
     branches:
     - '*'
+# Adding the manual launch of a github workflow
+  workflow_dispatch:
 
 jobs:
   base:
