@@ -2,21 +2,24 @@ FROM dockcross/base:latest
 MAINTAINER Matt McCormick "matt.mccormick@kitware.com"
 
 # Crosstool-ng version
-ENV CT_VERSION crosstool-ng-1.23.0
+# We use a git commit while waiting for 1.25 to release (1.24 is several years old)
+ENV CT_VERSION 9e10cb6fbaab6d83e1305b2d53ab585d14989667
+
+ENV QEMU_VERSION 6.0.0
 
 #include "common.crosstool"
 
-ENV CROSS_TRIPLE powerpc64le-linux-gnu
+ENV CROSS_TRIPLE powerpc64le-unknown-linux-gnu
 
 WORKDIR /usr/src
 
 RUN apt-get install -y libglib2.0-dev zlib1g-dev libpixman-1-dev && \
-  curl -L http://wiki.qemu-project.org/download/qemu-3.1.0.tar.bz2 | tar xj && \
-  cd qemu-3.1.0 && \
+  curl -L http://wiki.qemu-project.org/download/qemu-${QEMU_VERSION}.tar.bz2 | tar xj && \
+  cd qemu-${QEMU_VERSION} && \
   ./configure --target-list=ppc64le-linux-user --prefix=/usr && \
   make -j$(nproc) && \
   make install && \
-  cd .. && rm -rf qemu-3.1.0
+  cd .. && rm -rf qemu-${QEMU_VERSION}
 
 ENV CROSS_ROOT ${XCC_PREFIX}/${CROSS_TRIPLE}
 ENV AS=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-as \
@@ -35,7 +38,7 @@ WORKDIR /work
 COPY Toolchain.cmake /usr/lib/${CROSS_TRIPLE}/
 ENV CMAKE_TOOLCHAIN_FILE /usr/lib/${CROSS_TRIPLE}/Toolchain.cmake
 
-ENV PKG_CONFIG_PATH /usr/lib/powerpc64le-linux-gnu/pkgconfig
+ENV PKG_CONFIG_PATH /usr/lib/powerpc64le-unknown-linux-gnu/pkgconfig
 
 # Linux kernel cross compilation variables
 ENV PATH ${PATH}:${CROSS_ROOT}/bin
