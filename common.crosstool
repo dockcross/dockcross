@@ -21,6 +21,10 @@ RUN apt-get update --yes && apt-get install --no-install-recommends --yes \
     help2man \
     python3-dev \
     texinfo \
+# Packages needed for crosstool-ng 1.24 or higher 
+    unzip \
+    libtool \
+    libtool-bin \
     && apt-get clean autoclean --yes \
     && apt-get autoremove --yes \
     && rm -rf /var/lib/{apt,dpkg,cache,log}/
