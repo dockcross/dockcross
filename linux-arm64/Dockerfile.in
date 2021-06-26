@@ -3,7 +3,8 @@ FROM dockcross/base:latest
 # This is for 64-bit ARM Linux machine
 
 # Crosstool-ng version
-ENV CT_VERSION crosstool-ng-1.23.0
+# We use a git commit while waiting for 1.25 to release (1.24 is several years old)
+ENV CT_VERSION 9e10cb6fbaab6d83e1305b2d53ab585d14989667
 
 #include "common.crosstool"
 

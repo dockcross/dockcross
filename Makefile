@@ -288,4 +288,4 @@ test.prerequisites:
 
 $(addsuffix .test,base $(IMAGES)): test.prerequisites
 
-.PHONY: base images $(IMAGES) test %.test clean
+.PHONY: base images $(IMAGES) test %.test clean purge
