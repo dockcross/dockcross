@@ -6,6 +6,10 @@ FROM dockcross/manylinux2014-x64
 
 # This is for 64-bit ARM Manylinux machine
 
+# Crosstool-ng version
+# Issues with crosstool-ng-1.24.0 and up : https://github.com/dockcross/dockcross/issues/367
+ENV CT_VERSION crosstool-ng-1.23.0
+
 #include "common-manylinux.crosstool"
 
 # The cross-compiling emulator

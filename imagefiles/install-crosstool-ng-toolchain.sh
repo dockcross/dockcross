@@ -111,6 +111,9 @@ cp "${CONFIG_PATH}" "${BUILD}/.config"
 
 # As mentioned in ct-ng config, need to unset LD_LIBRARY_PATH.
 unset LD_LIBRARY_PATH
+# Fix build error on manylinux2014-aarch64
+unset CC
+unset CXX
 
 # Build and install the toolchain!
 # Print last 250 lines if build fail
