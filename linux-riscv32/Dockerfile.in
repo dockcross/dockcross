@@ -3,7 +3,7 @@ MAINTAINER Matt McCormick "matt.mccormick@kitware.com"
 
 # Crosstool-ng version
 # We use a git commit while waiting for 1.25 to release (1.24 is several years old)
-ENV CT_VERSION 9e10cb6fbaab6d83e1305b2d53ab585d14989667
+ENV CT_VERSION 94b98a4cc96ff6c4ca982ea19db953447e802919
 
 ENV QEMU_VERSION 6.0.0
 
