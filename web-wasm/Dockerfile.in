@@ -1,4 +1,4 @@
-FROM emscripten/emsdk:2.0.24
+FROM emscripten/emsdk:2.0.25
 MAINTAINER Matt McCormick "matt.mccormick@kitware.com"
 
 # Revert back to "/bin/sh" as default shell
@@ -52,7 +52,7 @@ RUN ln -s /usr/bin/python3 /usr/bin/python
 
 #include "common.docker"
 
-ENV EMSCRIPTEN_VERSION 2.0.22
+ENV EMSCRIPTEN_VERSION 2.0.25
 
 ENV PATH /emsdk:/emsdk/upstream/bin/:/emsdk/upstream/emscripten:${PATH}
 ENV CC=/emsdk/upstream/emscripten/emcc \
