@@ -3,7 +3,7 @@ name: Dockcross CI
 on:
   push:
     branches:
-    - 'master'
+    - '*'
     paths-ignore:
       - '**/README.md'
   pull_request:
@@ -11,11 +11,12 @@ on:
     - '*'
     paths-ignore:
       - '**/README.md'
+  workflow_dispatch:
 
 jobs:
   base:
     name: base
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: build
@@ -25,7 +26,7 @@ jobs:
       - name: archive base
         run: |
             mkdir -p cache
-            docker save -o ./cache/base.tar dockcross/base:latest
+            docker save dockcross/base:latest | xz -e9 -T0 > ./cache/base.tar.xz
       - name: save base
         uses: actions/upload-artifact@v2
         with:
@@ -45,7 +46,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        arch_name: [android-arm, android-arm64, android-x86, android-x86_64, web-wasm, linux-arm64, linux-arm64-musl, linux-armv5, linux-armv5-musl, linux-armv6, linux-armv6-musl, linux-armv7, linux-armv7a, linux-armv7l-musl, linux-x64-clang, linux-s390x, linux-x64, linux-x86, linux-mips, linux-ppc64le, manylinux1-x64, manylinux1-x86, manylinux2010-x64, manylinux2010-x86, manylinux2014-x64, manylinux2014-x86, manylinux2014-aarch64, windows-static-x64, windows-static-x64-posix, windows-static-x86, windows-shared-x64, windows-shared-x64-posix, windows-shared-x86]
+        arch_name: [android-arm, android-arm64, android-x86, android-x86_64, web-wasm, linux-arm64, linux-arm64-musl, linux-armv5, linux-armv5-musl, linux-armv6, linux-armv6-musl, linux-armv7, linux-armv7a, linux-armv7l-musl, linux-x64-clang, linux-s390x, linux-x64, linux-x86, linux-mips, linux-ppc64le, manylinux1-x64, manylinux1-x86, manylinux2010-x64, manylinux2010-x86, manylinux2014-x64, manylinux2014-x86, manylinux2014-aarch64, windows-static-x64, windows-static-x64-posix, windows-static-x86, windows-shared-x64, windows-shared-x64-posix, windows-shared-x86, linux-riscv64, linux-riscv32]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/download-artifact@v2
@@ -53,7 +54,7 @@ jobs:
           name: cache
           path: ./cache
       - name: load base
-        run: docker load -i ./cache/base.tar
+        run: xz -d -k < ./cache/base.tar.xz | docker load
       - name: build
         run: make ${{ matrix.arch_name }}
       - name: test

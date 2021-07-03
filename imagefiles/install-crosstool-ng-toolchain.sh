@@ -79,6 +79,9 @@ if [ ${REV} = "crosstool-ng-1.23.0" ]; then
   patch scripts/build/companion_libs/210-expat.sh -i /dockcross/crosstool-ng-expat.patch
   # Patch to fix error with bash 5 and up: https://github.com/pfalcon/esp-open-sdk/issues/365
   patch configure.ac -i /dockcross/Fix-error-with-bash-5-and-up.patch
+  # Clean patch
+  rm /dockcross/Fix-error-with-bash-5-and-up.patch
+  rm /dockcross/crosstool-ng-expat.patch
 fi
 
 # Bootstrap and install the tool.
