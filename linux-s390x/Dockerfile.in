@@ -3,7 +3,9 @@ FROM dockcross/base:latest
 # This is for 64-bit S390X Linux machine
 
 # Crosstool-ng version
-ENV CT_VERSION crosstool-ng-1.23.0
+# We use a git commit while waiting for 1.25 to release (1.24 is several years old)
+# crosstool-ng master 2021-07-07
+ENV CT_VERSION 62e9db247be34f8a4fa3bc116e60a1b15db62a97
 
 #include "common.crosstool"
 
