@@ -6,7 +6,7 @@ MAINTAINER Matt McCormick "matt.mccormick@kitware.com"
 # crosstool-ng master 2021-07-07
 ENV CT_VERSION 62e9db247be34f8a4fa3bc116e60a1b15db62a97
 
-ENV QEMU_VERSION 6.0.0
+ARG QEMU_VERSION=6.0.0
 
 #include "common.crosstool"
 
