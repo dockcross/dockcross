@@ -187,6 +187,8 @@ FINAL_ARGS=${ARG_ARGS-${DOCKCROSS_ARGS}}
 UBUNTU_ON_WINDOWS=$([ -e /proc/version ] && grep -l Microsoft /proc/version || echo "")
 # MSYS, Git Bash, etc.
 MSYS=$([ -e /proc/version ] && grep -l MINGW /proc/version || echo "")
+# CYGWIN
+CYGWIN=$([ -e /proc/version ] && grep -l CYGWIN /proc/version || echo "")
 
 if [ -z "$UBUNTU_ON_WINDOWS" -a -z "$MSYS" ]; then
     USER_IDS=(-e BUILDER_UID="$( id -u )" -e BUILDER_GID="$( id -g )" -e BUILDER_USER="$( id -un )" -e BUILDER_GROUP="$( id -gn )")
@@ -209,6 +211,11 @@ elif [ -n "$MSYS" ]; then
     HOST_PWD=$PWD
     HOST_PWD=${HOST_PWD/\//}
     HOST_PWD=${HOST_PWD/\//:\/}
+elif [ -n "$CYGWIN" ]; then
+    for f in pwd readlink cygpath ; do
+        test -n "$(type "${f}" )" || { echo >&2 "Missing functionality (${f}) (in cygwin)." ; exit 1 ; } ;
+    done ;
+    HOST_PWD="$( cygpath -w "$( readlink -f "$( pwd ;)" ; )" ; )" ;
 else
     HOST_PWD=$PWD
     [ -L $HOST_PWD ] && HOST_PWD=$(readlink $HOST_PWD)
@@ -221,7 +228,11 @@ fi
 
 HOST_VOLUMES=
 if [ -e "$SSH_DIR" -a -z "$MSYS" ]; then
-    HOST_VOLUMES+="-v $SSH_DIR:/home/$(id -un)/.ssh"
+    if test -n "${CYGWIN}" ; then
+      HOST_VOLUMES+="-v $(cygpath -w ${SSH_DIR} ; ):/home/$(id -un)/.ssh" ;
+    else
+      HOST_VOLUMES+="-v $SSH_DIR:/home/$(id -un)/.ssh" ;
+    fi ;
 fi
 
 #------------------------------------------------------------------------------
