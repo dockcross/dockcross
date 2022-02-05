@@ -121,14 +121,19 @@ The dockcross script will execute the given command-line inside the container, a
 
 The list of docker images that are **no longer maintained**.
 
-| Image name | Target arch | Compiler | Target OS |
-|:-------:|:--------:|:------:|:-----:|
-| dockcross/manylinux1-x86 | x86 | GCC | manylinux |
-| dockcross/manylinux1-x64 | x86_64 | GCC| manylinux |
-| dockcross/manylinux2010-x86 | x86 | GCC | manylinux |
-| dockcross/manylinux2010-x64 | x86_64 | GCC | manylinux |
-| dockcross/linux-mipsel | mipsel | GCC 4.9 | Debian 8 |
+| Image name | Target arch | Compiler | Target OS | End of life (EOL) |
+|:-------:|:--------:|:------:|:-----:|:-----:|
+| dockcross/manylinux-x86  | x86 | GCC | manylinux | [2019-05-22](1e0e89814) |
+| dockcross/manylinux-x64  | x86 | GCC | manylinux | [2019-05-22](1e0e89814) |
+| dockcross/linux-mipsel | mipsel | GCC 4.9 | Debian 8 | [2021-06-27](a30e76d5c) |
+| dockcross/manylinux1-x86  | x86 | GCC | manylinux | [2021-08-05](54f73cbb6) |
+| dockcross/manylinux1-x64 | x86_64 | GCC| manylinux | [2021-08-05](54f73cbb6) |
+| dockcross/manylinux2010-x86 | x86 | GCC | manylinux | [2021-08-05](54f73cbb6) |
+| dockcross/manylinux2010-x64 | x86_64 | GCC | manylinux | [2021-08-05](54f73cbb6) |
 
+[1e0e89814]: https://github.com/dockcross/dockcross/commit/1e0e89814
+[a30e76d5c]: https://github.com/dockcross/dockcross/commit/a30e76d5c
+[54f73cbb6]: https://github.com/dockcross/dockcross/commit/54f73cbb6
 
 ## Cross compilers
 
