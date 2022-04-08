@@ -28,7 +28,7 @@ jobs:
           mkdir -p cache
           docker save dockcross/base:latest | xz -e9 -T0 > ./cache/base.tar.xz
       - name: save base
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: cache
           path: ./cache
