@@ -13,7 +13,7 @@ if ! command -v gpg &> /dev/null; then
 	exit 1
 fi
 
-GOSU_VERSION=1.14
+GOSU_VERSION=1.13
 dpkgArch=$(dpkg --print-architecture)
 url="https://github.com/tianon/gosu/releases/download/${GOSU_VERSION}/gosu-${dpkgArch}"
 url_key="https://github.com/tianon/gosu/releases/download/${GOSU_VERSION}/gosu-${dpkgArch}.asc"
