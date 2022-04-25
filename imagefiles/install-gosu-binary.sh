@@ -13,8 +13,8 @@ if ! command -v gpg &> /dev/null; then
 	exit 1
 fi
 
-GOSU_VERSION=1.12
-dpkgArch=$(if test "$(uname -m)" = "x86_64"; then echo amd64; else echo i386; fi)
+GOSU_VERSION=1.14
+dpkgArch=$(dpkg --print-architecture)
 url="https://github.com/tianon/gosu/releases/download/${GOSU_VERSION}/gosu-${dpkgArch}"
 url_key="https://github.com/tianon/gosu/releases/download/${GOSU_VERSION}/gosu-${dpkgArch}.asc"
 
