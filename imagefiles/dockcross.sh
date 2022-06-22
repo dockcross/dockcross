@@ -45,11 +45,11 @@ help:update-image() {
 }
 
 command:update-script() {
-    if cmp -s <( $OCI_EXE run --rm $FINAL_IMAGE ) $0; then
+    if cmp -s <( $OCI_EXE run --pull never --rm $FINAL_IMAGE ) $0; then
         echo "$0 is up to date"
     else
         echo -n "Updating $0 ... "
-        $OCI_EXE run --rm $FINAL_IMAGE > $0 && echo ok
+        $OCI_EXE run --pull never --rm $FINAL_IMAGE > $0 && echo ok
     fi
 }
 
@@ -241,7 +241,7 @@ fi
 TTY_ARGS=
 tty -s && [ -z "$MSYS" ] && TTY_ARGS=-ti
 CONTAINER_NAME=dockcross_$RANDOM
-$OCI_EXE run $TTY_ARGS --name $CONTAINER_NAME \
+$OCI_EXE run --pull never $TTY_ARGS --name $CONTAINER_NAME \
     --platform linux/amd64 \
     -v "$HOST_PWD":/work \
     $HOST_VOLUMES \
