@@ -12,6 +12,9 @@ ORG = dockcross
 # Directory where to generate the dockcross script for each images (e.g bin/dockcross-manylinux2014-x64)
 BIN = ./bin
 
+# Prefer bash to support use of "set -o pipefail"
+SHELL=/bin/bash
+
 # These images are built using the "build implicit rule"
 STANDARD_IMAGES = android-arm android-arm64 android-x86 android-x86_64 \
 	linux-x86 linux-x64 linux-x64-clang linux-arm64 linux-arm64-musl linux-arm64-full \
@@ -230,6 +233,15 @@ base: Dockerfile imagefiles/
 base.test: base
 	$(DOCKER) run $(PULL) $(RM) $(ORG)/base > $(BIN)/dockcross-base && chmod +x $(BIN)/dockcross-base
 
+base.save:
+	mkdir -p ./cache
+	set -o pipefail; \
+	docker save $(ORG)/base:latest | xz -e9 -T0 > ./cache/base.tar.xz
+
+base.load:
+	set -o pipefail; \
+	xz -d -k < ./cache/base.tar.xz | docker load
+
 # display
 #
 display_images:
@@ -286,4 +298,18 @@ test.prerequisites:
 
 $(addsuffix .test,base $(IMAGES)): test.prerequisites
 
-.PHONY: base images $(IMAGES) test %.test clean purge bash-check display_images
+#
+# saving/loading implicit rule
+#
+.SECONDEXPANSION:
+$(addsuffix .save,$(IMAGES)):
+	mkdir -p ./cache-$(basename $@)
+	set -o pipefail; \
+	$(DOCKER) save $(ORG)/$(basename $@):latest | xz -e9 -T0 > ./cache/$(basename $@).tar.xz
+
+.SECONDEXPANSION:
+$(addsuffix .load,$(IMAGES)):
+	set -o pipefail; \
+	xz -d -k < ./cache/$(basename $@).tar.xz | $(DOCKER) load
+
+.PHONY: base images $(IMAGES) test %.test %.save %.load clean purge bash-check display_images

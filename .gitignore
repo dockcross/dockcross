@@ -3,6 +3,8 @@ dockcross
 dockcross-*
 build
 build-*
+cache/
+cache-*/
 */test/
 Dockerfile
 web-wasm/Dockerfile
