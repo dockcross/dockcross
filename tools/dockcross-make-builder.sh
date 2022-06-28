@@ -14,7 +14,7 @@ if (( $# >= 1 )); then
 #    docker pull "dockcross/$image:$tag"
 
     echo "Make script dockcross-$image"
-    docker run --rm dockcross/"$image" > ./dockcross-"$image"
+    docker run --pull never --rm dockcross/"$image" > ./dockcross-"$image"
     chmod +x ./dockcross-"$image"
 
     echo "Build $build_file"
