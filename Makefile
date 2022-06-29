@@ -236,7 +236,7 @@ base.test: base
 base.save:
 	mkdir -p ./cache
 	set -o pipefail; \
-	docker save $(ORG)/base:latest | xz -e9 -T0 > ./cache/base.tar.xz
+	docker save debian:bullseye-slim $(ORG)/base:latest | xz -e9 -T0 > ./cache/base.tar.xz
 
 base.load:
 	set -o pipefail; \
