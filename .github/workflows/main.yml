@@ -28,11 +28,11 @@ jobs:
         run: make base
 
       - name: test
-        run: make base.test
+        run: make base.test/fast
 
       - name: archive base
         run: |
-          make base.save
+          make base.save/fast
 
       - name: save base
         uses: actions/upload-artifact@v3
@@ -914,11 +914,11 @@ jobs:
 
       - name: build
         run: |
-          make ${{ matrix.arch_name.image }}
+          make ${{ matrix.arch_name.image }}/fast
 
       - name: basic test
         run: |
-          make ${{ matrix.arch_name.image }}.test
+          make ${{ matrix.arch_name.image }}.test/fast
 
       # Updated on 19/05/2022
       - name: stockfish build test

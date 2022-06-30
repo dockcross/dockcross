@@ -132,11 +132,13 @@ web-wasm: web-wasm/Dockerfile
 	rm -rf web-wasm/test
 	rm -rf $@/imagefiles
 
-web-wasm.test: web-wasm
+web-wasm.test/fast:
 	cp -r test web-wasm/
 	$(DOCKER) run $(PULL) $(RM) $(ORG)/web-wasm > $(BIN)/dockcross-web-wasm && chmod +x $(BIN)/dockcross-web-wasm
 	$(BIN)/dockcross-web-wasm python test/run.py --exe-suffix ".js"
 	rm -rf web-wasm/test
+
+web-wasm.test: web-wasm web-wasm.test/fast
 
 #
 # manylinux2014-aarch64
@@ -158,10 +160,12 @@ manylinux2014-aarch64: manylinux2014-aarch64/Dockerfile
 	@# libstdc++ is coppied into image, now remove it
 	docker run -v `pwd`:/host --rm quay.io/pypa/manylinux2014_aarch64 bash -c "rm -rf /host/$@/xc_script/usr"
 
-manylinux2014-aarch64.test: manylinux2014-aarch64
+manylinux2014-aarch64.test/fast:
 	$(DOCKER) run $(PULL) $(RM) $(ORG)/manylinux2014-aarch64 > $(BIN)/dockcross-manylinux2014-aarch64 \
 		&& chmod +x $(BIN)/dockcross-manylinux2014-aarch64
 	$(BIN)/dockcross-manylinux2014-aarch64 /opt/python/cp38-cp38/bin/python test/run.py
+
+manylinux2014-aarch64.test: manylinux2014-aarch64 manylinux2014-aarch64.test/fast
 
 #
 # manylinux_2_28-x64
@@ -177,10 +181,12 @@ manylinux_2_28-x64: manylinux_2_28-x64/Dockerfile
 		-f manylinux_2_28-x64/Dockerfile .
 	rm -rf $@/imagefiles
 
-manylinux_2_28-x64.test: manylinux_2_28-x64
+manylinux_2_28-x64.test/fast:
 	$(DOCKER) run $(PULL) $(RM) $(ORG)/manylinux_2_28-x64 > $(BIN)/dockcross-manylinux_2_28-x64 \
 		&& chmod +x $(BIN)/dockcross-manylinux_2_28-x64
 	$(BIN)/dockcross-manylinux_2_28-x64 /opt/python/cp310-cp310/bin/python test/run.py
+
+manylinux_2_28-x64.test: manylinux_2_28-x64 manylinux_2_28-x64.test/fast
 
 #
 # manylinux2014-x64
@@ -196,10 +202,12 @@ manylinux2014-x64: manylinux2014-x64/Dockerfile
 		-f manylinux2014-x64/Dockerfile .
 	rm -rf $@/imagefiles
 
-manylinux2014-x64.test: manylinux2014-x64
+manylinux2014-x64.test/fast:
 	$(DOCKER) run $(PULL) $(RM) $(ORG)/manylinux2014-x64 > $(BIN)/dockcross-manylinux2014-x64 \
 		&& chmod +x $(BIN)/dockcross-manylinux2014-x64
 	$(BIN)/dockcross-manylinux2014-x64 /opt/python/cp38-cp38/bin/python test/run.py
+
+manylinux2014-x64.test: manylinux2014-x64 manylinux2014-x64.test/fast
 
 #
 # manylinux2014-x86
@@ -215,10 +223,12 @@ manylinux2014-x86: manylinux2014-x86/Dockerfile
 		-f manylinux2014-x86/Dockerfile .
 	rm -rf $@/imagefiles
 
-manylinux2014-x86.test: manylinux2014-x86
+manylinux2014-x86.test/fast:
 	$(DOCKER) run $(PULL) $(RM) $(ORG)/manylinux2014-x86 > $(BIN)/dockcross-manylinux2014-x86 \
 		&& chmod +x $(BIN)/dockcross-manylinux2014-x86
 	$(BIN)/dockcross-manylinux2014-x86 /opt/python/cp38-cp38/bin/python test/run.py
+
+manylinux2014-x86.test: manylinux2014-x86 manylinux2014-x86.test/fast
 
 #
 # base
@@ -230,13 +240,17 @@ base: Dockerfile imagefiles/
 		--build-arg VCS_URL=`git config --get remote.origin.url` \
 		.
 
-base.test: base
+base.test/fast:
 	$(DOCKER) run $(PULL) $(RM) $(ORG)/base > $(BIN)/dockcross-base && chmod +x $(BIN)/dockcross-base
 
-base.save:
+base.test: base base.test/fast
+
+base.save/fast:
 	mkdir -p ./cache
 	set -o pipefail; \
 	docker save debian:bullseye-slim $(ORG)/base:latest | xz -e9 -T0 > ./cache/base.tar.xz
+
+base.save: base base.save/fast
 
 base.load:
 	set -o pipefail; \
@@ -252,17 +266,21 @@ $(VERBOSE).SILENT: display_images
 #
 # build implicit rule
 #
-
-$(STANDARD_IMAGES): %: %/Dockerfile base
-	mkdir -p $@/imagefiles && cp -r imagefiles $@/
-	$(DOCKER) build -t $(ORG)/$@:latest \
-		-t $(ORG)/$@:$(TAG) \
-		--build-arg IMAGE=$(ORG)/$@ \
+$(addsuffix /fast,$(STANDARD_IMAGES)): %/fast: %/Dockerfile
+	$(eval IMAGE_NAME = $(@:/fast=))
+	echo "Building IMAGE_NAME [$(IMAGE_NAME)]"
+	mkdir -p $(IMAGE_NAME)/imagefiles && cp -r imagefiles $(IMAGE_NAME)/
+	$(DOCKER) build -t $(ORG)/$(IMAGE_NAME):latest \
+		-t $(ORG)/$(IMAGE_NAME):$(TAG) \
+		--build-arg IMAGE=$(ORG)/$(IMAGE_NAME) \
 		--build-arg VCS_REF=`git rev-parse --short HEAD` \
 		--build-arg VCS_URL=`git config --get remote.origin.url` \
 		--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
-		$@
-	rm -rf $@/imagefiles
+		$(IMAGE_NAME)
+	rm -rf $(IMAGE_NAME)/imagefiles
+
+.SECONDEXPANSION:
+$(STANDARD_IMAGES): base $$(addsuffix /fast, $$@)
 
 clean:
 	for d in $(IMAGES) ; do rm -rf $$d/imagefiles ; done
@@ -284,11 +302,14 @@ bash-check:
 #
 # testing implicit rule
 #
+$(addsuffix .test/fast,$(STANDARD_IMAGES)):
+	$(eval IMAGE_NAME = $(basename $(@:/fast=)))
+	$(DOCKER) run $(PULL) $(RM) $(ORG)/$(IMAGE_NAME) > $(BIN)/dockcross-$(IMAGE_NAME) \
+		&& chmod +x $(BIN)/dockcross-$(IMAGE_NAME)
+	$(BIN)/dockcross-$(IMAGE_NAME) python3 test/run.py $($(patsubst /fast,,$@)_ARGS)
+
 .SECONDEXPANSION:
-$(addsuffix .test,$(STANDARD_IMAGES)): $$(basename $$@)
-	$(DOCKER) run $(PULL) $(RM) $(ORG)/$(basename $@) > $(BIN)/dockcross-$(basename $@) \
-		&& chmod +x $(BIN)/dockcross-$(basename $@)
-	$(BIN)/dockcross-$(basename $@) python3 test/run.py $($@_ARGS)
+$(addsuffix .test,$(STANDARD_IMAGES)): $$(basename $$@) $$(addsuffix /fast, $$@)
 
 #
 # testing prerequisites implicit rule
@@ -296,20 +317,21 @@ $(addsuffix .test,$(STANDARD_IMAGES)): $$(basename $$@)
 test.prerequisites:
 	mkdir -p $(BIN)
 
-$(addsuffix .test,base $(IMAGES)): test.prerequisites
+$(addsuffix .test/fast,base $(IMAGES)): test.prerequisites
 
 #
 # saving/loading implicit rule
 #
-.SECONDEXPANSION:
-$(addsuffix .save,$(IMAGES)):
+$(addsuffix .save/fast,$(IMAGES)):
 	mkdir -p ./cache-$(basename $@)
 	set -o pipefail; \
 	$(DOCKER) save $(ORG)/$(basename $@):latest | xz -e9 -T0 > ./cache/$(basename $@).tar.xz
 
 .SECONDEXPANSION:
+$(addsuffix .save,$(IMAGES)): $$(basename $$@) $(addsuffix /fast,$$@)
+
 $(addsuffix .load,$(IMAGES)):
 	set -o pipefail; \
 	xz -d -k < ./cache/$(basename $@).tar.xz | $(DOCKER) load
 
-.PHONY: base images $(IMAGES) test %.test %.save %.load clean purge bash-check display_images
+.PHONY: base images $(IMAGES) test %.test %.test/fast %.save %.save/fast %.load %.load/fast clean purge bash-check display_images
