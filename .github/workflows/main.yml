@@ -771,9 +771,9 @@ jobs:
               cpython: "no",
               cpython_arg: "",
             }
-          # manylinux_2_24 images
+          # manylinux_2_28 images
           - {
-              image: "manylinux_2_24-x64",
+              image: "manylinux_2_28-x64",
               stockfish: "yes",
               stockfish_arg: "ARCH=x86-64-modern",
               ninja: "yes",
