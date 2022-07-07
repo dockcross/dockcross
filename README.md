@@ -131,18 +131,19 @@ The list of docker images that are **no longer maintained**.
 
 | Image name | Target arch | Compiler | Target OS | End of life (EOL) |
 |:-------:|:--------:|:------:|:-----:|:-----:|
-| dockcross/manylinux-x86  | x86 | GCC | manylinux | [2019-05-22](1e0e89814) |
-| dockcross/manylinux-x64  | x86 | GCC | manylinux | [2019-05-22](1e0e89814) |
-| dockcross/linux-mipsel | mipsel | GCC 4.9 | Debian 8 | [2021-06-27](a30e76d5c) |
-| dockcross/manylinux1-x86  | x86 | GCC | manylinux | [2021-08-05](54f73cbb6) |
-| dockcross/manylinux1-x64 | x86_64 | GCC| manylinux | [2021-08-05](54f73cbb6) |
-| dockcross/manylinux2010-x86 | x86 | GCC | manylinux | [2021-08-05](54f73cbb6) |
-| dockcross/manylinux2010-x64 | x86_64 | GCC | manylinux | [2021-08-05](54f73cbb6) |
-| dockcross/manylinux_2_28-x64 | x86_64 | GCC | manylinux | [2022-06-16](manylinux_2_24-eol) |
+| dockcross/manylinux-x86  | x86 | GCC | manylinux | [2019-05-22][1e0e89814] |
+| dockcross/manylinux-x64  | x86 | GCC | manylinux | [2019-05-22][1e0e89814] |
+| dockcross/linux-mipsel | mipsel | GCC 4.9 | Debian 8 | [2021-06-27][a30e76d5c] |
+| dockcross/manylinux1-x86  | x86 | GCC | manylinux | [2021-08-05][54f73cbb6] |
+| dockcross/manylinux1-x64 | x86_64 | GCC| manylinux | [2021-08-05][54f73cbb6] |
+| dockcross/manylinux2010-x86 | x86 | GCC | manylinux | [2021-08-05][54f73cbb6] |
+| dockcross/manylinux2010-x64 | x86_64 | GCC | manylinux | [2021-08-05][54f73cbb6] |
+| dockcross/manylinux_2_24-x64 | x86_64 | GCC | manylinux | [2022-07-05][ada2c8dad], [pypa/manylinux#1332][manylinux_2_24-eol] |
 
 [1e0e89814]: https://github.com/dockcross/dockcross/commit/1e0e89814
 [a30e76d5c]: https://github.com/dockcross/dockcross/commit/a30e76d5c
 [54f73cbb6]: https://github.com/dockcross/dockcross/commit/54f73cbb6
+[ada2c8dad]: https://github.com/dockcross/dockcross/commit/ada2c8dad
 [manylinux_2_24-eol]: https://github.com/pypa/manylinux/issues/1332#issuecomment-1157666846
 
 ## Cross compilers
