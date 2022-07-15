@@ -3,8 +3,6 @@ FROM quay.io/pypa/manylinux2014_i686:latest
 
 LABEL maintainer="Matt McCormick matt.mccormick@kitware.com"
 
-ENV DEFAULT_DOCKCROSS_IMAGE dockcross/manylinux2014-x86
-
 #include "common.manylinux2014"
 
 #include "common.dockcross"
@@ -34,16 +32,6 @@ ENV CMAKE_TOOLCHAIN_FILE ${CROSS_ROOT}/../lib/Toolchain.cmake
 COPY linux-x86/linux32-entrypoint.sh /dockcross/
 ENTRYPOINT ["/dockcross/linux32-entrypoint.sh"]
 
-# Build-time metadata as defined at http://label-schema.org
-ARG BUILD_DATE
-ARG IMAGE=dockcross/manylinux2014-x86
-ARG VERSION=latest
-ARG VCS_REF
-ARG VCS_URL
-LABEL org.label-schema.build-date=$BUILD_DATE \
-      org.label-schema.name=$IMAGE \
-      org.label-schema.version=$VERSION \
-      org.label-schema.vcs-ref=$VCS_REF \
-      org.label-schema.vcs-url=$VCS_URL \
-      org.label-schema.schema-version="1.0"
+#include "common.label-and-env"
+
 ENV DEFAULT_DOCKCROSS_IMAGE ${IMAGE}:${VERSION}

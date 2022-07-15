@@ -3,8 +3,6 @@ FROM quay.io/pypa/manylinux_2_28_x86_64:latest
 
 LABEL maintainer="Matt McCormick matt.mccormick@kitware.com"
 
-ENV DEFAULT_DOCKCROSS_IMAGE dockcross/manylinux_2_28-x64
-
 #include "common.manylinux_2_28"
 
 #include "common.dockcross"
@@ -27,3 +25,5 @@ COPY manylinux_2_28-x64/Toolchain.cmake ${CROSS_ROOT}/../lib/
 ENV CMAKE_TOOLCHAIN_FILE ${CROSS_ROOT}/../lib/Toolchain.cmake
 
 #include "common.label-and-env"
+
+ENV DEFAULT_DOCKCROSS_IMAGE ${IMAGE}:${VERSION}
