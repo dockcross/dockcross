@@ -254,7 +254,7 @@ base.test: base base.test/fast
 base.save/fast:
 	mkdir -p ./cache
 	set -o pipefail; \
-	docker save debian:bullseye-slim $(ORG)/base:latest | xz -e9 -T0 > ./cache/base.tar.xz
+	docker save debian:bullseye-slim $(ORG)/base:$(TAG) $(ORG)/base:latest | xz -e9 -T0 > ./cache/base.tar.xz
 
 base.save: base base.save/fast
 
@@ -332,7 +332,7 @@ $(addsuffix .test/fast,base $(IMAGES)): test.prerequisites
 $(addsuffix .save/fast,$(IMAGES)):
 	mkdir -p ./cache-$(basename $@)
 	set -o pipefail; \
-	$(DOCKER) save $(ORG)/$(basename $@):latest | xz -e9 -T0 > ./cache/$(basename $@).tar.xz
+	$(DOCKER) save $(ORG)/$(basename $@):$(TAG) $(ORG)/$(basename $@):latest | xz -e9 -T0 > ./cache/$(basename $@).tar.xz
 
 .SECONDEXPANSION:
 $(addsuffix .save,$(IMAGES)): $$(basename $$@) $(addsuffix /fast,$$@)
