@@ -1,4 +1,5 @@
-FROM dockcross/base:latest
+ARG VERSION=latest
+FROM dockcross/base:${VERSION}
 
 RUN apt-get update && apt-get install -y unzip
 

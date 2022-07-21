@@ -1,4 +1,6 @@
-FROM dockcross/base:latest
+ARG VERSION=latest
+FROM dockcross/base:${VERSION}
+
 MAINTAINER Matt McCormick "matt.mccormick@kitware.com"
 RUN \
   sed -i '/debian-security/d' /etc/apt/sources.list && \

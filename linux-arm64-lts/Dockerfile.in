@@ -1,4 +1,5 @@
-FROM dockcross/base:latest
+ARG VERSION=latest
+FROM dockcross/base:${VERSION}
 
 # This is for 64-bit ARM Linux machine (Ubuntu 18.04 or Debian 9 mini)
 

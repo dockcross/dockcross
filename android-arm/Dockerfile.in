@@ -1,4 +1,6 @@
-FROM dockcross/base:latest
+ARG VERSION=latest
+FROM dockcross/base:${VERSION}
+
 MAINTAINER Matt McCormick "matt.mccormick@kitware.com"
 
 # The cross-compiling emulator

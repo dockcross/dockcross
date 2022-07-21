@@ -1,4 +1,5 @@
-FROM dockcross/base:latest
+ARG VERSION=latest
+FROM dockcross/base:${VERSION}
 
 ENV XCC_PREFIX /usr/xcc
 ENV CROSS_TRIPLE aarch64-linux-musl
