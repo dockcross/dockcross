@@ -11,8 +11,8 @@ ENV AS=${CROSS_ROOT}/bin/llvm-as \
     CXX=${CROSS_ROOT}/bin/clang++ \
     LD=${CROSS_ROOT}/bin/ld
 
-ENV ANDROID_NDK_REVISION 23
-ENV ANDROID_NDK_API 23
+ENV ANDROID_NDK_REVISION 25b
+ENV ANDROID_API 33
 
 RUN mkdir -p /build && \
     cd /build && \
@@ -21,7 +21,7 @@ RUN mkdir -p /build && \
     cd android-ndk-r${ANDROID_NDK_REVISION} && \
     ./build/tools/make_standalone_toolchain.py \
       --arch x86 \
-      --api ${ANDROID_NDK_API} \
+      --api ${ANDROID_API} \
       --stl=libc++ \
       --install-dir=${CROSS_ROOT} && \
     cd / && \
