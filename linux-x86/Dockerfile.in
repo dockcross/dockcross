@@ -20,20 +20,59 @@ RUN mkdir -p ${CROSS_ROOT}/bin
 COPY ${CROSS_TRIPLE}.sh ${CROSS_ROOT}/bin/${CROSS_TRIPLE}.sh
 COPY ${CROSS_TRIPLE}-as.sh ${CROSS_ROOT}/bin/${CROSS_TRIPLE}-as.sh
 COPY ${CROSS_TRIPLE}-noop.sh ${CROSS_ROOT}/bin/${CROSS_TRIPLE}-noop.sh
+
+# Create symlinks for x86_64 binaries that support x86 and x86_64 targets natively
+RUN cd ${CROSS_ROOT}/bin && \
+  ln -s /usr/bin/x86_64-linux-gnu-ar ${CROSS_TRIPLE}-ar && \
+  ln -s /usr/bin/x86_64-linux-gnu-c++filt ${CROSS_TRIPLE}-c++filt && \
+  ln -s /usr/bin/x86_64-linux-gnu-dwp ${CROSS_TRIPLE}-dwp && \
+  ln -s /usr/bin/x86_64-linux-gnu-elfedit ${CROSS_TRIPLE}-elfedit && \
+  ln -s /usr/bin/x86_64-linux-gnu-gcc-ar ${CROSS_TRIPLE}-gcc-ar && \
+  ln -s /usr/bin/x86_64-linux-gnu-gcc-ar-10 ${CROSS_TRIPLE}-gcc-ar-10 && \
+  ln -s /usr/bin/x86_64-linux-gnu-gcc-nm ${CROSS_TRIPLE}-gcc-nm && \
+  ln -s /usr/bin/x86_64-linux-gnu-gcc-ranlib ${CROSS_TRIPLE}-gcc-ranlib && \
+  ln -s /usr/bin/x86_64-linux-gnu-gcc-ranlib-10 ${CROSS_TRIPLE}-gcc-ranlib-10 && \
+  ln -s /usr/bin/x86_64-linux-gnu-gcov ${CROSS_TRIPLE}-gcov && \
+  ln -s /usr/bin/x86_64-linux-gnu-gcov-10 ${CROSS_TRIPLE}-gcov-10 && \
+  ln -s /usr/bin/x86_64-linux-gnu-gcov-dump ${CROSS_TRIPLE}-gcov-dump && \
+  ln -s /usr/bin/x86_64-linux-gnu-gcov-tool ${CROSS_TRIPLE}-gcov-tool && \
+  ln -s /usr/bin/x86_64-linux-gnu-gcov-tool-10 ${CROSS_TRIPLE}-gcov-tool-10 && \
+  ln -s /usr/bin/x86_64-linux-gnu-nm ${CROSS_TRIPLE}-nm && \
+  ln -s /usr/bin/x86_64-linux-gnu-objcopy ${CROSS_TRIPLE}-objcopy && \
+  ln -s /usr/bin/x86_64-linux-gnu-pkg-config ${CROSS_TRIPLE}-pkg-config && \
+  ln -s /usr/bin/x86_64-linux-gnu-ranlib ${CROSS_TRIPLE}-ranlib && \
+  ln -s /usr/bin/x86_64-linux-gnu-readelf ${CROSS_TRIPLE}-readelf && \
+  ln -s /usr/bin/x86_64-linux-gnu-size ${CROSS_TRIPLE}-size && \
+  ln -s /usr/bin/x86_64-linux-gnu-strings ${CROSS_TRIPLE}-strings && \
+  ln -s /usr/bin/x86_64-linux-gnu-strip ${CROSS_TRIPLE}-strip
+
+# Use x86_64-linux-gnu.sh to pass -m32 to binaries that support an emulation flag
 RUN cd ${CROSS_ROOT}/bin && \
   chmod +x ${CROSS_TRIPLE}.sh && \
   ln -s /usr/bin/x86_64-linux-gnu-gcc && \
   ln -s /usr/bin/x86_64-linux-gnu-g++ && \
+  ln -s /usr/bin/x86_64-linux-gnu-cpp && \
   ln -s /usr/bin/x86_64-linux-gnu-as && \
+  ln -s /usr/bin/x86_64-linux-gnu-ld && \
+  ln -s /usr/bin/x86_64-linux-gnu-ld.gold && \
+  ln -s /usr/bin/x86_64-linux-gnu-lto-dump-10 && \
+  ln -s /usr/bin/x86_64-linux-gnu-objdump && \
   ln -s ${CROSS_TRIPLE}.sh ${CROSS_TRIPLE}-gcc && \
+  ln -s ${CROSS_TRIPLE}.sh ${CROSS_TRIPLE}-cpp && \
   ln -s ${CROSS_TRIPLE}.sh ${CROSS_TRIPLE}-g++ && \
+  ln -s ${CROSS_TRIPLE}.sh ${CROSS_TRIPLE}-ld && \
+  ln -s ${CROSS_TRIPLE}.sh ${CROSS_TRIPLE}-ld.gold && \
+  ln -s ${CROSS_TRIPLE}.sh ${CROSS_TRIPLE}-lto-dump-10 && \
+  ln -s ${CROSS_TRIPLE}.sh ${CROSS_TRIPLE}-objdump && \
   ln -s ${CROSS_TRIPLE}-as.sh ${CROSS_TRIPLE}-as && \
-  ln -s /usr/bin/x86_64-linux-gnu-ar ${CROSS_TRIPLE}-ar && \
   ln -s ${CROSS_TRIPLE}-noop.sh ${CROSS_TRIPLE}-noop
+
 ENV AS=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-as \
     AR=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-ar \
     CC=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-gcc \
-    CXX=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-g++
+    CPP=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-cpp \
+    CXX=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-g++ \
+    LD=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-ld
 
 COPY Toolchain.cmake /usr/lib/${CROSS_TRIPLE}/
 ENV CMAKE_TOOLCHAIN_FILE /usr/lib/${CROSS_TRIPLE}/Toolchain.cmake
