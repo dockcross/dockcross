@@ -462,6 +462,26 @@ jobs:
               cpython: "yes",
               cpython_arg: "",
             }
+          # Linux i686 images
+          - {
+              image: "linux-i686",
+              stockfish: "yes",
+              stockfish_arg: "ARCH=x86-32-sse41-popcnt",
+              ninja: "yes",
+              ninja_arg: "",
+              openssl: "yes",
+              openssl_arg: "linux-x86",
+              C: "yes",
+              C_arg: "",
+              C-Plus-Plus: "yes",
+              C-Plus-Plus_arg: "",
+              fmt: "yes",
+              fmt_arg: "",
+              raylib: "no",
+              raylib_arg: "",
+              cpython: "yes",
+              cpython_arg: "",
+            }
           # Linux x86_64 images
           - {
               image: "linux-x64",
