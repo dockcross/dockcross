@@ -465,12 +465,12 @@ jobs:
           # Linux i686 images
           - {
               image: "linux-i686",
-              stockfish: "yes",
-              stockfish_arg: "ARCH=x86-32-sse41-popcnt",
+              stockfish: "no",
+              stockfish_arg: "",
               ninja: "yes",
               ninja_arg: "",
               openssl: "yes",
-              openssl_arg: "linux-x86",
+              openssl_arg: "linux-i686",
               C: "yes",
               C_arg: "",
               C-Plus-Plus: "yes",
