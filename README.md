@@ -319,7 +319,7 @@ Linux m68k cross compiler toolchain for m68k GNU systems (http://www.mac.linux-m
 
 ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/dockcross/linux-ppc64le/latest) ![Docker Pulls](https://img.shields.io/docker/pulls/dockcross/linux-ppc64le)
 
-Linux PowerPC 64 little endian cross compiler toolchain for the POWER8, etc. Important: Due to Issue #430, automatic build of newer images has been disabled.
+Linux PowerPC 64 little endian cross compiler toolchain for the POWER8, etc.
 
 ### dockcross/linux-x64
 
