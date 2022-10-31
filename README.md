@@ -111,6 +111,7 @@ The dockcross script will execute the given command-line inside the container, a
 | dockcross/manylinux_2_28-x64 | x86_64 | GCC | Linux |
 | dockcross/manylinux2014-x86 | x86 | GCC | Linux |
 | dockcross/manylinux2014-x64 | x86_64 | GCC | Linux |
+| dockcross/linux-i686 | x86 | GCC | Linux |
 | dockcross/linux-x86 | x86 | GCC | Linux |
 | dockcross/linux-x64 | x86_64 | GCC | Linux |
 | dockcross/linux-x86_64-full | x86_64 | GCC + libs | Linux |
@@ -343,13 +344,19 @@ Linux clang x86_64/amd64 compiler. Since the Docker image is natively x86_64, th
 
 ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/dockcross/linux-x86/latest) ![Docker Pulls](https://img.shields.io/docker/pulls/dockcross/linux-x86)
 
-Linux i686 cross compiler.
+Linux x86_64 32bit (i686) toolchain using gcc/g++ multilib. Multilib is a mechanism to support building and running code for different ABIs for the same CPU family on the host system. Most commonly it is used to support 32-bit code on 64-bit systems and 64-bit code on 32-bit systems with a 64-bit kernel. Since the Docker image is natively x86_64, this is not actually a cross compiler, it just adds capability to the existing host toolchain.
 
 ### dockcross/linux-x64-tinycc
 
 ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/dockcross/linux-x64-tinycc/latest) ![Docker Pulls](https://img.shields.io/docker/pulls/dockcross/linux-x64-tinycc)
 
 Linux tcc compiler for C compiler, and GCC for C++ compiler, for linux x86_64/amd64 arch.
+
+### dockcross/linux-i686
+
+![Docker Image Size (tag)](https://img.shields.io/docker/image-size/dockcross/linux-i686/latest) ![Docker Pulls](https://img.shields.io/docker/pulls/dockcross/linux-i686)
+
+Standalone Linux i686 cross compiler.
 
 ### dockcross/manylinux_2_28-x64
 
