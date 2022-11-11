@@ -15,4 +15,4 @@ set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY BOTH)
 set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE BOTH)
 set(CMAKE_SYSROOT ${cross_root}/${cross_triple}/sysroot)
 
-set(CMAKE_CROSSCOMPILING_EMULATOR /usr/bin/qemu-x86_64)
+set(CMAKE_CROSSCOMPILING_EMULATOR /usr/bin/qemu-x86_64 -cpu qemu32)
