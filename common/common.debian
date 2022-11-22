@@ -23,6 +23,7 @@ RUN \
     libncurses5 \
     libtool \
     make \
+    nasm \
     ncurses-dev \
     pkg-config \
     pax \
