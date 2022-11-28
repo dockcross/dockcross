@@ -470,7 +470,7 @@ jobs:
               ninja: "yes",
               ninja_arg: "",
               openssl: "yes",
-              openssl_arg: "linux-i686",
+              openssl_arg: "linux-generic32",
               C: "yes",
               C_arg: "",
               C-Plus-Plus: "yes",
