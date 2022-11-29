@@ -480,7 +480,7 @@ jobs:
               raylib: "no",
               raylib_arg: "",
               cpython: "yes",
-              cpython_arg: "",
+              cpython_arg: "--host=i686-linux-gnu --target=i686-linux-gnu",
             }
           # Linux x86_64 images
           - {
