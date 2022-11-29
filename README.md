@@ -544,7 +544,7 @@ An example Dockerfile would be:
 FROM dockcross/linux-armv7
 
 ENV DEFAULT_DOCKCROSS_IMAGE my_cool_image
-RUN apt-get install nano
+RUN apt-get install -y nano
 ```
 
 And then in the shell:
