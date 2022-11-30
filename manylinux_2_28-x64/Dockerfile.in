@@ -12,7 +12,7 @@ ENV DEFAULT_DOCKCROSS_IMAGE dockcross/manylinux_2_28-x64
 #include "common.docker"
 
 ENV CROSS_TRIPLE x86_64-linux-gnu
-ENV CROSS_ROOT /opt/rh/gcc-toolset-11/root/bin/
+ENV CROSS_ROOT /opt/rh/gcc-toolset-12/root/bin/
 ENV AS=${CROSS_ROOT}/as \
     AR=${CROSS_ROOT}/ar \
     CC=${CROSS_ROOT}/gcc \

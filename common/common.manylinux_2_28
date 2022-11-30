@@ -21,7 +21,7 @@ RUN \
   set -x && \
   # Remove sudo provided by devtoolset since it doesn't work with
   # our sudo wrapper calling gosu.
-  rm -f /opt/rh/gcc-toolset-11/root/usr/bin/sudo && \
+  rm -f /opt/rh/gcc-toolset-12/root/usr/bin/sudo && \
   /buildscripts/install-python-packages.sh && \
   rm -rf /buildscripts
 
