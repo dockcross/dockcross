@@ -1,5 +1,5 @@
 # Recent versions address yum functionality
-FROM quay.io/pypa/manylinux_2_28_x86_64:latest
+FROM quay.io/pypa/manylinux_2_28_x86_64:2022-11-28-5d13db4
 
 LABEL maintainer="Matt McCormick matt.mccormick@kitware.com"
 
