@@ -442,6 +442,25 @@ jobs:
               cpython: "yes",
               cpython_arg: "--host=armv7l-linux-musleabihf --target=armv7l-linux-musleabihf",
             }
+          - {
+              image: "linux-armv7l-uclibc",
+              stockfish: "yes",
+              stockfish_arg: "ARCH=armv7",
+              ninja: "yes",
+              ninja_arg: "",
+              openssl: "yes",
+              openssl_arg: "linux-armv4",
+              C: "no",
+              C_arg: "",
+              C-Plus-Plus: "yes",
+              C-Plus-Plus_arg: "",
+              fmt: "yes",
+              fmt_arg: "",
+              raylib: "no",
+              raylib_arg: "",
+              cpython: "yes",
+              cpython_arg: "--host=armv7l-linux-uclibceabi --target=armv7l-linux-uclibceabi",
+            }
           # Linux x86 images
           - {
               image: "linux-x86",
