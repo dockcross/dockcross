@@ -27,6 +27,6 @@ ${PYTHON} get-pip.py --ignore-installed
 rm get-pip.py
 
 ${PYTHON} -m pip install --upgrade --ignore-installed setuptools
-${PYTHON} -m pip install --ignore-installed conan
+${PYTHON} -m pip install --ignore-installed conan meson
 # Purge cache to save space: https://stackoverflow.com/questions/37513597/is-it-safe-to-delete-cache-pip-directory
 ${PYTHON} -m pip cache purge
