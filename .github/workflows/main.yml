@@ -640,6 +640,25 @@ jobs:
               cpython: "yes",
               cpython_arg: "--host=mips-unknown-linux-gnu --target=mips-unknown-linux-gnu",
             }
+          - {
+              image: "linux-mips-uclibc",
+              stockfish: "no",
+              stockfish_arg: "",
+              ninja: "yes",
+              ninja_arg: "",
+              openssl: "yes",
+              openssl_arg: "linux-generic32",
+              C: "yes",
+              C_arg: "",
+              C-Plus-Plus: "yes",
+              C-Plus-Plus_arg: "",
+              fmt: "yes",
+              fmt_arg: "",
+              raylib: "no",
+              raylib_arg: "",
+              cpython: "yes",
+              cpython_arg: "--host=mips-unknown-linux-uclibc --target=mips-unknown-linux-uclibc",
+            }
           # Linux mips images
           - {
               image: "linux-mips-lts",
