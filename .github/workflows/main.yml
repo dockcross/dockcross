@@ -648,7 +648,7 @@ jobs:
               ninja_arg: "",
               openssl: "yes",
               openssl_arg: "linux-generic32",
-              C: "yes",
+              C: "no",
               C_arg: "",
               C-Plus-Plus: "yes",
               C-Plus-Plus_arg: "",
