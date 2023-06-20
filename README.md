@@ -569,7 +569,7 @@ The key difference is that [dockbuild](https://github.com/dockbuild/dockbuild#re
 
 ## Build images by yourself
 
-Perbuilt images available on Docker hub are single architecture amd64 images. Those images work evan on different architectures: for example, if you run a dockcross image on Docker running on an Apple M1, the image will run in emulation mode, meaning that it will still work as expected, although it will be slower than running on native hardware (you can expect a factor or 10 or more).
+Prebuilt images available on Docker hub are single architecture amd64 images. Those images work evan on different architectures: for example, if you run a dockcross image on Docker running on an Apple M1, the image will run in emulation mode, meaning that it will still work as expected, although it will be slower than running on native hardware (you can expect a factor or 10 or more).
 
 To overcome this limitation, you can build your own images on non-amd64 architectures. To do so, you can use the `Makefile` provided in this repository. For example, to build the `linux-armv7` image, and provided that your Docker hub organization name is `ACME`, you can run:
 
