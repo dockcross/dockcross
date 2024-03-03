@@ -40,7 +40,7 @@ jobs:
         with:
           name: cache
           path: ./cache
-          retention-days: 1
+          retention-days: 3
 
       - name: deploy
         if: github.ref == 'refs/heads/master'
