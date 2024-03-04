@@ -1,5 +1,6 @@
 RUN \
   set -x && \
+  yum upgrade -y almalinux-release && \
   yum -y install \
     gpg \
     python3-devel \
