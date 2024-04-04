@@ -1187,7 +1187,7 @@ jobs:
             }
           - {
               image: "web-wasi",
-              arm_host: "",
+              arm_host: "yes",
               stockfish: "no",
               stockfish_arg: "",
               ninja: "no",
