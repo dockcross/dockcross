@@ -23,7 +23,7 @@ cd crosstool-ng
 Change git branch:
 
 ```bash
-git checkout crosstool-ng-1.25.0
+git checkout crosstool-ng-1.26.0
 ```
 
 Once in the **crosstool-ng** folder, you must first run the `bootstrap` script:
@@ -134,8 +134,8 @@ LABEL maintainer="Matt McCormick matt.mccormick@kitware.com"
 
 # This is for 64-bit ARM Linux machine
 
-# Crosstool-ng crosstool-ng-1.25.0 2022-05-13
-ENV CT_VERSION crosstool-ng-1.25.0
+# Crosstool-ng crosstool-ng-1.26.0 2023-09-24
+ENV CT_VERSION crosstool-ng-1.26.0
 
 #include "common.crosstool"
 

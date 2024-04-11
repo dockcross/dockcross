@@ -53,8 +53,8 @@ if [ -z ${CONFIG_PATH} ] || [ ! -f ${CONFIG_PATH} ]; then
 fi
 
 if [ -z ${REV} ]; then
-  echo "WARNING: No version selected, use default version: crosstool-ng-1.25.0 (-v)."
-  REV=crosstool-ng-1.25.0
+  echo "WARNING: No version selected, use default version: crosstool-ng-1.26.0 (-v)."
+  REV=crosstool-ng-1.26.0
 fi
 
 
@@ -75,7 +75,7 @@ git fetch --tags
 # checkout 
 git checkout ${REV}
 
-if [ ${REV} = "crosstool-ng-1.25.0" ]; then
+if [ ${REV} = "crosstool-ng-1.26.0" ]; then
   patch scripts/build/companion_libs/050-zlib.sh -i /dockcross/crosstool-ng-zlib-target.patch
   # Clean patch
   rm /dockcross/crosstool-ng-zlib-target.patch

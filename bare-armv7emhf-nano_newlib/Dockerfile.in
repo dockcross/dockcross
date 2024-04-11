@@ -5,8 +5,8 @@ LABEL maintainer="Chen Tao t.clydechen@gmail.com"
 
 # This is for armv7e-m+fp bare metal
 
-# Crosstool-ng version 1.25.0
-ENV CT_VERSION 8fa98eeeff9bc53478d97ef722f366fea151ae64
+# Crosstool-ng version 2023-09-24
+ENV CT_VERSION crosstool-ng-1.26.0
 
 #include "common.crosstool"
 

@@ -7,8 +7,8 @@ LABEL maintainer="Matt McCormick matt.mccormick@kitware.com"
 # VFP instructions (armhf).
 # musleabi as default glibc
 
-# Crosstool-ng version 2022-05-19
-ENV CT_VERSION crosstool-ng-1.25.0
+# Crosstool-ng version 2023-09-24
+ENV CT_VERSION crosstool-ng-1.26.0
 
 #include "common.crosstool"
 

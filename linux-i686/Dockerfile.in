@@ -5,8 +5,8 @@ LABEL maintainer="PJ Reid PJ.Reid@Zetier.com"
 
 # This is for 32-bit (i686) intel/amd devices
 
-# Crosstool-ng version 2022-05-19
-ENV CT_VERSION crosstool-ng-1.25.0
+# Crosstool-ng version 2023-09-24
+ENV CT_VERSION crosstool-ng-1.26.0
 
 #include "common.crosstool"
 
