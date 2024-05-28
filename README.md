@@ -13,7 +13,7 @@ Cross compiling toolchains in Docker images.
 - Most images also contain an emulator for the target system.
 - Clean separation of build tools, source code, and build artifacts.
 - Commands in the container are run as the calling user, so that any created files have the expected ownership, (i.e. not root).
-- Make variables **CC**, **CXX**, **LD**, **AS** etc) are set to point to the appropriate tools in the container.
+- Make variables (**CC**, **CXX**, **LD**, **AS** etc) are set to point to the appropriate tools in the container.
 - Recent [CMake](https://cmake.org) and ninja are precompiled.
 - [Meson](https://mesonbuild.com) is pre-installed.
 - [Conan.io](https://www.conan.io) can be used as a package manager.
