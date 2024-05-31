@@ -3,8 +3,8 @@ FROM ${ORG}/base:latest
 
 LABEL maintainer="Matt McCormick matt.mccormick@kitware.com"
 
-# Crosstool-ng version 2022-05-19
-ENV CT_VERSION crosstool-ng-1.25.0
+# Crosstool-ng version 2023-09-24
+ENV CT_VERSION crosstool-ng-1.26.0
 
 # This is for compiling binaries for arm routers with uclibc (e.g ddwrt, asuswrt)
 #include "common.crosstool"

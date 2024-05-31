@@ -10,7 +10,7 @@ LABEL maintainer="Matt McCormick matt.mccormick@kitware.com"
 # This is for 64-bit ARM Manylinux machine
 
 # Crosstool-ng version
-ENV CT_VERSION crosstool-ng-1.25.0
+ENV CT_VERSION crosstool-ng-1.26.0
 
 #include "common-manylinux.crosstool"
 

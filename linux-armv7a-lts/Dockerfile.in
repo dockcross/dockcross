@@ -5,9 +5,8 @@ LABEL maintainer="Matt McCormick matt.mccormick@kitware.com"
 
 # This is for 32-bit ARMv7a Linux
 
-# We use a git commit while waiting for 1.25 to release (1.24 is several years old)
-# crosstool-ng 1.25.0
-ENV CT_VERSION crosstool-ng-1.25.0
+# Crosstool-ng version 2023-09-24
+ENV CT_VERSION crosstool-ng-1.26.0
 
 #include "common.crosstool"
 
