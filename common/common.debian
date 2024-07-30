@@ -11,6 +11,7 @@ RUN \
     build-essential \
     bzip2 \
     ca-certificates \
+    ccache \
     curl \
     dirmngr \
     file \
