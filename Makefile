@@ -165,7 +165,7 @@ web-wasi-threads.test: web-wasi-threads
 #
 # manylinux2014-aarch64
 #
-manylinux2014-aarch64: manylinux2014-aarch64/Dockerfile
+manylinux2014-aarch64: manylinux2014-aarch64/Dockerfile manylinux2014-x64
 	@# Register qemu
 	docker run --rm --privileged hypriot/qemu-register
 	@# Get libstdc++ from quay.io/pypa/manylinux2014_aarch64 container

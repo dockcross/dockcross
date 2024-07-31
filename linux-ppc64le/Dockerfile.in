@@ -15,7 +15,7 @@ ENV CROSS_TRIPLE powerpc64le-unknown-linux-gnu
 WORKDIR /usr/src
 
 RUN apt-get install -y libglib2.0-dev zlib1g-dev libpixman-1-dev && \
-  curl -L http://wiki.qemu-project.org/download/qemu-${QEMU_VERSION}.tar.bz2 | tar xj && \
+  curl -L https://download.qemu.org/qemu-${QEMU_VERSION}.tar.bz2 | tar xj && \
   cd qemu-${QEMU_VERSION} && \
   ./configure --target-list=ppc64le-linux-user --prefix=/usr && \
   make -j$(nproc) && \

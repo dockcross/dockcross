@@ -15,8 +15,8 @@
 #  ARG MXE_TARGET_LINK=shared
 #
 
-# mxe master 2021-10-18
-ARG MXE_GIT_TAG=8838ac3938cd8e47424a4cb5d3676d1ae9a4d670
+# mxe master 2024-07-27
+ARG MXE_GIT_TAG=9f349e0de62a4a68bfc0f13d835a6c685dae9daa
 
 ENV CMAKE_TOOLCHAIN_FILE /usr/src/mxe/usr/${MXE_TARGET_ARCH}-w64-mingw32.${MXE_TARGET_LINK}${MXE_TARGET_THREAD}/share/cmake/mxe-conf.cmake
 
@@ -69,6 +69,7 @@ RUN \
     wget \
     wine \
     xz-utils \
+    python3-mako \
   && \
   #
   # Install Wine

@@ -1098,6 +1098,8 @@ jobs:
         run: xz -d -k < ./cache/base.tar.xz | docker import - dockcross/base:latest
 
       - name: build
+        env:
+          BUILD_CMD: build --cache-from type=gha --cache-to type=gha,mode=max
         run: make ${{ matrix.arch_name.image }}
 
       - name: basic test
