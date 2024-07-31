@@ -154,7 +154,7 @@ jobs:
               openssl_arg: "linux-aarch64",
               C: "yes",
               C_arg: "",
-              C-Plus-Plus: "yes",
+              C-Plus-Plus: "no",
               C-Plus-Plus_arg: "",
               fmt: "yes",
               fmt_arg: "",
