@@ -806,8 +806,6 @@ jobs:
               C-Plus-Plus_arg: "",
               llama_cpp: "no",
               llama_cpp_arg: "",
-              llama_cpp: "no",
-              llama_cpp_arg: "",
               fmt: "no",
               fmt_arg: "",
               raylib: "no",
