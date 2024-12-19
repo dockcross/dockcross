@@ -3,8 +3,19 @@
 # Parameters
 #
 
-# Name of the docker executable
+# Name of the docker-equivalent executable for building images.
+# OCI: open container interface.
+# Common values: docker, podman, buildah
 DOCKER := $(or $(OCI_EXE), docker)
+BUILD_DOCKER := $(or $(BUILD_DOCKER), $(DOCKER))
+# Name of the docker-equivalent executable for running test containers.
+# Supports the use case:
+#
+#   DOCKER=buildah
+#   TEST_DOCKER=podman
+#
+# because buildah does not run containers.
+TEST_DOCKER := $(or $(TEST_DOCKER), $(DOCKER))
 
 # The build sub-command. Use:
 #
@@ -12,6 +23,7 @@ DOCKER := $(or $(OCI_EXE), docker)
 #
 # to generate multi-platform images.
 BUILD_CMD := $(or $(BUILD_CMD), build)
+TAG_FLAG := $(or $(TAG_FLAG), --tag)
 
 # Docker organization to pull the images from
 ORG = dockcross
@@ -125,8 +137,8 @@ $(GEN_IMAGE_DOCKERFILES) Dockerfile: %Dockerfile: %Dockerfile.in $(DOCKER_COMPOS
 web-wasm: web-wasm/Dockerfile
 	mkdir -p $@/imagefiles && cp -r imagefiles $@/
 	cp -r test web-wasm/
-	$(DOCKER) $(BUILD_CMD) -t $(ORG)/web-wasm:$(TAG) \
-		-t $(ORG)/web-wasm:latest \
+	$(BUILD_DOCKER) $(BUILD_CMD) $(TAG_FLAG) $(ORG)/web-wasm:$(TAG) \
+		$(TAG_FLAG) $(ORG)/web-wasm:latest \
 		--build-arg IMAGE=$(ORG)/web-wasm \
 		--build-arg VERSION=$(TAG) \
 		--build-arg VCS_REF=`git rev-parse --short HEAD` \
@@ -138,7 +150,7 @@ web-wasm: web-wasm/Dockerfile
 
 web-wasm.test: web-wasm
 	cp -r test web-wasm/
-	$(DOCKER) run $(RM) $(ORG)/web-wasm:latest > $(BIN)/dockcross-web-wasm && chmod +x $(BIN)/dockcross-web-wasm
+	$(TEST_DOCKER) run $(RM) $(ORG)/web-wasm:latest > $(BIN)/dockcross-web-wasm && chmod +x $(BIN)/dockcross-web-wasm
 	$(BIN)/dockcross-web-wasm -i $(ORG)/web-wasm:latest python test/run.py --exe-suffix ".js"
 	rm -rf web-wasm/test
 
@@ -148,7 +160,7 @@ web-wasm.test: web-wasm
 web-wasi-threads: web-wasi web-wasi-threads/Dockerfile
 	mkdir -p $@/imagefiles && cp -r imagefiles $@/
 	cp -r test web-wasi-threads/
-	$(DOCKER) $(BUILD_CMD) -t $(ORG)/web-wasi-threads:$(TAG) \
+	$(BUILD_DOCKER) $(BUILD_CMD) $(TAG_FLAG) $(ORG)/web-wasi-threads:$(TAG) \
 		-t $(ORG)/web-wasi-threads:latest \
 		--build-arg IMAGE=$(ORG)/web-wasi-threads \
 		--build-arg VERSION=$(TAG) \
@@ -158,7 +170,7 @@ web-wasi-threads: web-wasi web-wasi-threads/Dockerfile
 		web-wasi-threads
 
 web-wasi-threads.test: web-wasi-threads
-	$(DOCKER) run $(RM) $(ORG)/web-wasi-threads:latest > $(BIN)/dockcross-web-wasi-threads \
+	$(TEST_DOCKER) run $(RM) $(ORG)/web-wasi-threads:latest > $(BIN)/dockcross-web-wasi-threads \
 		&& chmod +x $(BIN)/dockcross-web-wasi-threads
 	$(BIN)/dockcross-web-wasi-threads -i $(ORG)/web-wasi-threads:latest python3 test/run.py
 	rm -rf web-wasi-threads/test
@@ -171,8 +183,8 @@ manylinux2014-aarch64: manylinux2014-aarch64/Dockerfile manylinux2014-x64
 	@# Get libstdc++ from quay.io/pypa/manylinux2014_aarch64 container
 	docker run -v `pwd`:/host --rm -e LIB_PATH=/host/$@/xc_script/ quay.io/pypa/manylinux2014_aarch64 bash -c "PASS=1 /host/$@/xc_script/docker_setup_scrpits/copy_libstd.sh"
 	mkdir -p $@/imagefiles && cp -r imagefiles $@/
-	$(DOCKER) build -t $(ORG)/manylinux2014-aarch64:$(TAG) \
-		-t $(ORG)/manylinux2014-aarch64:latest \
+	$(BUILD_DOCKER) $(BUILD_CMD) $(TAG_FLAG) $(ORG)/manylinux2014-aarch64:$(TAG) \
+		$(TAG_FLAG) $(ORG)/manylinux2014-aarch64:latest \
 		--build-arg IMAGE=$(ORG)/manylinux2014-aarch64 \
 		--build-arg VERSION=$(TAG) \
 		--build-arg VCS_REF=`git rev-parse --short HEAD` \
@@ -184,7 +196,7 @@ manylinux2014-aarch64: manylinux2014-aarch64/Dockerfile manylinux2014-x64
 	docker run -v `pwd`:/host --rm quay.io/pypa/manylinux2014_aarch64 bash -c "rm -rf /host/$@/xc_script/usr"
 
 manylinux2014-aarch64.test: manylinux2014-aarch64
-	$(DOCKER) run $(RM) $(ORG)/manylinux2014-aarch64:latest > $(BIN)/dockcross-manylinux2014-aarch64 \
+	$(TEST_DOCKER) run $(RM) $(ORG)/manylinux2014-aarch64:latest > $(BIN)/dockcross-manylinux2014-aarch64 \
 		&& chmod +x $(BIN)/dockcross-manylinux2014-aarch64
 	$(BIN)/dockcross-manylinux2014-aarch64 -i $(ORG)/manylinux2014-aarch64:latest /opt/python/cp38-cp38/bin/python test/run.py
 
@@ -193,8 +205,8 @@ manylinux2014-aarch64.test: manylinux2014-aarch64
 #
 manylinux_2_28-x64: manylinux_2_28-x64/Dockerfile
 	mkdir -p $@/imagefiles && cp -r imagefiles $@/
-	$(DOCKER) build -t $(ORG)/manylinux_2_28-x64:$(TAG) \
-		-t $(ORG)/manylinux_2_28-x64:latest \
+	$(BUILD_DOCKER) $(BUILD_CMD) $(TAG_FLAG) $(ORG)/manylinux_2_28-x64:$(TAG) \
+		$(TAG_FLAG) $(ORG)/manylinux_2_28-x64:latest \
 		--build-arg IMAGE=$(ORG)/manylinux_2_28-x64 \
 		--build-arg VERSION=$(TAG) \
 		--build-arg VCS_REF=`git rev-parse --short HEAD` \
@@ -204,7 +216,7 @@ manylinux_2_28-x64: manylinux_2_28-x64/Dockerfile
 	rm -rf $@/imagefiles
 
 manylinux_2_28-x64.test: manylinux_2_28-x64
-	$(DOCKER) run $(RM) $(ORG)/manylinux_2_28-x64:latest > $(BIN)/dockcross-manylinux_2_28-x64 \
+	$(TEST_DOCKER) run $(RM) $(ORG)/manylinux_2_28-x64:latest > $(BIN)/dockcross-manylinux_2_28-x64 \
 		&& chmod +x $(BIN)/dockcross-manylinux_2_28-x64
 	$(BIN)/dockcross-manylinux_2_28-x64 -i $(ORG)/manylinux_2_28-x64:latest /opt/python/cp310-cp310/bin/python test/run.py
 
@@ -213,8 +225,8 @@ manylinux_2_28-x64.test: manylinux_2_28-x64
 #
 manylinux2014-x64: manylinux2014-x64/Dockerfile
 	mkdir -p $@/imagefiles && cp -r imagefiles $@/
-	$(DOCKER) build -t $(ORG)/manylinux2014-x64:$(TAG) \
-		-t $(ORG)/manylinux2014-x64:latest \
+	$(BUILD_DOCKER) $(BUILD_CMD) $(TAG_FLAG) $(ORG)/manylinux2014-x64:$(TAG) \
+		$(TAG_FLAG) $(ORG)/manylinux2014-x64:latest \
 		--build-arg IMAGE=$(ORG)/manylinux2014-x64 \
 		--build-arg VERSION=$(TAG) \
 		--build-arg VCS_REF=`git rev-parse --short HEAD` \
@@ -224,7 +236,7 @@ manylinux2014-x64: manylinux2014-x64/Dockerfile
 	rm -rf $@/imagefiles
 
 manylinux2014-x64.test: manylinux2014-x64
-	$(DOCKER) run $(RM) $(ORG)/manylinux2014-x64:latest > $(BIN)/dockcross-manylinux2014-x64 \
+	$(TEST_DOCKER) run $(RM) $(ORG)/manylinux2014-x64:latest > $(BIN)/dockcross-manylinux2014-x64 \
 		&& chmod +x $(BIN)/dockcross-manylinux2014-x64
 	$(BIN)/dockcross-manylinux2014-x64 -i $(ORG)/manylinux2014-x64:latest /opt/python/cp38-cp38/bin/python test/run.py
 
@@ -233,7 +245,7 @@ manylinux2014-x64.test: manylinux2014-x64
 #
 manylinux2014-x86: manylinux2014-x86/Dockerfile
 	mkdir -p $@/imagefiles && cp -r imagefiles $@/
-	$(DOCKER) build -t $(ORG)/manylinux2014-x86:$(TAG) \
+	$(BUILD_DOCKER) $(BUILD_CMD) $(TAG_FLAG) $(ORG)/manylinux2014-x86:$(TAG) \
 		-t $(ORG)/manylinux2014-x86:latest \
 		--build-arg IMAGE=$(ORG)/manylinux2014-x86 \
 		--build-arg VERSION=$(TAG) \
@@ -244,7 +256,7 @@ manylinux2014-x86: manylinux2014-x86/Dockerfile
 	rm -rf $@/imagefiles
 
 manylinux2014-x86.test: manylinux2014-x86
-	$(DOCKER) run $(RM) $(ORG)/manylinux2014-x86:latest > $(BIN)/dockcross-manylinux2014-x86 \
+	$(TEST_DOCKER) run $(RM) $(ORG)/manylinux2014-x86:latest > $(BIN)/dockcross-manylinux2014-x86 \
 		&& chmod +x $(BIN)/dockcross-manylinux2014-x86
 	$(BIN)/dockcross-manylinux2014-x86 -i $(ORG)/manylinux2014-x86:latest /opt/python/cp38-cp38/bin/python test/run.py
 
@@ -252,14 +264,14 @@ manylinux2014-x86.test: manylinux2014-x86
 # base
 #
 base: Dockerfile imagefiles/
-	$(DOCKER) $(BUILD_CMD) -t $(ORG)/base:latest \
-		-t $(ORG)/base:$(TAG) \
+	$(BUILD_DOCKER) $(BUILD_CMD) $(TAG_FLAG) $(ORG)/base:latest \
+		$(TAG_FLAG) $(ORG)/base:$(TAG) \
 		--build-arg IMAGE=$(ORG)/base \
 		--build-arg VCS_URL=`git config --get remote.origin.url` \
 		.
 
 base.test: base
-	$(DOCKER) run $(RM) $(ORG)/base:latest > $(BIN)/dockcross-base && chmod +x $(BIN)/dockcross-base
+	$(TEST_DOCKER) run $(RM) $(ORG)/base:latest > $(BIN)/dockcross-base && chmod +x $(BIN)/dockcross-base
 
 # display
 #
@@ -274,8 +286,8 @@ $(VERBOSE).SILENT: display_images
 
 $(STANDARD_IMAGES): %: %/Dockerfile base
 	mkdir -p $@/imagefiles && cp -r imagefiles $@/
-	$(DOCKER) $(BUILD_CMD) -t $(ORG)/$@:latest \
-		-t $(ORG)/$@:$(TAG) \
+	$(BUILD_DOCKER) $(BUILD_CMD) $(TAG_FLAG) $(ORG)/$@:latest \
+		$(TAG_FLAG) $(ORG)/$@:$(TAG) \
 		--build-arg ORG=$(ORG) \
 		--build-arg IMAGE=$(ORG)/$@ \
 		--build-arg VERSION=$(TAG) \
@@ -293,9 +305,9 @@ clean:
 
 purge: clean
 # Remove all untagged images
-	$(DOCKER) container ls -aq | xargs -r $(DOCKER) container rm -f
+	$(TEST_DOCKER) container ls -aq | xargs -r $(DOCKER) container rm -f
 # Remove all images with organization (ex dockcross/*)
-	$(DOCKER) images --filter=reference='$(ORG)/*' --format='{{.Repository}}:{{.Tag}}' | xargs -r $(DOCKER) rmi -f
+	$(BUILD_DOCKER) images --filter=reference='$(ORG)/*' --format='{{.Repository}}:{{.Tag}}' | xargs -r $(DOCKER) rmi -f
 
 # Check bash syntax
 bash-check:
@@ -307,7 +319,7 @@ bash-check:
 #
 .SECONDEXPANSION:
 $(addsuffix .test,$(STANDARD_IMAGES)): $$(basename $$@)
-	$(DOCKER) run $(RM) $(ORG)/$(basename $@):latest > $(BIN)/dockcross-$(basename $@) \
+	$(TEST_DOCKER) run $(RM) $(ORG)/$(basename $@):latest > $(BIN)/dockcross-$(basename $@) \
 		&& chmod +x $(BIN)/dockcross-$(basename $@)
 	$(BIN)/dockcross-$(basename $@) -i $(ORG)/$(basename $@):latest python3 test/run.py $($@_ARGS)
 
