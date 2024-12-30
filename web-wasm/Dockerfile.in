@@ -1,5 +1,6 @@
 ARG DOCKER_IMAGE_VERSION=3.1.74
-FROM emscripten/emsdk:$DOCKER_IMAGE_VERSION
+ARG HOST_ARCH_TAG
+FROM emscripten/emsdk:$DOCKER_IMAGE_VERSION$HOST_ARCH_TAG
 
 LABEL maintainer="Matt McCormick matt@mmmccormick.com"
 
@@ -57,15 +58,15 @@ RUN ln -s /usr/bin/python3 /usr/bin/python
 
 #include "common.webassembly"
 
-ENV EMSCRIPTEN_VERSION $DOCKER_IMAGE_VERSION
+ENV EMSCRIPTEN_VERSION=$DOCKER_IMAGE_VERSION
 
-ENV PATH /emsdk:/emsdk/upstream/bin/:/emsdk/upstream/emscripten:${PATH}
+ENV PATH=/emsdk:/emsdk/upstream/bin/:/emsdk/upstream/emscripten:${PATH}
 ENV CC=/emsdk/upstream/emscripten/emcc \
   CXX=/emsdk/upstream/emscripten/em++ \
   AR=/emsdk/upstream/emscripten/emar
 
 RUN chmod -R 777 /emsdk/upstream/emscripten/cache
 
-ENV CMAKE_TOOLCHAIN_FILE /emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake
+ENV CMAKE_TOOLCHAIN_FILE=/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake
 
 #include "common.label-and-env"
