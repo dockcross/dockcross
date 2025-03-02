@@ -4,13 +4,13 @@ FROM ${ORG}/base:latest
 LABEL maintainer="Matt McCormick matt@mmmccormick.com"
 
 # Crosstool-ng version 2024-08-04
-ENV CT_VERSION crosstool-ng-1.26.0
+ENV CT_VERSION=crosstool-ng-1.26.0
 
 ARG QEMU_VERSION=6.0.0
 
 #include "common.crosstool"
 
-ENV CROSS_TRIPLE powerpc64le-unknown-linux-gnu
+ENV CROSS_TRIPLE=powerpc64le-unknown-linux-gnu
 
 WORKDIR /usr/src
 
@@ -22,7 +22,7 @@ RUN apt-get install -y libglib2.0-dev zlib1g-dev libpixman-1-dev && \
   make install && \
   cd .. && rm -rf qemu-${QEMU_VERSION}
 
-ENV CROSS_ROOT ${XCC_PREFIX}/${CROSS_TRIPLE}
+ENV CROSS_ROOT=${XCC_PREFIX}/${CROSS_TRIPLE}
 ENV AS=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-as \
     AR=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-ar \
     CC=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-gcc \
@@ -31,19 +31,19 @@ ENV AS=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-as \
     LD=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-ld \
     FC=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-gfortran
 
-ENV QEMU_LD_PREFIX "${CROSS_ROOT}/${CROSS_TRIPLE}/sysroot"
-ENV QEMU_SET_ENV "LD_LIBRARY_PATH=${CROSS_ROOT}/lib:${QEMU_LD_PREFIX}"
+ENV QEMU_LD_PREFIX="${CROSS_ROOT}/${CROSS_TRIPLE}/sysroot"
+ENV QEMU_SET_ENV="LD_LIBRARY_PATH=${CROSS_ROOT}/lib:${QEMU_LD_PREFIX}"
 
 WORKDIR /work
 
 COPY Toolchain.cmake /usr/lib/${CROSS_TRIPLE}/
-ENV CMAKE_TOOLCHAIN_FILE /usr/lib/${CROSS_TRIPLE}/Toolchain.cmake
+ENV CMAKE_TOOLCHAIN_FILE=/usr/lib/${CROSS_TRIPLE}/Toolchain.cmake
 
-ENV PKG_CONFIG_PATH /usr/lib/powerpc64le-unknown-linux-gnu/pkgconfig
+ENV PKG_CONFIG_PATH=/usr/lib/powerpc64le-unknown-linux-gnu/pkgconfig
 
 # Linux kernel cross compilation variables
-ENV PATH ${PATH}:${CROSS_ROOT}/bin
-ENV CROSS_COMPILE ${CROSS_TRIPLE}-
-ENV ARCH powerpc
+ENV PATH=${PATH}:${CROSS_ROOT}/bin
+ENV CROSS_COMPILE=${CROSS_TRIPLE}-
+ENV ARCH=powerpc
 
 #include "common.label-and-env"

@@ -3,7 +3,7 @@ FROM ${ORG}/base:latest
 
 LABEL maintainer="Matt McCormick matt@mmmccormick.com"
 
-ENV WINEARCH win32
+ENV WINEARCH=win32
 ARG MXE_TARGET_ARCH=i686
 ARG MXE_TARGET_THREAD=
 ARG MXE_TARGET_LINK=shared

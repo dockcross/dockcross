@@ -1,9 +1,9 @@
 ARG ORG=dockcross
 FROM ${ORG}/base:latest
 
-ENV XCC_PREFIX /usr/xcc
-ENV CROSS_TRIPLE aarch64-linux-musl
-ENV CROSS_ROOT ${XCC_PREFIX}/${CROSS_TRIPLE}-cross
+ENV XCC_PREFIX=/usr/xcc
+ENV CROSS_TRIPLE=aarch64-linux-musl
+ENV CROSS_ROOT=${XCC_PREFIX}/${CROSS_TRIPLE}-cross
 
 RUN mkdir -p ${XCC_PREFIX}
 RUN curl --max-time 15 --retry 5 -LO http://musl.cc/${CROSS_TRIPLE}-cross.tgz
@@ -18,12 +18,12 @@ ENV AS=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-as \
     FC=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-gfortran
 
 COPY Toolchain.cmake ${CROSS_ROOT}/
-ENV CMAKE_TOOLCHAIN_FILE ${CROSS_ROOT}/Toolchain.cmake
+ENV CMAKE_TOOLCHAIN_FILE=${CROSS_ROOT}/Toolchain.cmake
 
 # Linux kernel cross compilation variables
-ENV PATH ${PATH}:${CROSS_ROOT}/bin
-ENV CROSS_COMPILE ${CROSS_TRIPLE}-
-ENV ARCH arm64
+ENV PATH=${PATH}:${CROSS_ROOT}/bin
+ENV CROSS_COMPILE=${CROSS_TRIPLE}-
+ENV ARCH=arm64
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
@@ -37,4 +37,4 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.vcs-ref=$VCS_REF \
       org.label-schema.vcs-url=$VCS_URL \
       org.label-schema.schema-version="1.0"
-ENV DEFAULT_DOCKCROSS_IMAGE ${IMAGE}:${VERSION}
+ENV DEFAULT_DOCKCROSS_IMAGE=${IMAGE}:${VERSION}

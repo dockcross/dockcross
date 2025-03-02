@@ -3,7 +3,7 @@ FROM quay.io/pypa/manylinux_2_28_x86_64:2024-07-20-e0def9a
 
 LABEL maintainer="Matt McCormick matt@mmmccormick.com"
 
-ENV DEFAULT_DOCKCROSS_IMAGE dockcross/manylinux_2_28-x64
+ENV DEFAULT_DOCKCROSS_IMAGE=dockcross/manylinux_2_28-x64
 
 #include "common.manylinux_2_28"
 
@@ -11,8 +11,8 @@ ENV DEFAULT_DOCKCROSS_IMAGE dockcross/manylinux_2_28-x64
 
 #include "common.docker"
 
-ENV CROSS_TRIPLE x86_64-linux-gnu
-ENV CROSS_ROOT /opt/rh/gcc-toolset-12/root/bin/
+ENV CROSS_TRIPLE=x86_64-linux-gnu
+ENV CROSS_ROOT=/opt/rh/gcc-toolset-12/root/bin/
 ENV AS=${CROSS_ROOT}/as \
     AR=${CROSS_ROOT}/ar \
     CC=${CROSS_ROOT}/gcc \
@@ -24,6 +24,6 @@ ENV AS=${CROSS_ROOT}/as \
 COPY linux-x64/${CROSS_TRIPLE}-noop.sh /usr/bin/${CROSS_TRIPLE}-noop
 
 COPY manylinux_2_28-x64/Toolchain.cmake ${CROSS_ROOT}/../lib/
-ENV CMAKE_TOOLCHAIN_FILE ${CROSS_ROOT}/../lib/Toolchain.cmake
+ENV CMAKE_TOOLCHAIN_FILE=${CROSS_ROOT}/../lib/Toolchain.cmake
 
 #include "common.label-and-env"

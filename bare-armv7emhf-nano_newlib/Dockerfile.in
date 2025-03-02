@@ -6,13 +6,13 @@ LABEL maintainer="Chen Tao t.clydechen@gmail.com"
 # This is for armv7e-m+fp bare metal
 
 # Crosstool-ng version 1.25.0
-ENV CT_VERSION 8fa98eeeff9bc53478d97ef722f366fea151ae64
+ENV CT_VERSION=8fa98eeeff9bc53478d97ef722f366fea151ae64
 
 #include "common.crosstool"
 
-ENV CROSS_TRIPLE arm-none-eabi
+ENV CROSS_TRIPLE=arm-none-eabi
 
-ENV CROSS_ROOT ${XCC_PREFIX}/${CROSS_TRIPLE}
+ENV CROSS_ROOT=${XCC_PREFIX}/${CROSS_TRIPLE}
 ENV AS=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-as \
     AR=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-ar \
     CC=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-gcc \
@@ -23,13 +23,13 @@ ENV AS=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-as \
     OBJCOPY=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-objcopy
 
 COPY Toolchain.cmake ${CROSS_ROOT}/
-ENV CMAKE_TOOLCHAIN_FILE ${CROSS_ROOT}/Toolchain.cmake
+ENV CMAKE_TOOLCHAIN_FILE=${CROSS_ROOT}/Toolchain.cmake
 
-ENV PKG_CONFIG_PATH /usr/lib/arm-none-eabi/pkgconfig
+ENV PKG_CONFIG_PATH=/usr/lib/arm-none-eabi/pkgconfig
 
 # Linux kernel cross compilation variables
-ENV PATH ${PATH}:${CROSS_ROOT}/bin
-ENV CROSS_COMPILE ${CROSS_TRIPLE}-
-ENV ARCH arm
+ENV PATH=${PATH}:${CROSS_ROOT}/bin
+ENV CROSS_COMPILE=${CROSS_TRIPLE}-
+ENV ARCH=arm
 
 #include "common.label-and-env"

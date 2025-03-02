@@ -8,7 +8,7 @@ LABEL maintainer="Matt McCormick matt@mmmccormick.com"
 # musleabi as default glibc
 
 # Crosstool-ng version 2022-05-19
-ENV CT_VERSION crosstool-ng-1.25.0
+ENV CT_VERSION=crosstool-ng-1.25.0
 
 #include "common.crosstool"
 
@@ -20,8 +20,8 @@ RUN apt-get update \
 && apt-get clean --yes
 
 # The CROSS_TRIPLE is a configured alias of the "armv5-unknown-linux-musleabi" target.
-ENV CROSS_TRIPLE armv5-unknown-linux-musleabi
-ENV CROSS_ROOT ${XCC_PREFIX}/${CROSS_TRIPLE}
+ENV CROSS_TRIPLE=armv5-unknown-linux-musleabi
+ENV CROSS_ROOT=${XCC_PREFIX}/${CROSS_TRIPLE}
 ENV AS=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-as \
     AR=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-ar \
     CC=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-gcc \
@@ -30,17 +30,17 @@ ENV AS=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-as \
     LD=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-ld \
     FC=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-gfortran
 
-ENV QEMU_LD_PREFIX "${CROSS_ROOT}/${CROSS_TRIPLE}/sysroot"
-ENV QEMU_SET_ENV "LD_LIBRARY_PATH=${CROSS_ROOT}/lib:${QEMU_LD_PREFIX}"
+ENV QEMU_LD_PREFIX="${CROSS_ROOT}/${CROSS_TRIPLE}/sysroot"
+ENV QEMU_SET_ENV="LD_LIBRARY_PATH=${CROSS_ROOT}/lib:${QEMU_LD_PREFIX}"
 
 COPY Toolchain.cmake ${CROSS_ROOT}/
-ENV CMAKE_TOOLCHAIN_FILE ${CROSS_ROOT}/Toolchain.cmake
+ENV CMAKE_TOOLCHAIN_FILE=${CROSS_ROOT}/Toolchain.cmake
 
-ENV PKG_CONFIG_PATH /usr/lib/arm-linux-musleabihf/
+ENV PKG_CONFIG_PATH=/usr/lib/arm-linux-musleabihf/
 
 # Linux kernel cross compilation variables
-ENV PATH ${PATH}:${CROSS_ROOT}/bin
-ENV CROSS_COMPILE ${CROSS_TRIPLE}-
-ENV ARCH arm
+ENV PATH=${PATH}:${CROSS_ROOT}/bin
+ENV CROSS_COMPILE=${CROSS_TRIPLE}-
+ENV ARCH=arm
 
 #include "common.label-and-env"

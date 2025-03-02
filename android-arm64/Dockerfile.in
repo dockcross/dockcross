@@ -21,8 +21,8 @@ ENV AS=${CROSS_ROOT}/bin/llvm-as \
     CXX=${CROSS_ROOT}/bin/clang++ \
     LD=${CROSS_ROOT}/bin/ld
 
-ENV ANDROID_NDK_REVISION 25b
-ENV ANDROID_API 23
+ENV ANDROID_NDK_REVISION=25b
+ENV ANDROID_API=23
 
 RUN mkdir -p /build && \
     cd /build && \
@@ -46,6 +46,6 @@ COPY config.toml /root/.cargo/
 
 # Prepare CMake
 COPY Toolchain.cmake ${CROSS_ROOT}/
-ENV CMAKE_TOOLCHAIN_FILE ${CROSS_ROOT}/Toolchain.cmake
+ENV CMAKE_TOOLCHAIN_FILE=${CROSS_ROOT}/Toolchain.cmake
 
 #include "common.label-and-env"

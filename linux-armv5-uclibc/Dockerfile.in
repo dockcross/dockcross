@@ -4,7 +4,7 @@ FROM ${ORG}/base:latest
 LABEL maintainer="Matt McCormick matt@mmmccormick.com"
 
 # Crosstool-ng version 2022-05-19
-ENV CT_VERSION crosstool-ng-1.25.0
+ENV CT_VERSION=crosstool-ng-1.25.0
 
 # This is for compiling binaries for arm routers with uclibc (e.g ddwrt, asuswrt)
 #include "common.crosstool"
@@ -16,8 +16,8 @@ RUN apt-get update \
   qemu-user-static \
 && apt-get clean --yes
 
-ENV CROSS_TRIPLE arm-unknown-linux-uclibcgnueabi
-ENV CROSS_ROOT ${XCC_PREFIX}/${CROSS_TRIPLE}
+ENV CROSS_TRIPLE=arm-unknown-linux-uclibcgnueabi
+ENV CROSS_ROOT=${XCC_PREFIX}/${CROSS_TRIPLE}
 ENV AS=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-as \
     AR=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-ar \
     CC=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-gcc \
@@ -26,17 +26,17 @@ ENV AS=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-as \
     LD=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-ld \
     FC=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-gfortran
 
-ENV QEMU_LD_PREFIX "${CROSS_ROOT}/${CROSS_TRIPLE}/sysroot"
-ENV QEMU_SET_ENV "LD_LIBRARY_PATH=${CROSS_ROOT}/lib:${QEMU_LD_PREFIX}"
+ENV QEMU_LD_PREFIX="${CROSS_ROOT}/${CROSS_TRIPLE}/sysroot"
+ENV QEMU_SET_ENV="LD_LIBRARY_PATH=${CROSS_ROOT}/lib:${QEMU_LD_PREFIX}"
 
 COPY Toolchain.cmake /usr/lib/${CROSS_ROOT}/
-ENV CMAKE_TOOLCHAIN_FILE /usr/lib/${CROSS_ROOT}/Toolchain.cmake
+ENV CMAKE_TOOLCHAIN_FILE=/usr/lib/${CROSS_ROOT}/Toolchain.cmake
 
-ENV PKG_CONFIG_PATH /usr/lib/{CROSS_ROOT}/pkgconfig/
+ENV PKG_CONFIG_PATH=/usr/lib/{CROSS_ROOT}/pkgconfig/
 
 # Linux kernel cross compilation variables
-ENV PATH ${PATH}:${CROSS_ROOT}/bin
-ENV CROSS_COMPILE ${CROSS_TRIPLE}-
-ENV ARCH arm
+ENV PATH=${PATH}:${CROSS_ROOT}/bin
+ENV CROSS_COMPILE=${CROSS_TRIPLE}-
+ENV ARCH=arm
 
 #include "common.label-and-env"

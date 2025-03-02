@@ -6,7 +6,7 @@ LABEL maintainer="Matt McCormick matt@mmmccormick.com"
 # This is for 32-bit ARMv7 Linux
 
 # Crosstool-ng version 2024-05-21
-ENV CT_VERSION crosstool-ng-1.26.0
+ENV CT_VERSION=crosstool-ng-1.26.0
 
 #include "common.crosstool"
 
@@ -19,9 +19,9 @@ RUN apt-get update \
 
 
 # The CROSS_TRIPLE is a configured alias of the "aarch64-unknown-linux-gnueabi" target.
-#ENV CROSS_TRIPLE armv7-unknown-linux-gnueabi
-ENV CROSS_TRIPLE arm-cortexa8_neon-linux-gnueabihf
-ENV CROSS_ROOT ${XCC_PREFIX}/${CROSS_TRIPLE}
+#ENV CROSS_TRIPLE=armv7-unknown-linux-gnueabi
+ENV CROSS_TRIPLE=arm-cortexa8_neon-linux-gnueabihf
+ENV CROSS_ROOT=${XCC_PREFIX}/${CROSS_TRIPLE}
 ENV AS=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-as \
     AR=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-ar \
     CC=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-gcc \
@@ -30,19 +30,19 @@ ENV AS=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-as \
     LD=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-ld \
     FC=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-gfortran
 
-ENV QEMU_LD_PREFIX "${CROSS_ROOT}/${CROSS_TRIPLE}/sysroot"
-ENV QEMU_SET_ENV "LD_LIBRARY_PATH=${CROSS_ROOT}/lib:${QEMU_LD_PREFIX}"
+ENV QEMU_LD_PREFIX="${CROSS_ROOT}/${CROSS_TRIPLE}/sysroot"
+ENV QEMU_SET_ENV="LD_LIBRARY_PATH=${CROSS_ROOT}/lib:${QEMU_LD_PREFIX}"
 
-ENV DEFAULT_DOCKCROSS_IMAGE dockcross/linux-armv7a
+ENV DEFAULT_DOCKCROSS_IMAGE=dockcross/linux-armv7a
 
 COPY Toolchain.cmake ${CROSS_ROOT}/
-ENV CMAKE_TOOLCHAIN_FILE ${CROSS_ROOT}/Toolchain.cmake
+ENV CMAKE_TOOLCHAIN_FILE=${CROSS_ROOT}/Toolchain.cmake
 
-ENV PKG_CONFIG_PATH /usr/lib/arm-linux-gnueabihf/
+ENV PKG_CONFIG_PATH=/usr/lib/arm-linux-gnueabihf/
 
 # Linux kernel cross compilation variables
-ENV PATH ${PATH}:${CROSS_ROOT}/bin
-ENV CROSS_COMPILE ${CROSS_TRIPLE}-
-ENV ARCH arm
+ENV PATH=${PATH}:${CROSS_ROOT}/bin
+ENV CROSS_COMPILE=${CROSS_TRIPLE}-
+ENV ARCH=arm
 
 #include "common.label-and-env"
