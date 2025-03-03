@@ -1483,14 +1483,14 @@ jobs:
         if: matrix.arch_name.multiarch == 'yes'
         run: |
           mkdir -p cache-${{ matrix.arch_name.image }}-${{ env.HOST_ARCH }}
-          docker export dockcross/${{ matrix.arch_name.image }}:latest-${{ env.HOST_ARCH }} | xz -e9 -T0 > ./cache/${{ matrix.arch_name.image }}-${{ env.HOST_ARCH }}.tar.xz
+          docker export dockcross/${{ matrix.arch_name.image }}:latest-${{ env.HOST_ARCH }} | xz -e9 -T0 > ./cache-${{ matrix.arch_name.image }}-${{ env.HOST_ARCH }}/${{ matrix.arch_name.image }}-${{ env.HOST_ARCH }}.tar.xz
 
       - name: save ${{ matrix.arch_name.image }}-${{ matrix.os }}
         uses: actions/upload-artifact@v4
         if: matrix.arch_name.multiarch == 'yes'
         with:
           name: cache-${{ matrix.arch_name.image }}-${{ env.HOST_ARCH }}
-          path: ./cache/${{ matrix.arch_name.image }}-${{ env.HOST_ARCH }}.tar.xz
+          path: ./cache/${{ matrix.arch_name.image }}-${{ env.HOST_ARCH }}
           retention-days: 3
 
       - name: Login to Docker Hub
@@ -1524,18 +1524,18 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: cache-${{ matrix.image_name }}-amd64
-          path: ./cache/${{ matrix.image_name }}-amd64.tar.xz
+          path: ./cache-${{ matrix.image_name }}-amd64
 
       - name: download ${{ matrix.image_name }}-arm64
         uses: actions/download-artifact@v4
         with:
           name: cache-${{ matrix.image_name }}-arm64
-          path: ./cache/${{ matrix.image_name }}-arm64.tar.xz
+          path: ./cache-${{ matrix.image_name }}-arm64
 
       - name: load images
         run: |
-          xz -d -k < ./cache/${{ matrix.image_name }}-amd64.tar.xz | docker import - dockcross/${{ matrix.image_name }}-amd64
-          xz -d -k < ./cache/${{ matrix.image_name }}-arm64.tar.xz | docker import - dockcross/${{ matrix.image_name }}-arm64
+          xz -d -k < ./cache-${{ matrix.image_name }}-amd64/${{ matrix.image_name }}-amd64.tar.xz | docker import - dockcross/${{ matrix.image_name }}-amd64
+          xz -d -k < ./cache-${{ matrix.image_name }}-arm64/${{ matrix.image_name }}-arm64.tar.xz | docker import - dockcross/${{ matrix.image_name }}-arm64
 
       - name: Login to Docker Hub
         if: github.ref == 'refs/heads/master'
