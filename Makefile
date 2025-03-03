@@ -49,7 +49,7 @@ STANDARD_IMAGES := android-arm android-arm64 android-x86 android-x86_64 \
 # Generated Dockerfiles.
 GEN_IMAGES := android-arm android-arm64 \
 	linux-i686 linux-x86 linux-x64 linux-x64-clang linux-arm64 linux-arm64-musl linux-arm64-full \
-	manylinux_2_28-x64 \
+	manylinux_2_28-x64 manylinux_2_34-x64 \
 	manylinux2014-x64 manylinux2014-x86 \
 	manylinux2014-aarch64 linux-arm64-lts \
 	web-wasm web-wasi web-wasi-emulated-threads web-wasi-threads linux-mips linux-mips-uclibc linux-mips-lts windows-arm64 windows-armv7 \
@@ -68,11 +68,11 @@ MULTIARCH_IMAGES :=  linux-arm64 \
 GEN_IMAGE_DOCKERFILES = $(addsuffix /Dockerfile,$(GEN_IMAGES))
 
 # These images are expected to have explicit rules for *both* build and testing
-NON_STANDARD_IMAGES := manylinux_2_28-x64 manylinux2014-x64 manylinux2014-x86 \
+NON_STANDARD_IMAGES := manylinux_2_28-x64 manylinux_2_34-x64 manylinux2014-x64 manylinux2014-x86 \
 		      manylinux2014-aarch64 web-wasm web-wasi-emulated-threads web-wasi-threads
 
 # Docker composite files
-DOCKER_COMPOSITE_SOURCES = common.docker common.debian common.manylinux2014 common.manylinux_2_28 common.buildroot \
+DOCKER_COMPOSITE_SOURCES = common.docker common.debian common.manylinux2014 common.manylinux_2_28 common.manylinux_2_34 common.buildroot \
 	common.crosstool common.webassembly common.windows common-manylinux.crosstool common.dockcross \
 	common.label-and-env
 DOCKER_COMPOSITE_FOLDER_PATH = common/
@@ -128,6 +128,7 @@ $(GEN_IMAGE_DOCKERFILES) Dockerfile: %Dockerfile: %Dockerfile.in $(DOCKER_COMPOS
 		-e '/common.docker/ r $(DOCKER_COMPOSITE_FOLDER_PATH)common.docker' \
 		-e '/common.debian/ r $(DOCKER_COMPOSITE_FOLDER_PATH)common.debian' \
 		-e '/common.manylinux_2_28/ r $(DOCKER_COMPOSITE_FOLDER_PATH)common.manylinux_2_28' \
+		-e '/common.manylinux_2_34/ r $(DOCKER_COMPOSITE_FOLDER_PATH)common.manylinux_2_34' \
 		-e '/common.manylinux2014/ r $(DOCKER_COMPOSITE_FOLDER_PATH)common.manylinux2014' \
 		-e '/common.crosstool/ r $(DOCKER_COMPOSITE_FOLDER_PATH)common.crosstool' \
 		-e '/common.buildroot/ r $(DOCKER_COMPOSITE_FOLDER_PATH)common.buildroot' \
@@ -229,6 +230,26 @@ manylinux_2_28-x64.test: manylinux_2_28-x64
 	$(TEST_DOCKER) run $(RM) $(ORG)/manylinux_2_28-x64:latest > $(BIN)/dockcross-manylinux_2_28-x64 \
 		&& chmod +x $(BIN)/dockcross-manylinux_2_28-x64
 	$(BIN)/dockcross-manylinux_2_28-x64 -i $(ORG)/manylinux_2_28-x64:latest /opt/python/cp310-cp310/bin/python test/run.py
+
+#
+# manylinux_2_34-x64
+#
+manylinux_2_34-x64: manylinux_2_34-x64/Dockerfile
+	mkdir -p $@/imagefiles && cp -r imagefiles $@/
+	$(DOCKER) build -t $(ORG)/manylinux_2_34-x64:$(TAG) \
+		-t $(ORG)/manylinux_2_34-x64:latest \
+		--build-arg IMAGE=$(ORG)/manylinux_2_34-x64 \
+		--build-arg VERSION=$(TAG) \
+		--build-arg VCS_REF=`git rev-parse --short HEAD` \
+		--build-arg VCS_URL=`git config --get remote.origin.url` \
+		--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
+		-f manylinux_2_34-x64/Dockerfile .
+	rm -rf $@/imagefiles
+
+manylinux_2_34-x64.test: manylinux_2_34-x64
+	$(DOCKER) run $(RM) $(ORG)/manylinux_2_34-x64:latest > $(BIN)/dockcross-manylinux_2_34-x64 \
+		&& chmod +x $(BIN)/dockcross-manylinux_2_34-x64
+	$(BIN)/dockcross-manylinux_2_34-x64 -i $(ORG)/manylinux_2_34-x64:latest /opt/python/cp310-cp310/bin/python test/run.py
 
 #
 # manylinux2014-x64

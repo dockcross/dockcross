@@ -116,6 +116,7 @@ The dockcross script will execute the given command-line inside the container, a
 | dockcross/linux-m68k-uclibc | m68k | GCC + uclibc | Linux |
 | dockcross/linux-xtensa-uclibc | xtensa | GCC + uclibc | Linux |
 | dockcross/manylinux_2_28-x64 | x86_64 | GCC | Linux |
+| dockcross/manylinux_2_34-x64 | x86_64 | GCC | Linux |
 | dockcross/manylinux2014-x86 | x86 | GCC | Linux |
 | dockcross/manylinux2014-x64 | x86_64 | GCC | Linux |
 | dockcross/linux-i686 | x86 | GCC | Linux |
@@ -384,6 +385,12 @@ Standalone Linux i686 cross compiler.
 
 Docker [manylinux_2_28](https://github.com/pypa/manylinux) image for building Linux x86_64 / amd64 [Python wheel packages](http://pythonwheels.com/). It includes Python 3.6, 3.7, 3.8, 3.9, 3.10 and 3.11. Also has support for the dockcross script, and it has installations of CMake, Ninja, and [scikit-build](http://scikit-build.org). For CMake, it sets **MANYLINUX_2_28** to \"TRUE\" in the toolchain.
 
+### dockcross/manylinux_2_34-x64
+
+![Docker Image Size (tag)](https://img.shields.io/docker/image-size/dockcross/manylinux_2_34-x64/latest) ![Docker Pulls](https://img.shields.io/docker/pulls/dockcross/manylinux_2_34-x64)
+
+Docker [manylinux_2_34](https://github.com/pypa/manylinux) image for building Linux x86_64 / amd64 [Python wheel packages](http://pythonwheels.com/). It includes Python 3.8.10+, 3.9.5+, 3.10.0+. Also has support for the dockcross script, and it has installations of CMake, Ninja, and [scikit-build](http://scikit-build.org). For CMake, it sets **MANYLINUX_2_34** to \"TRUE\" in the toolchain.
+
 ### dockcross/manylinux2014-x64
 
 ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/dockcross/manylinux2014-x64/latest) ![Docker Pulls](https://img.shields.io/docker/pulls/dockcross/manylinux2014-x64)
@@ -569,7 +576,7 @@ An example Dockerfile would be:
 ```
 FROM dockcross/linux-armv7
 
-ENV DEFAULT_DOCKCROSS_IMAGE my_cool_image
+ENV DEFAULT_DOCKCROSS_IMAGE=my_cool_image
 RUN apt-get install -y nano
 ```
 

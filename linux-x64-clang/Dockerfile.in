@@ -27,8 +27,8 @@ RUN echo "deb http://apt.llvm.org/bookworm/ llvm-toolchain-bookworm main" >> /et
     && c++ --version \
     && cpp --version
 
-ENV CROSS_TRIPLE x86_64-linux-gnu
-ENV CROSS_ROOT /usr/bin
+ENV CROSS_TRIPLE=x86_64-linux-gnu
+ENV CROSS_ROOT=/usr/bin
 ENV CC=/usr/bin/clang-${CLANG_VERSION}  \
     CPP=/usr/bin/clang-cpp-${CLANG_VERSION} \
     CXX=/usr/bin/clang++-${CLANG_VERSION} \
@@ -40,6 +40,6 @@ ENV CC=/usr/bin/clang-${CLANG_VERSION}  \
 COPY ${CROSS_TRIPLE}-noop.sh /usr/bin/${CROSS_TRIPLE}-noop
 
 COPY Toolchain.cmake /usr/lib/${CROSS_TRIPLE}/
-ENV CMAKE_TOOLCHAIN_FILE /usr/lib/${CROSS_TRIPLE}/Toolchain.cmake
+ENV CMAKE_TOOLCHAIN_FILE=/usr/lib/${CROSS_TRIPLE}/Toolchain.cmake
 
 #include "common.label-and-env"

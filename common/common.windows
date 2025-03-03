@@ -9,7 +9,7 @@
 #
 # For example:
 #
-#  ENV WINEARCH win64
+#  ENV WINEARCH=win64
 #  ARG MXE_TARGET_ARCH=x86_64
 #  ARG MXE_TARGET_THREAD=
 #  ARG MXE_TARGET_LINK=shared
@@ -18,7 +18,7 @@
 # mxe master 2024-07-27
 ARG MXE_GIT_TAG=9f349e0de62a4a68bfc0f13d835a6c685dae9daa
 
-ENV CMAKE_TOOLCHAIN_FILE /usr/src/mxe/usr/${MXE_TARGET_ARCH}-w64-mingw32.${MXE_TARGET_LINK}${MXE_TARGET_THREAD}/share/cmake/mxe-conf.cmake
+ENV CMAKE_TOOLCHAIN_FILE=/usr/src/mxe/usr/${MXE_TARGET_ARCH}-w64-mingw32.${MXE_TARGET_LINK}${MXE_TARGET_THREAD}/share/cmake/mxe-conf.cmake
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -125,8 +125,8 @@ RUN \
   #
   rm -rf /tmp/wine-*
 
-ENV PATH ${PATH}:/usr/src/mxe/usr/bin
-ENV CROSS_TRIPLE ${MXE_TARGET_ARCH}-w64-mingw32.${MXE_TARGET_LINK}${MXE_TARGET_THREAD}
+ENV PATH=${PATH}:/usr/src/mxe/usr/bin
+ENV CROSS_TRIPLE=${MXE_TARGET_ARCH}-w64-mingw32.${MXE_TARGET_LINK}${MXE_TARGET_THREAD}
 ENV AS=/usr/src/mxe/usr/bin/${CROSS_TRIPLE}-as \
     AR=/usr/src/mxe/usr/bin/${CROSS_TRIPLE}-ar \
     CC=/usr/src/mxe/usr/bin/${CROSS_TRIPLE}-gcc \

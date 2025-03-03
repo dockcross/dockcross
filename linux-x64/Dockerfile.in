@@ -10,8 +10,8 @@ RUN apt-get update && \
     libtbb-dev \
     && apt-get clean --yes
 
-ENV CROSS_TRIPLE x86_64-linux-gnu
-ENV CROSS_ROOT /usr/bin
+ENV CROSS_TRIPLE=x86_64-linux-gnu
+ENV CROSS_ROOT=/usr/bin
 ENV AS=/usr/bin/${CROSS_TRIPLE}-as \
     AR=/usr/bin/${CROSS_TRIPLE}-ar \
     CC=/usr/bin/${CROSS_TRIPLE}-gcc \
@@ -23,6 +23,6 @@ ENV AS=/usr/bin/${CROSS_TRIPLE}-as \
 COPY ${CROSS_TRIPLE}-noop.sh /usr/bin/${CROSS_TRIPLE}-noop
 
 COPY Toolchain.cmake /usr/lib/${CROSS_TRIPLE}/
-ENV CMAKE_TOOLCHAIN_FILE /usr/lib/${CROSS_TRIPLE}/Toolchain.cmake
+ENV CMAKE_TOOLCHAIN_FILE=/usr/lib/${CROSS_TRIPLE}/Toolchain.cmake
 
 #include "common.label-and-env"

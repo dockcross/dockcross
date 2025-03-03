@@ -1,0 +1,30 @@
+RUN \
+  set -x && \
+  yum upgrade -y almalinux-release && \
+  yum -y install \
+    gpg \
+    python3-devel \
+    zlib-devel \
+    gettext \
+    openssh-clients \
+    wget \
+    nasm \
+    zip \
+  && \
+  yum clean all
+
+# Image build scripts
+COPY \
+  manylinux-common/install-python-packages.sh \
+  /buildscripts/
+
+RUN \
+  set -x && \
+  # Remove sudo provided by devtoolset since it doesn't work with
+  # our sudo wrapper calling gosu.
+  rm -f /opt/rh/gcc-toolset-14/root/usr/bin/sudo && \
+  /buildscripts/install-python-packages.sh && \
+  rm -rf /buildscripts
+
+# Runtime scripts
+COPY manylinux-common/pre_exec.sh /dockcross/

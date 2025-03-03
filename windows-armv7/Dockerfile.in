@@ -3,9 +3,9 @@ FROM ${ORG}/base:latest
 
 LABEL maintainer="Matt McCormick matt@mmmccormick.com"
 
-ENV XCC_PREFIX /usr/xcc
-ENV CROSS_TRIPLE armv7-w64-mingw32
-ENV CROSS_ROOT ${XCC_PREFIX}/${CROSS_TRIPLE}-cross
+ENV XCC_PREFIX=/usr/xcc
+ENV CROSS_TRIPLE=armv7-w64-mingw32
+ENV CROSS_ROOT=${XCC_PREFIX}/${CROSS_TRIPLE}-cross
 
 ARG DOWNLOAD_URL=https://github.com/mstorsjo/llvm-mingw/releases/download/20220323/llvm-mingw-20220323-msvcrt-ubuntu-18.04-x86_64.tar.xz
 ENV DOWNLOAD_URL=${DOWNLOAD_URL}
@@ -20,11 +20,11 @@ ENV AS=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-as \
     FC=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-gfortran
 
 COPY Toolchain.cmake ${CROSS_ROOT}/
-ENV CMAKE_TOOLCHAIN_FILE ${CROSS_ROOT}/Toolchain.cmake
+ENV CMAKE_TOOLCHAIN_FILE=${CROSS_ROOT}/Toolchain.cmake
 
 # Linux kernel cross compilation variables
-ENV PATH ${PATH}:${CROSS_ROOT}/bin
-ENV CROSS_COMPILE ${CROSS_TRIPLE}-
-ENV ARCH arm
+ENV PATH=${PATH}:${CROSS_ROOT}/bin
+ENV CROSS_COMPILE=${CROSS_TRIPLE}-
+ENV ARCH=arm
 
 #include "common.label-and-env"

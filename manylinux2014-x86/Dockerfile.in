@@ -3,7 +3,7 @@ FROM quay.io/pypa/manylinux2014_i686:2024-07-20-e0def9a
 
 LABEL maintainer="Matt McCormick matt@mmmccormick.com"
 
-ENV DEFAULT_DOCKCROSS_IMAGE dockcross/manylinux2014-x86
+ENV DEFAULT_DOCKCROSS_IMAGE=dockcross/manylinux2014-x86
 
 #include "common.manylinux2014"
 
@@ -16,8 +16,8 @@ ENV DEFAULT_DOCKCROSS_IMAGE dockcross/manylinux2014-x86
 RUN echo $'#!/bin/bash\n\
 LD_PRELOAD=/usr/lib/libcurl.so.4 /usr/bin/yum "$@"' > /usr/local/bin/yum && chmod a+x /usr/local/bin/yum
 
-ENV CROSS_TRIPLE i686-linux-gnu
-ENV CROSS_ROOT /opt/rh/devtoolset-10/root/usr/bin
+ENV CROSS_TRIPLE=i686-linux-gnu
+ENV CROSS_ROOT=/opt/rh/devtoolset-10/root/usr/bin
 ENV AS=${CROSS_ROOT}/as \
     AR=${CROSS_ROOT}/ar \
     CC=${CROSS_ROOT}/gcc \
@@ -29,7 +29,7 @@ ENV AS=${CROSS_ROOT}/as \
 COPY linux-x86/${CROSS_TRIPLE}-noop.sh /usr/bin/${CROSS_TRIPLE}-noop
 
 COPY manylinux2014-x86/Toolchain.cmake ${CROSS_ROOT}/../lib/
-ENV CMAKE_TOOLCHAIN_FILE ${CROSS_ROOT}/../lib/Toolchain.cmake
+ENV CMAKE_TOOLCHAIN_FILE=${CROSS_ROOT}/../lib/Toolchain.cmake
 
 COPY linux-x86/linux32-entrypoint.sh /dockcross/
 ENTRYPOINT ["/dockcross/linux32-entrypoint.sh"]
@@ -46,4 +46,4 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.vcs-ref=$VCS_REF \
       org.label-schema.vcs-url=$VCS_URL \
       org.label-schema.schema-version="1.0"
-ENV DEFAULT_DOCKCROSS_IMAGE ${IMAGE}:${VERSION}
+ENV DEFAULT_DOCKCROSS_IMAGE=${IMAGE}:${VERSION}

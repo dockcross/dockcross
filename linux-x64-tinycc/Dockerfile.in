@@ -26,8 +26,8 @@ ENV PATH="/usr/local/bin:${PATH}"
 # Test if compiler work
 RUN tcc -v
 
-ENV CROSS_TRIPLE x86_64-linux-gnu
-ENV CROSS_ROOT /usr/bin
+ENV CROSS_TRIPLE=x86_64-linux-gnu
+ENV CROSS_ROOT=/usr/bin
 ENV AS=/usr/bin/${CROSS_TRIPLE}-as \
     AR=/usr/bin/${CROSS_TRIPLE}-ar \
     CC=/usr/local/bin/tcc \
@@ -39,6 +39,6 @@ ENV AS=/usr/bin/${CROSS_TRIPLE}-as \
 COPY ${CROSS_TRIPLE}-noop.sh /usr/bin/${CROSS_TRIPLE}-noop
 
 COPY Toolchain.cmake /usr/lib/${CROSS_TRIPLE}/
-ENV CMAKE_TOOLCHAIN_FILE /usr/lib/${CROSS_TRIPLE}/Toolchain.cmake
+ENV CMAKE_TOOLCHAIN_FILE=/usr/lib/${CROSS_TRIPLE}/Toolchain.cmake
 
 #include "common.label-and-env"
