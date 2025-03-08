@@ -92,7 +92,7 @@ function build_perl {
         -fsSLO ${PERL_DOWNLOAD_URL}/${perl_fname}.tar.gz
 
     check_sha256sum ${perl_fname}.tar.gz ${perl_sha256}
-    tar -xzf ${perl_fname}.tar.gz
+    tar -xzf ${perl_fname}.tar.gz --no-same-owner
     (cd ${perl_fname} && do_perl_build)
     rm -rf ${perl_fname} ${perl_fname}.tar.gz
 }
