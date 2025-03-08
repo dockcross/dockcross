@@ -15,6 +15,7 @@ set(CMAKE_FIND_ROOT_PATH ${cross_root} ${cross_root}/${cross_triple})
 set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
 set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+list(APPEND CMAKE_FIND_ROOT_PATH ${CMAKE_PREFIX_PATH})
 set(CMAKE_SYSROOT ${cross_root}/${cross_triple}/sysroot)
 
 set(CMAKE_CROSSCOMPILING_EMULATOR /usr/bin/qemu-mips)
