@@ -10,8 +10,7 @@ RUN apt-get update --yes && apt-get install --no-install-recommends --yes \
     libtool \
     libtool-bin \
     && apt-get clean autoclean --yes \
-    && apt-get autoremove --yes \
-    && rm -rf /var/lib/{apt,dpkg,cache,log}/
+    && apt-get autoremove --yes
 
 COPY \
   imagefiles/install-buildroot-toolchain.sh \

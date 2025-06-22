@@ -42,8 +42,4 @@ RUN \
     python-is-python3 \
     && apt-get clean autoclean --yes \
     && apt-get autoremove --yes \
-    && rm -rf /var/lib/apt/ \
-    && rm -rf /var/lib/dpkg/ \
-    && rm -rf /var/cache/ \
-    && rm -rf /var/log/ \
     && rm /etc/ssh/*key*
