@@ -22,7 +22,9 @@ autoreconf
 
 ./configure --with-ssl-dir=/usr/local/ssl --prefix=/usr/local --with-libs=-lpthread
 
-make -j1 install
+
+make -j"$(nproc)"
+make install
 
 cd /usr/src
 rm -rf ${OPENSSH_SRC_DIR}

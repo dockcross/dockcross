@@ -1397,13 +1397,13 @@ jobs:
           cd ..
           rm -rf C
 
-      # Updated on 12/09/2022 No longer maintained
+      # Updated on 22/06/2025
       - name: C-Plus-Plus build test
         if: ${{ matrix.arch_name.C-Plus-Plus == 'yes' && (matrix.arch_name.multiarch == 'yes' || env.HOST_ARCH == 'amd64') }}
         run: |
           git clone https://github.com/TheAlgorithms/C-Plus-Plus.git
           cd C-Plus-Plus
-          git checkout 0594923efa8e6b006a5d754c5e7976850290577c
+          git checkout 93a700c7e947c8704df387564ea4780e6c031967
           ./../tools/dockcross-cmake-builder.sh ${{ matrix.arch_name.image }} ${{ matrix.arch_name.C-Plus-Plus_arg }}
           cd ..
           rm -rf C-Plus-Plus

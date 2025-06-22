@@ -19,12 +19,8 @@ COPY \
   /dockcross/
 
 # Build and install the toolchain, cleaning up artifacts afterwards.
-RUN mkdir /dockcross/buildroot \
-    && cd /dockcross/buildroot \
-    && /dockcross/install-buildroot-toolchain.sh \
-    -c "/dockcross/buildroot.config" \
-    -v "${BR_VERSION}" \
-    && rm -rf /dockcross/buildroot /dockcross/install-buildroot-toolchain.sh
+RUN mkdir /dockcross/buildroot && cd /dockcross/buildroot && \
+    /dockcross/install-buildroot-toolchain.sh -c "/dockcross/buildroot.config" -v "${BR_VERSION}"
 
 # Restore our default workdir (from "dockcross/base").
 WORKDIR /work
