@@ -1,7 +1,7 @@
 name: 'Close stale issues and PRs'
 on:
   schedule:
-    - cron: '0 */8 * * *'
+    - cron: '0 0 */2 * *'
 jobs:
   stale:
     runs-on: ubuntu-latest
@@ -12,11 +12,11 @@ jobs:
           exempt-issue-milestones: 'future,alpha,beta,release,bugfix,improvement,enhancement,help wanted'
           exempt-pr-milestones: 'bugfix,improvement,enhancement,help wanted'
           exempt-all-pr-assignees: true
-          stale-issue-message: 'This issue is stale because it has been open 120 days with no activity. Remove stale label or comment or this will be closed in 30 days.'
-          stale-pr-message: 'This PR is stale because it has been open 120 days with no activity. Remove stale label or comment or this will be closed in 30 days.'
+          stale-issue-message: 'This issue is stale because it has been open 240 days with no activity. Remove stale label or comment or this will be closed in 30 days.'
+          stale-pr-message: 'This PR is stale because it has been open 240 days with no activity. Remove stale label or comment or this will be closed in 30 days.'
           close-issue-message: 'This issue was closed because it has been stalled for 30 days with no activity.'
           close-pr-message: 'This PR was closed because it has been stalled for 30 days with no activity.'
-          days-before-issue-stale: 120
-          days-before-pr-stale: 120
-          days-before-issue-close: 30
-          days-before-pr-close: 30
+          days-before-issue-stale: 240
+          days-before-pr-stale: 240
+          days-before-issue-close: 60
+          days-before-pr-close: 60
