@@ -33,7 +33,12 @@ if [[ -n $BUILDER_UID ]] && [[ -n $BUILDER_GID ]]; then
     export HOME=/home/${BUILDER_USER}
     shopt -s dotglob
     # Move rustup/cargo directories as they are large, and not needed as root
-    mv -t $HOME/ /root/.rustup /root/.cargo
+    if [[ -d /root/.rustup ]]; then
+        mv -t $HOME/ /root/.rustup
+    fi
+    if [[ -d /root/.cargo ]]; then
+        mv -t $HOME/ /root/.cargo
+    fi
     # Copy the rest
     cp -r /root/* $HOME/
     chown -R $BUILDER_UID:$BUILDER_GID $HOME
