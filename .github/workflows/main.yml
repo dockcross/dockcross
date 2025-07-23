@@ -1354,15 +1354,15 @@ jobs:
             make ${{ matrix.arch_name.image }}.test
           fi
 
-      # Updated on 19/05/2022
+      # Updated on 15/07/2025
       - name: stockfish build test
         if: ${{ matrix.arch_name.stockfish == 'yes' && (matrix.arch_name.multiarch == 'yes' || env.HOST_ARCH == 'amd64') }}
         run: |
-          git clone --depth 1 --branch sf_15 https://github.com/official-stockfish/Stockfish.git
-          cd Stockfish/src
-          ./../../tools/dockcross-make-builder.sh ${{ matrix.arch_name.image }} net
-          ./../../tools/dockcross-make-builder.sh ${{ matrix.arch_name.image }} build ${{ matrix.arch_name.stockfish_arg }} -j${nproc}
-          cd ../..
+          git clone --depth 1 --branch sf_17.1 https://github.com/official-stockfish/Stockfish.git
+          cd Stockfish
+          ./../tools/dockcross-make-builder.sh ${{ matrix.arch_name.image }} -C src net
+          ./../tools/dockcross-make-builder.sh ${{ matrix.arch_name.image }} -C src build ${{ matrix.arch_name.stockfish_arg }} -j${nproc}
+          cd ..
           rm -rf Stockfish
 
       # Updated on 12/09/2022
@@ -1397,13 +1397,13 @@ jobs:
           cd ..
           rm -rf C
 
-      # Updated on 12/09/2022 No longer maintained
+      # Updated on 15/07/2025
       - name: C-Plus-Plus build test
         if: ${{ matrix.arch_name.C-Plus-Plus == 'yes' && (matrix.arch_name.multiarch == 'yes' || env.HOST_ARCH == 'amd64') }}
         run: |
           git clone https://github.com/TheAlgorithms/C-Plus-Plus.git
           cd C-Plus-Plus
-          git checkout 0594923efa8e6b006a5d754c5e7976850290577c
+          git checkout f1eddf4d65efa0d6ebc9c93cc94223d24ef22c77
           ./../tools/dockcross-cmake-builder.sh ${{ matrix.arch_name.image }} ${{ matrix.arch_name.C-Plus-Plus_arg }}
           cd ..
           rm -rf C-Plus-Plus
