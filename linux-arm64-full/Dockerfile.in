@@ -6,8 +6,8 @@ LABEL maintainer="Matt McCormick matt@mmmccormick.com"
 # This is for 64-bit ARM Linux machine
 
 # Buildroot version
-# buildroot master 2021-09-20
-ENV BR_VERSION=d4877e6f88d5eea54dc74b855556ffc0dd3f399f
+# buildroot master 2025-06-22
+ENV BR_VERSION=2025.05
 
 #include "common.buildroot"
 
@@ -20,7 +20,7 @@ RUN apt-get update \
 
 # The CROSS_TRIPLE is a configured alias of the "aarch64-buildroot-linux-gnu" target.
 ENV CROSS_TRIPLE=aarch64-buildroot-linux-gnu
-ENV CROSS_ROOT=/buildroot
+ENV CROSS_ROOT=/aarch64_efi/host
 ENV AS=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-as \
     AR=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-ar \
     CC=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-gcc \
