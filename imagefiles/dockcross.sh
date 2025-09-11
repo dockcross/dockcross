@@ -24,9 +24,9 @@ has() {
 
 # If OCI_EXE is not already set, search for a container executor (OCI stands for "Open Container Initiative")
 if [ -z "$OCI_EXE" ]; then
-    if which podman >/dev/null 2>/dev/null; then
+    if type -p podman >/dev/null 2>/dev/null; then
         OCI_EXE=podman
-    elif which docker >/dev/null 2>/dev/null; then
+    elif type -p docker >/dev/null 2>/dev/null; then
         OCI_EXE=docker
     else
         die "Cannot find a container executor. Search for docker and podman."
