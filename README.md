@@ -620,6 +620,14 @@ Note that the architecture is now `aarch64` instead of `amd64`, so it runs nativ
 
 \-\--
 
+## Multi-architecture Image Creation
+
+For creating multi-architecture container images, this project uses [manifest-tool](https://github.com/estesp/manifest-tool) to create and manage manifest lists that combine platform-specific images into a single multi-platform reference. This allows container runtimes to automatically select the appropriate image based on the target architecture.
+
+The multi-architecture images are built on different architectures (amd64 and arm64) and then combined using manifest-tool's `push from-args` command, which creates manifest lists pointing to the individual platform-specific images.
+
+---
+
 Credits:
 
 - [sdt/docker-raspberry-pi-cross-compiler](https://github.com/sdt/docker-raspberry-pi-cross-compiler), who invented the base of the **dockcross** script.

@@ -1547,6 +1547,13 @@ jobs:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_PASS }}
 
+      - name: Install manifest-tool
+        if: github.ref == 'refs/heads/master'
+        run: |
+          wget https://github.com/estesp/manifest-tool/releases/latest/download/binaries-manifest-tool.tar.gz -O - | tar -xz
+          sudo cp manifest-tool-linux-amd64 /usr/local/bin/manifest-tool
+          sudo chmod +x /usr/local/bin/manifest-tool
+
       - name: deploy-multi-arch
         if: github.ref == 'refs/heads/master'
         run: |
