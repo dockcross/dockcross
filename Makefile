@@ -8,7 +8,7 @@
 # Common values: docker, podman, buildah
 DOCKER := $(or $(OCI_EXE), docker)
 BUILD_DOCKER := $(or $(BUILD_DOCKER), $(DOCKER))
-BUILDAH := $(or $(BUILDAH_EXE), buildah)
+MANIFEST_TOOL := $(or $(MANIFEST_TOOL_EXE), manifest-tool)
 RM = --rm
 
 # Name of the docker-equivalent executable for running test containers.
@@ -382,16 +382,17 @@ $(addsuffix .push,$(STANDARD_IMAGES) $(NON_STANDARD_IMAGES)): $$(basename $$@)
 
 .SECONDEXPANSION:
 $(addsuffix .manifest,$(MULTIARCH_IMAGES) web-wasi-threads web-wasm): $$(basename $$@)
-	if $(BUILDAH) manifest exists $(ORG)/$(basename $@); then \
-		$(BUILDAH) manifest rm $(ORG)/$(basename $@); fi
-	$(BUILDAH) manifest create $(ORG)/$(basename $@)
-	$(BUILDAH) manifest add $(ORG)/$(basename $@) docker://$(ORG)/$(basename $@):latest-amd64
-	$(BUILDAH) manifest add $(ORG)/$(basename $@) docker://$(ORG)/$(basename $@):latest-arm64
+	$(MANIFEST_TOOL) push from-args \
+		--platforms linux/amd64,linux/arm64 \
+		--template $(ORG)/$(basename $@):latest-ARCH \
+		--target $(ORG)/$(basename $@):latest
 
 .SECONDEXPANSION:
 $(addsuffix .push,$(MULTIARCH_IMAGES) web-wasi-threads web-wasm): $$(basename $$@).manifest
-	$(BUILDAH) manifest push --all --format v2s2 $(ORG)/$(basename $@) docker://$(ORG)/$(basename $@):latest
-	$(BUILDAH) manifest push --all --format v2s2 $(ORG)/$(basename $@) docker://$(ORG)/$(basename $@):$(TAG)
+	$(MANIFEST_TOOL) push from-args \
+		--platforms linux/amd64,linux/arm64 \
+		--template $(ORG)/$(basename $@):$(TAG)-ARCH \
+		--target $(ORG)/$(basename $@):$(TAG)
 
 #
 # testing prerequisites implicit rule
