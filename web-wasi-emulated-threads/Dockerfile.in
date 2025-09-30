@@ -4,8 +4,8 @@ FROM ${ORG}/base:latest-${HOST_ARCH}
 
 LABEL maintainer="Matt McCormick matt@mmmccormick.com"
 
-ENV LLVM_VERSION=19
-ENV WASI_VERSION=25
+ENV LLVM_VERSION=21
+ENV WASI_VERSION=27
 ENV WASI_VERSION_FULL=${WASI_VERSION}.0
 
 ENV WASMTIME_HOME=/wasi-runtimes/wasmtime
