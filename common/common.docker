@@ -18,6 +18,9 @@ ARG CURL_HASH=3b4378156ba09e224008e81dcce854b7ce4d182b1f9cfb97fe5ed9e9c18c6bd3
 ARG PERL_VERSION=perl-5.40.1
 ARG PERL_HASH=02f8c45bb379ed0c3de7514fad48c714fd46be8f0b536bfd5320050165a1ee26
 
+ENV RUSTUP_HOME=/opt/rustup
+ENV CARGO_HOME=/opt/rustup/cargo
+
 # Image build scripts
 COPY \
   imagefiles/build-and-install-cmake.sh \
@@ -48,6 +51,8 @@ RUN \
   /buildscripts/build-and-install-ninja.sh -python ${PYTHON} && \
   /buildscripts/build-and-install-flatcc.sh && \
   rm -rf /buildscripts
+
+ENV PATH=/opt/rustup/cargo/bin:$PATH
 
 RUN echo "root:root" | chpasswd
 WORKDIR /work
