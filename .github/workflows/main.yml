@@ -35,7 +35,7 @@ jobs:
           docker export dockcross/base:latest | xz -e9 -T0 > ./cache/base.tar.xz
 
       - name: save base
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: cache
           path: ./cache
@@ -86,7 +86,7 @@ jobs:
           docker export dockcross/base:latest-${{ env.HOST_ARCH }} | xz -e9 -T0 > ./cache/base-multiarch.tar.xz
 
       - name: save base
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: cache-${{ matrix.os }}
           path: ./cache
@@ -1489,7 +1489,7 @@ jobs:
           docker export dockcross/${{ matrix.arch_name.image }}:latest-${{ env.HOST_ARCH }} | xz -e9 -T0 > ./cache-${{ matrix.arch_name.image }}-${{ env.HOST_ARCH }}/${{ matrix.arch_name.image }}-${{ env.HOST_ARCH }}.tar.xz
 
       - name: save ${{ matrix.arch_name.image }}-${{ matrix.os }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         if: matrix.arch_name.multiarch == 'yes'
         with:
           name: cache-${{ matrix.arch_name.image }}-${{ env.HOST_ARCH }}
