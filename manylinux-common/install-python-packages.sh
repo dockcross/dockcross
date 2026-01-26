@@ -15,7 +15,7 @@ done
 # This GID isn't used in the manylinux image, but just to be safe, we'll verify
 # it's still not in use during the image build.
 BUILDER_GID=200
-if grep "^${BUILDER_GID}:" /etc/group; then
+if id -g "$BUILDER_GID" 2> /dev/null; then
   echo "Error: builder gid $BUILDER_GID already exists!  Aborting"
   exit 1
 fi
@@ -36,7 +36,7 @@ done
 for DIR in /opt/python/*; do
   mkdir $DIR/man
   chown -R :$BUILDER_GID $DIR/man
-  chmod g+w $DIR
+  chmod g+w $DIR/man
 done
 for DIR in /opt/python/*/share; do
   chown -R :$BUILDER_GID $DIR
