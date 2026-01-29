@@ -50,8 +50,10 @@ if [[ -n $BUILDER_UID ]] && [[ -n $BUILDER_GID ]]; then
        gosu $BUILDER_UID:$BUILDER_GID /work/.dockcross
     fi
 
-    # Run the command as the specified user/group.
-    exec gosu $BUILDER_UID:$BUILDER_GID "$@"
+    # Run the command as the specified user.  The group will be BUILDER_GID,
+    # as pulled from /etc/passwd, but will have additional groups from
+    # /etc/group.  This is necessary for manylinux to install python packages.
+    exec gosu $BUILDER_UID "$@"
 else
     # Just run the command as root.
     exec "$@"

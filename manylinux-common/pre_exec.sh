@@ -1,15 +1,5 @@
 #!/usr/bin/env bash
 
-for DIR in /opt/python/*/lib/python*/site-packages; do
-  chown -R $BUILDER_UID:$BUILDER_GID $DIR
-done
-for DIR in /opt/python/*/bin; do
-  chown -R $BUILDER_UID:$BUILDER_GID $DIR
-done
-for DIR in /opt/python/*; do
-  mkdir $DIR/man
-  chown -R $BUILDER_UID:$BUILDER_GID $DIR/man
-done
-for DIR in /opt/python/*/share; do
-  chown -R $BUILDER_UID:$BUILDER_GID $DIR
-done
+# Add the BUILDER_USER to the builder group so `pip install` doesn't get access
+# denied errors.
+usermod -a -G builder $BUILDER_USER
