@@ -1,0 +1,69 @@
+# crosstool.common-manylinux_2_34
+#
+# Common Docker instructions to install "crosstool-ng" and build a full
+# cross-compiler suite from a crosstool-ng configuration, CROSSTOOL_CONFIG.
+#
+# This import complements the "dockcross/base" image, adding:
+# - "ct-ng", a cross-compiler building utilty.
+# - A cross-compiler suite configured in "crosstool-ng.config".
+#
+# The generated cross-compiler will have a CROSS_ROOT of:
+#   ${XCC_PREFIX}/${CROSS_TRIPLE}
+#
+# A given platform will need to supply the appropriate "crosstool-ng.config" to
+# generate its cross-compiler. This can be built using "ct-ng menuconfig" to
+# generate a configuration.
+
+ENV MANYLINUX_DEPS="glibc-devel glibc-devel.i686 libstdc++-devel glib2-devel libX11-devel libXext-devel libXrender-devel mesa-libGL-devel libICE-devel libSM-devel"
+
+ENV PYTHON_COMPILE_DEPS="python-devel zlib-devel bzip2-devel expat-devel ncurses-devel readline-devel tk-devel gdbm-devel libdb-devel libpcap-devel xz-devel openssl-devel keyutils-libs-devel krb5-devel libcom_err-devel libidn-devel curl-devel perl-devel"
+
+ENV TOOLCHAIN_DEPS="gcc-toolset-14-binutils gcc-toolset-14-gcc gcc-toolset-14-gcc-c++ gcc-toolset-14-gcc-gfortran"
+
+# Install dependent packages required for `ct-ng`.
+RUN \
+  dnf -y update && \
+  dnf -y install \
+    gawk \
+    gperf \
+    help2man \
+    texinfo \
+    flex \
+    ncurses-devel \
+    glibc-static \
+    rsync \
+    systemtap-devel \
+    systemtap-sdt-devel \
+    ${TOOLCHAIN_DEPS} \
+    ${PYTHON_COMPILE_DEPS} \
+    ${MANYLINUX_DEPS} && \
+  dnf clean all
+
+ENV XCC_PREFIX=/usr/xcc
+
+# Add the crosstool-ng script and image-specific toolchain configuration into
+# /dockcross/.
+#
+# Afterwards, we will leave the "ct-ng" config in the image as a reference
+# for users.
+COPY \
+  imagefiles/install-crosstool-ng-toolchain.sh \
+  imagefiles/patch/crosstool-ng/crosstool-ng-zlib-target.patch \
+  manylinux_2_34-aarch64/crosstool-ng.config \
+  /dockcross/
+
+# Build and install the toolchain, cleaning up artifacts afterwards.
+RUN \
+  mkdir /dockcross/crosstool && \
+  cd /dockcross/crosstool && \
+  /dockcross/install-crosstool-ng-toolchain.sh \
+  -p "${XCC_PREFIX}" \
+  -c /dockcross/crosstool-ng.config \
+  -v "${CT_VERSION}" && \
+  rm -rf /dockcross/crosstool /dockcross/install-crosstool-ng-toolchain.sh && \
+  # Remove sudo provided by gcc-toolset since it doesn't work with
+  # our sudo wrapper calling gosu.
+  rm -f /opt/rh/gcc-toolset-14/root/usr/bin/sudo
+
+# Restore our default workdir (from "dockcross/base").
+WORKDIR /work

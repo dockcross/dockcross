@@ -53,7 +53,7 @@ GEN_IMAGES := android-arm android-arm64 \
 	linux-i686 linux-x86 linux-x64 linux-x64-clang linux-arm64 linux-arm64-musl linux-arm64-full \
 	manylinux_2_28-x64 manylinux_2_34-x64 \
 	manylinux2014-x64 manylinux2014-x86 \
-	manylinux2014-aarch64 linux-arm64-lts \
+	manylinux2014-aarch64 manylinux_2_34-aarch64 linux-arm64-lts \
 	web-wasm web-wasi web-wasi-emulated-threads web-wasi-threads linux-mips linux-mips-uclibc linux-mips-lts windows-arm64 windows-armv7 \
 	windows-static-x86 windows-static-x64 windows-static-x64-posix \
 	windows-shared-x86 windows-shared-x64 windows-shared-x64-posix \
@@ -71,11 +71,11 @@ GEN_IMAGE_DOCKERFILES = $(addsuffix /Dockerfile,$(GEN_IMAGES))
 
 # These images are expected to have explicit rules for *both* build and testing
 NON_STANDARD_IMAGES := manylinux_2_28-x64 manylinux_2_34-x64 manylinux2014-x64 manylinux2014-x86 \
-		      manylinux2014-aarch64 web-wasm web-wasi-emulated-threads web-wasi-threads
+		      manylinux2014-aarch64 manylinux_2_34-aarch64 web-wasm web-wasi-emulated-threads web-wasi-threads
 
 # Docker composite files
 DOCKER_COMPOSITE_SOURCES = common.docker common.debian common.manylinux2014 common.manylinux_2_28 common.manylinux_2_34 common.buildroot \
-	common.crosstool common.webassembly common.windows common-manylinux.crosstool common.dockcross \
+	common.crosstool common.webassembly common.windows common-manylinux.crosstool common-manylinux_2_34.crosstool common.dockcross \
 	common.label-and-env
 DOCKER_COMPOSITE_FOLDER_PATH = common/
 DOCKER_COMPOSITE_PATH = $(addprefix $(DOCKER_COMPOSITE_FOLDER_PATH),$(DOCKER_COMPOSITE_SOURCES))
@@ -191,6 +191,32 @@ manylinux2014-aarch64.test: manylinux2014-aarch64
 	$(TEST_DOCKER) run $(RM) $(ORG)/manylinux2014-aarch64:latest > $(BIN)/dockcross-manylinux2014-aarch64 \
 		&& chmod +x $(BIN)/dockcross-manylinux2014-aarch64
 	$(BIN)/dockcross-manylinux2014-aarch64 -i $(ORG)/manylinux2014-aarch64:latest /opt/python/cp311-cp311/bin/python test/run.py
+
+#
+# manylinux_2_34-aarch64
+#
+manylinux_2_34-aarch64: manylinux_2_34-aarch64/Dockerfile manylinux_2_34-x64
+	@# Register qemu
+	docker run --rm --privileged hypriot/qemu-register
+	@# Get libstdc++ from quay.io/pypa/manylinux_2_34_aarch64 container
+	docker run -v `pwd`:/host --rm -e LIB_PATH=/host/$@/xc_script/ quay.io/pypa/manylinux_2_34_aarch64 bash -c "PASS=1 /host/$@/xc_script/docker_setup_scrpits/copy_libstd.sh"
+	mkdir -p $@/imagefiles && cp -r imagefiles $@/
+	$(BUILD_DOCKER) $(BUILD_CMD) $(TAG_FLAG) $(ORG)/manylinux_2_34-aarch64:$(TAG) \
+		$(TAG_FLAG) $(ORG)/manylinux_2_34-aarch64:latest \
+		--build-arg IMAGE=$(ORG)/manylinux_2_34-aarch64 \
+		--build-arg VERSION=$(TAG) \
+		--build-arg VCS_REF=`git rev-parse --short HEAD` \
+		--build-arg VCS_URL=`git config --get remote.origin.url` \
+		--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
+		-f manylinux_2_34-aarch64/Dockerfile .
+	rm -rf $@/imagefiles
+	@# libstdc++ is copied into image, now remove it
+	docker run -v `pwd`:/host --rm quay.io/pypa/manylinux_2_34_aarch64 bash -c "rm -rf /host/$@/xc_script/usr"
+
+manylinux_2_34-aarch64.test: manylinux_2_34-aarch64
+	$(TEST_DOCKER) run $(RM) $(ORG)/manylinux_2_34-aarch64:latest > $(BIN)/dockcross-manylinux_2_34-aarch64 \
+		&& chmod +x $(BIN)/dockcross-manylinux_2_34-aarch64
+	$(BIN)/dockcross-manylinux_2_34-aarch64 -i $(ORG)/manylinux_2_34-aarch64:latest /opt/python/cp311-cp311/bin/python test/run.py
 
 #
 # manylinux_2_28-x64

@@ -117,6 +117,7 @@ The dockcross script will execute the given command-line inside the container, a
 | dockcross/linux-xtensa-uclibc | xtensa | GCC + uclibc | Linux |
 | dockcross/manylinux_2_28-x64 | x86_64 | GCC | Linux |
 | dockcross/manylinux_2_34-x64 | x86_64 | GCC | Linux |
+| dockcross/manylinux_2_34-aarch64 | ARMv8 | GCC | Linux |
 | dockcross/manylinux2014-x86 | x86 | GCC | Linux |
 | dockcross/manylinux2014-x64 | x86_64 | GCC | Linux |
 | dockcross/linux-i686 | x86 | GCC | Linux |
@@ -390,6 +391,12 @@ Docker [manylinux_2_28](https://github.com/pypa/manylinux) image for building Li
 ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/dockcross/manylinux_2_34-x64/latest) ![Docker Pulls](https://img.shields.io/docker/pulls/dockcross/manylinux_2_34-x64)
 
 Docker [manylinux_2_34](https://github.com/pypa/manylinux) image for building Linux x86_64 / amd64 [Python wheel packages](http://pythonwheels.com/). It includes Python 3.8.10+, 3.9.5+, 3.10.0+. Also has support for the dockcross script, and it has installations of CMake, Ninja, and [scikit-build](http://scikit-build.org). For CMake, it sets **MANYLINUX_2_34** to \"TRUE\" in the toolchain.
+
+### dockcross/manylinux_2_34-aarch64
+
+![Docker Image Size (tag)](https://img.shields.io/docker/image-size/dockcross/manylinux_2_34-aarch64/latest) ![Docker Pulls](https://img.shields.io/docker/pulls/dockcross/manylinux_2_34-aarch64)
+
+Docker [manylinux_2_34](https://github.com/pypa/manylinux) image for building Linux aarch64 / arm64 [Python wheel packages](http://pythonwheels.com/). It includes CPython 3.6, 3.7, 3.8, 3.9, 3.10, 3.11, 3.12, 3.13, 3.13t (free-threaded) and PyPy 3.10. Also has support for the dockcross script, and it has installations of CMake, Ninja, and [scikit-build](http://scikit-build.org). For CMake, it sets **MANYLINUX_2_34** to "TRUE" in the toolchain. This image is designed to run on x86_64 hosts and cross-compile for aarch64 targets using QEMU emulation.
 
 ### dockcross/manylinux2014-x64
 
