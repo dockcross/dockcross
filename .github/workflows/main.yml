@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           submodules: "recursive"
           fetch-depth: 1
@@ -62,7 +62,7 @@ jobs:
         os: [ubuntu-22.04, ubuntu-22.04-arm]
     steps:
       - name: checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           submodules: "recursive"
           fetch-depth: 1
@@ -1312,7 +1312,7 @@ jobs:
             }
     steps:
       - name: checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           submodules: "recursive"
           fetch-depth: 1
@@ -1518,7 +1518,7 @@ jobs:
         image_name: ["linux-arm64", "web-wasm", "web-wasi", "web-wasi-threads"]
     steps:
       - name: checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           submodules: "recursive"
           fetch-depth: 1
