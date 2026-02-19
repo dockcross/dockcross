@@ -1449,7 +1449,7 @@ jobs:
         run: |
           git clone https://github.com/raysan5/raylib.git
           cd raylib
-          git checkout a12ddacb7bfbc6e552e6145456f2fe6dfdfbe1c7
+          git checkout 98c773491179984e3de53a929fd31b467589a738
           ./../tools/dockcross-cmake-builder.sh ${{ matrix.arch_name.image }} ${{ matrix.arch_name.raylib_arg }}
           cd ..
           rm -rf raylib
