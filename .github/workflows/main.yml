@@ -1381,7 +1381,7 @@ jobs:
         run: |
           git clone --depth 1 --branch OpenSSL_1_1_1w https://github.com/openssl/openssl.git
           cd openssl
-          wget https://raw.githubusercontent.com/mavlink/MAVSDK/main/third_party/openssl/dockcross-android.patch
+          wget https://raw.githubusercontent.com/mavlink/MAVSDK/17ad598f0e004d225f5e939aa2947a95791f2f9b/cpp/third_party/openssl/dockcross-android.patch
           patch -p 0 < dockcross-android.patch
           ./../tools/dockcross-command.sh ${{ matrix.arch_name.image }} ./Configure ${{ matrix.arch_name.openssl_arg }}
           ./../tools/dockcross-make-builder.sh ${{ matrix.arch_name.image }} -j${nproc}
