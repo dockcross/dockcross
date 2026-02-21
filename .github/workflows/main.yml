@@ -1214,6 +1214,29 @@ jobs:
               cpython: "yes",
               cpython_arg: "--host=aarch64-unknown-linux-gnu --target=aarch64-unknown-linux-gnu",
             }
+          # manylinux_2_34 aarch64 images
+          - {
+              image: "manylinux_2_34-aarch64",
+              multiarch: "",
+              stockfish: "no",
+              stockfish_arg: "",
+              ninja: "no",
+              ninja_arg: "",
+              openssl: "yes",
+              openssl_arg: "linux-aarch64",
+              C: "no",
+              C_arg: "",
+              SQLite: "yes",
+              SQLite_arg: "",
+              llama_cpp: "no",
+              llama_cpp_arg: "",
+              fmt: "no",
+              fmt_arg: "",
+              raylib: "no",
+              raylib_arg: "",
+              cpython: "yes",
+              cpython_arg: "--host=aarch64-unknown-linux-gnu --target=aarch64-unknown-linux-gnu",
+            }
           # web-wasm images
           - {
               image: "web-wasm",

@@ -1,0 +1,62 @@
+# manylinux_2_34-aarch64 is based on manylinux_2_34-x64 and the aarch64 toolchain installed. This allows to
+# run the container on a x86_64 host.
+# This image is not based on "pypa/manylinux_2_34_aarch64" because it would require the host to be aarch64.
+# For more details, read https://github.com/dockcross/dockcross/issues/367
+ARG ORG=dockcross
+FROM ${ORG}/manylinux_2_34-x64:latest
+
+LABEL maintainer="Matt McCormick matt@mmmccormick.com"
+
+# This is for 64-bit ARM Manylinux machine
+
+# Crosstool-ng version
+ENV CT_VERSION=crosstool-ng-1.27.0
+
+#include "common-manylinux_2_34.crosstool"
+
+# The cross-compiling emulator
+# AlmaLinux 9 doesn't package qemu-user-static, so we download from multiarch/qemu-user-static
+ARG QEMU_VERSION=v7.2.0-1
+RUN \
+  curl -L -o /usr/bin/qemu-aarch64-static \
+    https://github.com/multiarch/qemu-user-static/releases/download/${QEMU_VERSION}/qemu-aarch64-static && \
+  chmod +x /usr/bin/qemu-aarch64-static
+
+# The CROSS_TRIPLE is a configured alias of the "aarch64-unknown-linux-gnu" target.
+ENV CROSS_TRIPLE=aarch64-unknown-linux-gnu
+ENV CROSS_ROOT=${XCC_PREFIX}/${CROSS_TRIPLE}
+ENV PATH=${PATH}:${CROSS_ROOT}/bin
+
+# Running scripts to cross compile python and copy libstdc++ into toolcain
+ADD manylinux_2_34-aarch64/xc_script /tmp/
+RUN PASS=2 /tmp/docker_setup_scrpits/copy_libstd.sh
+RUN /tmp/docker_setup_scrpits/prepare_cross_env.sh
+RUN rm -rf /tmp/docker_setup_scrpits
+RUN rm -rf /tmp/usr/
+
+ENV AS=${CROSS_TRIPLE}-as \
+    AR=${CROSS_TRIPLE}-ar \
+    CC=${CROSS_TRIPLE}-gcc \
+    CPP=${CROSS_TRIPLE}-cpp \
+    CXX=${CROSS_TRIPLE}-g++ \
+    LD=${CROSS_TRIPLE}-ld \
+    FC=${CROSS_TRIPLE}-gfortran \
+    STRIP=${CROSS_TRIPLE}-strip \
+    OBJCOPY=${CROSS_TRIPLE}-objcopy
+
+ENV QEMU_LD_PREFIX="${CROSS_ROOT}/${CROSS_TRIPLE}/sysroot"
+ENV QEMU_SET_ENV="LD_LIBRARY_PATH=${CROSS_ROOT}/lib:${QEMU_LD_PREFIX}"
+
+COPY manylinux_2_34-aarch64/Toolchain.cmake ${CROSS_ROOT}/
+ENV CMAKE_TOOLCHAIN_FILE=${CROSS_ROOT}/Toolchain.cmake
+
+ENV PKG_CONFIG_PATH=/usr/lib/aarch64-linux-gnu/pkgconfig
+
+# Linux kernel cross compilation variables
+ENV CROSS_COMPILE=${CROSS_TRIPLE}-
+ENV ARCH=arm64
+
+ENV AUDITWHEEL_ARCH=aarch64
+ENV AUDITWHEEL_PLAT=manylinux_2_34_$AUDITWHEEL_ARCH
+
+#include "common.label-and-env"
