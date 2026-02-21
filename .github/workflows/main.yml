@@ -1232,7 +1232,7 @@ jobs:
               llama_cpp_arg: "",
               fmt: "no",
               fmt_arg: "",
-              raylib: "yes",
+              raylib: "no",
               raylib_arg: "-DPLATFORM=Web",
               cpython: "no",
               cpython_arg: "",
