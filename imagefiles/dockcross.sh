@@ -218,7 +218,7 @@ elif [ -n "$CYGWIN" ]; then
     HOST_PWD="$( cygpath -w "$( readlink -f "$( pwd ;)" ; )" ; )" ;
 else
     HOST_PWD=$PWD
-    [ -L $HOST_PWD ] && HOST_PWD=$(readlink $HOST_PWD)
+    [ -L "$HOST_PWD" ] && HOST_PWD=$(readlink $HOST_PWD)
 fi
 
 # Mount Additional Volumes
