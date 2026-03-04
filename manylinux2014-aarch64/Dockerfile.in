@@ -29,9 +29,8 @@ ENV PATH=${PATH}:${CROSS_ROOT}/bin
 
 # Running scripts to cross compile python and copy libstdc++ into toolcain
 ADD manylinux2014-aarch64/xc_script /tmp/
-RUN PASS=2 /tmp/docker_setup_scrpits/copy_libstd.sh
-RUN /tmp/docker_setup_scrpits/prepare_cross_env.sh
-RUN rm -rf /tmp/docker_setup_scrpits
+RUN /tmp/docker_setup_scripts/prepare_cross_env.sh
+RUN rm -rf /tmp/docker_setup_scripts
 RUN rm -rf /tmp/usr/
 
 ENV AS=${CROSS_TRIPLE}-as \

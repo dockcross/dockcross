@@ -170,10 +170,6 @@ web-wasi-threads: web-wasi web-wasi-threads/Dockerfile
 # manylinux2014-aarch64
 #
 manylinux2014-aarch64: manylinux2014-aarch64/Dockerfile manylinux2014-x64
-	@# Register qemu
-	docker run --rm --privileged hypriot/qemu-register
-	@# Get libstdc++ from quay.io/pypa/manylinux2014_aarch64 container
-	docker run -v `pwd`:/host --rm -e LIB_PATH=/host/$@/xc_script/ quay.io/pypa/manylinux2014_aarch64 bash -c "PASS=1 /host/$@/xc_script/docker_setup_scrpits/copy_libstd.sh"
 	mkdir -p $@/imagefiles && cp -r imagefiles $@/
 	$(BUILD_DOCKER) $(BUILD_CMD) $(TAG_FLAG) $(ORG)/manylinux2014-aarch64:$(TAG) \
 		$(TAG_FLAG) $(ORG)/manylinux2014-aarch64:latest \
@@ -184,8 +180,6 @@ manylinux2014-aarch64: manylinux2014-aarch64/Dockerfile manylinux2014-x64
 		--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
 		-f manylinux2014-aarch64/Dockerfile .
 	rm -rf $@/imagefiles
-	@# libstdc++ is coppied into image, now remove it
-	docker run -v `pwd`:/host --rm quay.io/pypa/manylinux2014_aarch64 bash -c "rm -rf /host/$@/xc_script/usr"
 
 manylinux2014-aarch64.test: manylinux2014-aarch64
 	$(TEST_DOCKER) run $(RM) $(ORG)/manylinux2014-aarch64:latest > $(BIN)/dockcross-manylinux2014-aarch64 \
