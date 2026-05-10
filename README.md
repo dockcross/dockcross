@@ -103,6 +103,7 @@ The dockcross script will execute the given command-line inside the container, a
 | dockcross/linux-armv7-lts | ARMv7 | GCC 8.5.0 + Glibc 2.28 | Linux |
 | dockcross/linux-armv7a | ARMv7a | GCC | Linux |
 | dockcross/linux-armv7l-musl | ARMv7l | GCC + musl | Linux |
+| dockcross/linux-loongarch64 | LoongArch64 | GCC | Linux |
 | dockcross/linux-mips | mips | GCC | Linux |
 | dockcross/linux-mips-uclibc | mips | GCC + uclibc | Linux |
 | dockcross/linux-mips-lts | mips | GCC 8.5.0 + Glibc 2.28 | Linux |
@@ -282,6 +283,12 @@ board PC with TI SoC AM3358 on board, Cortex-A8.
 
 Toolchain configured for ARMv7-L, using
 [musl](https://www.musl-libc.org/) as base \"libc\".
+
+### dockcross/linux-loongarch64
+
+![Docker Image Size (tag)](https://img.shields.io/docker/image-size/dockcross/linux-loongarch64/latest) ![Docker Pulls](https://img.shields.io/docker/pulls/dockcross/linux-loongarch64)
+
+Generic Linux LoongArch64 cross compiler toolchain.
 
 ### dockcross/linux-mips
 

@@ -763,6 +763,24 @@ jobs:
               cpython: "yes",
               cpython_arg: "--host=s390x-ibm-linux-gnu --target=s390x-ibm-linux-gnu",
             }
+          # Linux loongarch64 images
+          - {
+              image: "linux-loongarch64",
+              stockfish: "yes",
+              stockfish_arg: "ARCH=loongarch64",
+              ninja: "yes",
+              ninja_arg: "",
+              openssl: "yes",
+              openssl_arg: "linux64-loongarch64",
+              C: "yes",
+              C_arg: "",
+              C-Plus-Plus: "yes",
+              C-Plus-Plus_arg: "",
+              fmt: "yes",
+              fmt_arg: "",
+              cpython: "yes",
+              cpython_arg: "--host=loongarch64-unknown-linux-gnu --target=loongarch64-unknown-linux-gnu",
+            }
           # Linux mips images
           - {
               image: "linux-mips",
