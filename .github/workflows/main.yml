@@ -773,7 +773,7 @@ jobs:
               openssl: "yes",
               openssl_arg: "linux64-loongarch64",
               C: "yes",
-              C_arg: "",
+              C_arg: "-DCMAKE_C_FLAGS=-Wno-incompatible-pointer-types",
               C-Plus-Plus: "yes",
               C-Plus-Plus_arg: "",
               fmt: "yes",
