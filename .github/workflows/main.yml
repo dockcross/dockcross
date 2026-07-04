@@ -32,7 +32,7 @@ jobs:
       - name: archive base
         run: |
           mkdir -p cache
-          docker export dockcross/base:latest | xz -e9 -T0 > ./cache/base.tar.xz
+          docker save dockcross/base:latest | xz -e6 -T0 > ./cache/base.tar.xz
 
       - name: save base
         uses: actions/upload-artifact@v7
@@ -83,7 +83,7 @@ jobs:
       - name: archive base
         run: |
           mkdir -p cache
-          docker export dockcross/base:latest-${{ env.HOST_ARCH }} | xz -e9 -T0 > ./cache/base-multiarch.tar.xz
+          docker save dockcross/base:latest-${{ env.HOST_ARCH }} | xz -e6 -T0 > ./cache/base-multiarch.tar.xz
 
       - name: save base
         uses: actions/upload-artifact@v7
@@ -1393,7 +1393,7 @@ jobs:
           path: ./cache
 
       - name: load base
-        run: xz -d -k < ./cache/base.tar.xz | docker import - dockcross/base:latest
+        run: xz -d -k < ./cache/base.tar.xz | docker load
 
       - uses: actions/download-artifact@v8
         with:
@@ -1401,7 +1401,7 @@ jobs:
           path: ./cache
 
       - name: load multiarch base
-        run: xz -d -k < ./cache/base-multiarch.tar.xz | docker import - dockcross/base:latest-${{ env.HOST_ARCH }}
+        run: xz -d -k < ./cache/base-multiarch.tar.xz | docker load
 
       - name: build
         env:
@@ -1549,7 +1549,7 @@ jobs:
         if: matrix.arch_name.multiarch == 'yes'
         run: |
           mkdir -p cache-${{ matrix.arch_name.image }}-${{ env.HOST_ARCH }}
-          docker export dockcross/${{ matrix.arch_name.image }}:latest-${{ env.HOST_ARCH }} | xz -e9 -T0 > ./cache-${{ matrix.arch_name.image }}-${{ env.HOST_ARCH }}/${{ matrix.arch_name.image }}-${{ env.HOST_ARCH }}.tar.xz
+          docker save dockcross/${{ matrix.arch_name.image }}:latest-${{ env.HOST_ARCH }} | xz -e6 -T0 > ./cache-${{ matrix.arch_name.image }}-${{ env.HOST_ARCH }}/${{ matrix.arch_name.image }}-${{ env.HOST_ARCH }}.tar.xz
 
       - name: save ${{ matrix.arch_name.image }}-${{ matrix.os }}
         uses: actions/upload-artifact@v7
@@ -1600,8 +1600,8 @@ jobs:
 
       - name: load images
         run: |
-          xz -d -k < ./cache-${{ matrix.image_name }}-amd64/${{ matrix.image_name }}-amd64.tar.xz | docker import - dockcross/${{ matrix.image_name }}:latest-amd64
-          xz -d -k < ./cache-${{ matrix.image_name }}-arm64/${{ matrix.image_name }}-arm64.tar.xz | docker import - dockcross/${{ matrix.image_name }}:latest-arm64
+          xz -d -k < ./cache-${{ matrix.image_name }}-amd64/${{ matrix.image_name }}-amd64.tar.xz | docker load
+          xz -d -k < ./cache-${{ matrix.image_name }}-arm64/${{ matrix.image_name }}-arm64.tar.xz | docker load
 
       - name: Login to Docker Hub
         if: github.ref == 'refs/heads/master'
