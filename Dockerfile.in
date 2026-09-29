@@ -1,4 +1,4 @@
-ARG DOCKER_IMAGE=debian:bookworm-slim
+ARG DOCKER_IMAGE=debian:trixie-slim
 FROM $DOCKER_IMAGE
 
 LABEL maintainer="Matt McCormick matt@mmmccormick.com"
